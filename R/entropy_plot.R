@@ -18,6 +18,7 @@
 #'
 entropy = function(test){
   test = test |>  mutate(suma = rowSums(across(where(is.numeric))))
+  test = test |> mutate(suma = ifelse(suma > 0 , suma, 1))
   test <- test %>%
     mutate(across(where(is.numeric), ~ . / suma))
 
