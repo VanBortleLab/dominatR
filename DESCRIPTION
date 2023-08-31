@@ -11,5 +11,5 @@ LazyData: true
 LazyDataCompression: xz
 Depends: 
     R (>= 2.10)
-Imports: dplyr, forcats, lubridate, purrr, readr, stringr, tibble, tidyr, geomtextpath, ggforce, ggplot2
+Imports: dplyr, forcats, lubridate, purrr, readr, stringr, tibble, tidyr, geomtextpath, ggforce, ggplot2, ggplot
 RoxygenNote: 7.2.3
