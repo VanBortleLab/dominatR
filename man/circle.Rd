@@ -10,7 +10,7 @@ circle(
   rect = F,
   back_alpha = 0.05,
   label = c("curve", "legend"),
-  labels = c(1:ncol(data))
+  variables = colnames(data)
 )
 }
 \arguments{
@@ -24,14 +24,14 @@ circle(
 
 \item{label}{It determines if the variables are labeled around the circle or displayed as a legend. Two options are available, 'Curve' or 'Legend'}
 
-\item{labels}{A vector that contains the numerical location of the variables that want to be labeled in the plot. The default is to present labels for each variable, but it can be modified if a vector with the numerical location of the variable of interest is provided}
+\item{variables}{A vector that contains the names of the columns that should appear in the plot when label == 'Curve'.}
 }
 \value{
 Returns a list of objects. It contains the domination plot, a data frame with the calculated entropy, and a dataframe with the calculated categorical entropy
 }
 \description{
-Entropy Plotter
+Creates a circular plot based on the Entropy for each row in a dataset.
 }
 \seealso{
-[func(entropy), func(Qentropy)]
+[func(entropy)], [func(Qentropy)]
 }

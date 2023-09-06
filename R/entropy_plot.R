@@ -64,31 +64,36 @@ Qentropy = function(test){
 
 #' Entropy Plotter
 #'
+#' Creates a circular plot based on the Entropy for each row in a dataset.
+#'
 #' @param n Total number of variables to account for Entropy calculation. It is the total number of columns
 #' @param data A numerical dataframe. Each column represents the variable used to calculate the entropy and build the plot
 #' @param rect A logical parameter. If TRUE, points will be displayed in a single rect line
 #' @param back_alpha A numerical parameter, controls the intensity of the background for the plot
 #' @param label It determines if the variables are labeled around the circle or displayed as a legend. Two options are available, 'Curve' or 'Legend'
-#' @param labels A vector that contains the numerical location of the variables that want to be labeled in the plot. The default is to present labels for each variable, but it can be modified if a vector with the numerical location of the variable of interest is provided
+#' @param variables A vector that contains the names of the columns that should appear in the plot when label == 'Curve'.
 #'
 #' @return
 #' Returns a list of objects. It contains the domination plot, a data frame with the calculated entropy, and a dataframe with the calculated categorical entropy
 #' @export
 #' @import dplyr forcats lubridate purrr readr stringr tibble tidyr ggforce geomtextpath
 #'
-#' @seealso [func(entropy), func(Qentropy)]
+#' @seealso [func(entropy)], [func(Qentropy)]
 #'
 #'
 #'
-circle = function(n, data, rect = F, back_alpha = 0.05, label = c('curve', 'legend'), labels = c(1:ncol(data))) {
+circle = function(n, data, rect = F, back_alpha = 0.05, label = c('curve', 'legend'), variables = colnames(data)) {
+  ## removing rows where sum = 0
+  data = data |> filter(rowSums(data[,1:ncol(data)]) > 0)
+
   area = back_alpha
   a = ifelse(n >15, 80, 70)
-  b = ifelse(n > 15, 95, 110)
+  b = ifelse(n > 15, 100, 110)
   size = ifelse(n >15, 2,3)
   rect1 = rect
   deg = 2 * pi / n
   deg_sp = (2 * pi / n) / 2
-  labels1 = colnames(data)[labels]
+  labels1 = variables
   location = data.frame(
     col = colnames(data),
     deg = pi / 2 - deg * (1:n),
@@ -98,11 +103,12 @@ circle = function(n, data, rect = F, back_alpha = 0.05, label = c('curve', 'lege
     curv_end = pi / 2 - deg_sp - deg * (1:n)
   )
 
-  data3 = data
   location$labels = NA
   location$labels[location$col %in%labels1] =   location$col[location$col %in%labels1]
 
-  location = location |> mutate(x = 100.5*(cos(curv_start)), xend = 100.5*(cos(curv_end)), y=100.5*(sin(curv_start)), yend =100.5*(sin(curv_end)))
+  rad_label = ifelse(n == 3, 120, 100.5)
+
+  location = location |> mutate(x = rad_label*(cos(curv_start)), xend = rad_label*(cos(curv_end)), y=rad_label*(sin(curv_start)), yend =rad_label*(sin(curv_end)))
   arc = NULL
 
   for (i in 1:n) {
@@ -144,7 +150,7 @@ circle = function(n, data, rect = F, back_alpha = 0.05, label = c('curve', 'lege
   data1 = data.frame(rad = a * (1:(n - 1)))
 
   if(label == 'legend'){
-    circle = ggplot() +  theme_minimal() +
+    circle = ggplot2::ggplot() +  theme_minimal() +
       geom_polygon(
         data = arc,
         aes(x, y, fill = type),
@@ -198,12 +204,13 @@ circle = function(n, data, rect = F, back_alpha = 0.05, label = c('curve', 'lege
         aes(x, y, col = col, alpha = alpha),
         pch = 19,
         size = ifelse(n >15, 0.8, 1.5),
-        width = 3,
-        height = 3, show.legend = F
+        width = 1,
+        height = 1, show.legend = F
       ) +
       scale_alpha(guide = 'none') +
       coord_equal(xlim = c(-105,105), ylim = c(-105,105))
   }
 
-  return(circle) }
+  return(plot(circle))
+}
 
