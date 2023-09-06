@@ -5,13 +5,9 @@
 \alias{rnapol_chip}
 \title{RNA Polymerase CHIP-Seq Data}
 \format{
-A dataframe with 900000 rows and 8 variables:
+A dataframe with 1635 rows and 4 variables:
 \describe{
-\item{ID}{Coordinates for RNA of interest}
-\item{V1}{Chromosome where the RNA of interest is located}
-\item{URSID}{Unique RNA Sequence identifier - Can be retrieved from RNA Central}
-\item{Strand}{DNA Strand Orientation}
-\item{RNA_Type}{Type of RNA}
+\item{UU}{Type of transcript}
 \item{pol1}{Normalized peak call value for RNA Polymerase I Chip-Seq}
 \item{pol2}{Normalized peak call value for RNA Polymerase II Chip-Seq}
 \item{pol3}{Normalized peak call value for RNA Polymerase III Chip-Seq}}
