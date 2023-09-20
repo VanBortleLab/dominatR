@@ -53,7 +53,7 @@ entropy = function(test){
 Qentropy = function(test){
   test <- test %>%
     rowwise() %>%
-    mutate(across(where(is.numeric), ~ Entropy - ifelse(. == 0, 0, log2(.))))
+    mutate(across(where(is.numeric), ~ ifelse(. == 0, Inf, Entropy - log2(.))))
 
   test = test |> select(-Entropy)
 
