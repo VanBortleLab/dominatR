@@ -74,7 +74,7 @@ Qentropy = function(test){
 #' @param variables A vector that contains the names of the columns that should appear in the plot when label == 'Curve'.
 #'
 #' @return
-#' Returns a list of objects. It contains the domination plot, a data frame with the calculated entropy, and a dataframe with the calculated categorical entropy
+#' Returns a list of objects. It contains the domination plot, an a dataframe with the plotting coordinates with entropy and dominant variable for each point
 #' @export
 #' @import dplyr forcats lubridate purrr readr stringr tibble tidyr ggforce geomtextpath
 #'
@@ -210,7 +210,8 @@ circle = function(n, data, rect = F, back_alpha = 0.05, label = c('curve', 'lege
       scale_alpha(guide = 'none') +
       coord_equal(xlim = c(-105,105), ylim = c(-105,105))
   }
+  data = data |> select(Entropy, col, x, y) |> mutate(Entropy = log2(Entropy))
 
-  return(plot(circle))
+  return(list(circle, data ))
 }
 

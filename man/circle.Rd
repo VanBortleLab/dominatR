@@ -27,7 +27,7 @@ circle(
 \item{variables}{A vector that contains the names of the columns that should appear in the plot when label == 'Curve'.}
 }
 \value{
-Returns a list of objects. It contains the domination plot, a data frame with the calculated entropy, and a dataframe with the calculated categorical entropy
+Returns a list of objects. It contains the domination plot, an a dataframe with the plotting coordinates with entropy and dominant variable for each point
 }
 \description{
 Creates a circular plot based on the Entropy for each row in a dataset.
