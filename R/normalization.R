@@ -60,7 +60,6 @@ cpm = function(df, log_trans = F){
 #' @description Normalizes a count matrix by the TPM method
 #' @return A Matrix with normalized counts.
 #'
-
 tpm = function(df, gene_length, log_trans = F){
 
   ### Divide counts by Gene Length
