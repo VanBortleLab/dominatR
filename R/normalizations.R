@@ -4,7 +4,7 @@
 #' @param log_trans Logical attribute, determines if normalized data should be log2 transformed. Note: An extra count is added.
 #' @description Normalizes a count matrix by the quantile normalization method
 #' @return A Matrix with quantile normalized values
-#'
+#' @export
 #'
 quant.normalization <- function(df, log_trans = F){
   df_rank <- apply(df,2,rank,ties.method="min")
@@ -19,7 +19,7 @@ quant.normalization <- function(df, log_trans = F){
   rownames(df_final) <- rownames(df)
 
   if(log_trans == F){
-  return(df_final)
+    return(df_final)
   } else {
     df_final = log2(df_final + 1)
     return(df_final)
@@ -34,7 +34,7 @@ quant.normalization <- function(df, log_trans = F){
 #'
 #' @description Normalizes a count matrix by the counts per million method
 #' @return A Matrix with normalized counts.
-#'
+#' @export
 #'
 cpm = function(df, log_trans = F){
   sum = colSums(df)/1e6
@@ -43,10 +43,10 @@ cpm = function(df, log_trans = F){
   df = mapply('/', df, sum)
 
   if(log_trans == F){
-  return(df)
+    return(df)
   } else {
-  df = log2(df + 1)
-  return(df)
+    df = log2(df + 1)
+    return(df)
   }
 }
 
@@ -59,7 +59,7 @@ cpm = function(df, log_trans = F){
 #'
 #' @description Normalizes a count matrix by the TPM method
 #' @return A Matrix with normalized counts.
-#'
+#' @export
 tpm = function(df, gene_length, log_trans = F){
 
   ### Divide counts by Gene Length
@@ -88,7 +88,7 @@ tpm = function(df, gene_length, log_trans = F){
 #'
 #' @description Normalizes a count matrix by the RPKM method
 #' @return A Matrix with normalized counts.
-#'
+#' @export
 rpkm = function(df, gene_length, log_trans = F){
 
   sum = colSums(df)/1e6
