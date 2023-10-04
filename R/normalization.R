@@ -6,8 +6,6 @@
 #' @return A Matrix with quantile normalized values
 #'
 #'
-
-
 quant.normalization <- function(df, log_trans = F){
   df_rank <- apply(df,2,rank,ties.method="min")
   df_sorted <- data.frame(apply(df, 2, sort))
