@@ -1,6 +1,6 @@
 #' Quantile Normalization
 #'
-#' @param df A dataframe or matrix, must contain only numerical valeus
+#' @param df A dataframe or matrix, must contain only numerical values
 #' @param log_trans Logical attribute, determines if normalized data should be log2 transformed. Note: An extra count is added.
 #' @description Normalizes a count matrix by the quantile normalization method
 #' @return A Matrix with quantile normalized values

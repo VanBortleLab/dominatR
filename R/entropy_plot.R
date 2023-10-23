@@ -11,8 +11,8 @@
 #' @references
 #' https://en.wikipedia.org/wiki/Entropy_(information_theory)
 #' @examples
-#' data(rnapol_chip)
-#' test =  entropy(rnapol_chip)
+#' data(rnapol_score)
+#' test =  entropy(rnapol_score)
 #'
 #'
 #'
@@ -45,8 +45,8 @@ entropy = function(test){
 #' @export
 #' @import dplyr forcats lubridate purrr readr stringr tibble tidyr
 #' @examples
-#' data(rnapol_chip)
-#' test =  entropy(rnapol_chip)
+#' data(rnapol_score)
+#' test =  entropy(rnapol_score)
 #' test = Qentropy(test)
 #'
 #' @seealso [func(entropy)]

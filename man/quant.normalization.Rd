@@ -7,7 +7,7 @@
 quant.normalization(df, log_trans = F)
 }
 \arguments{
-\item{df}{A dataframe or matrix, must contain only numerical valeus}
+\item{df}{A dataframe or matrix, must contain only numerical values}
 
 \item{log_trans}{Logical attribute, determines if normalized data should be log2 transformed. Note: An extra count is added.}
 }

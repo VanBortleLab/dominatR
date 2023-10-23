@@ -16,8 +16,8 @@ Returns the data frame with modified values for numerical columns.
 Calculates the Categorical Entropy value related to each column. Entropy calculation should be performed before using this function
 }
 \examples{
-data(rnapol_chip)
-test =  entropy(rnapol_chip)
+data(rnapol_score)
+test =  entropy(rnapol_score)
 test = Qentropy(test)
 
 }

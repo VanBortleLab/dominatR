@@ -16,8 +16,8 @@ Returns an extra column to the dataframe with a value related to the Entropy val
 Calculates the Entropy value for each row across numerical columns.
 }
 \examples{
-data(rnapol_chip)
-test =  entropy(rnapol_chip)
+data(rnapol_score)
+test =  entropy(rnapol_score)
 
 
 
