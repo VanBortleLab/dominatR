@@ -8,7 +8,10 @@
 A dataframe with 9817 rows and 23 variables:
 \describe{
 \item{core_type}{Category for genes based on their expression across tissues}
-\item{Gene}{Chromosome where the RNA of interest is located}
+\item{Chr}{Chromosome where the RNA of interest is located}
+\item{Start}{Gene start coordinate}
+\item{End}{Gene end coordinate}
+\item{Gene}{Gene name}
 \item{Index}{Unique RNA Sequence identifier - Can be retrieved from RNA Central}
 \item{Type}{Type of RNA POL3 Transcript}
 \item{Tissue}{Remaining columns contain the name of different assessed tissues}}
