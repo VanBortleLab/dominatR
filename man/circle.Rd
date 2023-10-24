@@ -7,10 +7,13 @@
 circle(
   n,
   data,
-  rect = F,
+  str = F,
   back_alpha = 0.05,
   label = c("curve", "legend"),
-  variables = colnames(data)
+  variables = colnames(data),
+  title = NULL,
+  threshold = 0,
+  col_variable = NULL
 )
 }
 \arguments{
@@ -18,13 +21,19 @@ circle(
 
 \item{data}{A numerical dataframe. Each column represents the variable used to calculate the entropy and build the plot}
 
-\item{rect}{A logical parameter. If TRUE, points will be displayed in a single rect line}
+\item{str}{A logical parameter. If TRUE, points will be displayed in a single rect line}
 
 \item{back_alpha}{A numerical parameter, controls the intensity of the background for the plot}
 
 \item{label}{It determines if the variables are labeled around the circle or displayed as a legend. Two options are available, 'Curve' or 'Legend'}
 
 \item{variables}{A vector that contains the names of the columns that should appear in the plot when label == 'Curve'.}
+
+\item{title}{Title of the plot.}
+
+\item{threshold}{A numerical value that determines the minimum value for rows to be filtered. Any row with a rowSums value less than this threshold is removed from the subsequent analysis. Default is 0}
+
+\item{col_variable}{The name of a variable with categorical data that wants to be displayed. The function in general adds color to the observations based on their column names, if each observation has a categorical value linked to it, by providing the name of that variable, data points will be colored accordingly.}
 }
 \value{
 Returns a list of objects. It contains the domination plot, an a dataframe with the plotting coordinates with entropy and dominant variable for each point
@@ -33,5 +42,5 @@ Returns a list of objects. It contains the domination plot, an a dataframe with 
 Creates a circular plot based on the Entropy for each row in a dataset.
 }
 \seealso{
-[func(entropy)], [func(Qentropy)]
+[entropy()], [Qentropy()]
 }

@@ -22,5 +22,5 @@ test = Qentropy(test)
 
 }
 \seealso{
-[func(entropy)]
+[entropy()]
 }
