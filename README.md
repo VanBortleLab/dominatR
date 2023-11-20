@@ -8,13 +8,13 @@
 
 - **Built-in normalization methods:** If desired, feature counts can be normalized across conditions using built-in normalization functions (quantile normalization, min-max normalization, counts per million (cpm), reads per kb per million (rpkm), transcript per million (tpm), etc.)
 
-- **Categorical entropy calculation:** Quickly identify features that are specific to a particular category or condition, or features that are relatively uniform across conditions using Shannon's entropy. 
+- **Categorical entropy calculation:** Quickly identify features that are specific to a particular category or condition, or features that are relatively uniform across conditions
 
 - **Informative plots:** Generate informative and customizable plots that highlight feature dominance, aiding in the interpretation and communication of your data.
 
 ## Installation
 
-You can install dominatR from GitHub using the `devtools` package:
+dominatR can be installed from GitHub using the `devtools` package:
 
 ```R
 # Install devtools if not already installed
