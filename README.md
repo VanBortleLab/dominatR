@@ -10,7 +10,7 @@
 
 - **Categorical entropy calculation:** Quickly identify features that are specific to a particular category or condition, as well as features that are relatively uniform across conditions
 
-- **Informative plots:** Generate informative and customizable plots that highlight feature dominance, aiding data interpretation and communication.
+- **Feature dominance plots:** Generate informative and customizable plots that highlight feature dominance, aiding data interpretation and communication.
 
 ## Installation
 
