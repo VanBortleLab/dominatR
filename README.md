@@ -6,7 +6,7 @@
 
 ### Features
 
-- **Built-in normalization methods:** If desired, feature counts can be normalized across conditions using built-in functions (quantile normalization, min-max normalization, counts per million (cpm), reads per kb per million (rpkm), transcript per million (tpm), etc.)
+- **Built-in normalization methods:** If desired, feature counts can be normalized across conditions using built-in functions for quantile normalization, min-max normalization, counts per million (cpm), reads per kb per million (rpkm), transcript per million (tpm), and others.
 
 - **Categorical entropy calculation:** Quickly identify features that are specific to a particular category or condition, as well as features that are relatively uniform across conditions
 
