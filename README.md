@@ -22,6 +22,6 @@ if (!require(devtools)) install.packages("devtools")
 
 # Install dominatR from GitHub
 devtools::install_github("VanBortleLab/dominatR")
-'''
+```
 
 ## Usage
