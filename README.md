@@ -2,7 +2,7 @@
 
 ## Overview
 
-**dominatR** is an R package designed for quantifying and visualizing feature dominance in datasets. dominatR leverages Shannon's information entropy to help identify features that are dominated by a particular category or condition. 
+**dominatR** is an R package for quantifying and visualizing feature dominance in datasets. dominatR leverages Shannon's entropy to identify features that are dominated by a particular category or condition. 
 
 ### Key Features
 
