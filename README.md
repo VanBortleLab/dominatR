@@ -1,4 +1,4 @@
-# <img src="man/figures/dominatR_header.png" width="1200px">
+ # <img src="man/figures/dominatR_header.png" width="1200px">
 
 ## Overview
 
@@ -6,11 +6,11 @@
 
 ### Features
 
-- **Built-in normalization methods:** If desired, feature counts can be normalized across conditions using built-in normalization functions (quantile normalization, min-max normalization, counts per million (cpm), reads per kb per million (rpkm), transcript per million (tpm), etc.)
+- **Built-in normalization methods:** If desired, feature counts can be normalized across conditions using built-in functions (quantile normalization, min-max normalization, counts per million (cpm), reads per kb per million (rpkm), transcript per million (tpm), etc.)
 
-- **Categorical entropy calculation:** Quickly identify features that are specific to a particular category or condition, or features that are relatively uniform across conditions
+- **Categorical entropy calculation:** Quickly identify features that are specific to a particular category or condition, as well as features that are relatively uniform across conditions
 
-- **Informative plots:** Generate informative and customizable plots that highlight feature dominance, aiding in the interpretation and communication of your data.
+- **Informative plots:** Generate informative and customizable plots that highlight feature dominance, aiding data interpretation and communication.
 
 ## Installation
 
@@ -25,3 +25,4 @@ devtools::install_github("VanBortleLab/dominatR")
 ```
 
 ## Usage
+
