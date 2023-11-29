@@ -40,6 +40,14 @@ utils::globalVariables(
     "runif",
     "rgb",
     "text",
-    "vrtx"
+    "vrtx",
+    'bin',
+    'geom_line',
+    'proportion',
+    'unit',
+    'element_rect',
+    'ylab',
+    'xlab',
+    'facet_wrap'
   )
 )

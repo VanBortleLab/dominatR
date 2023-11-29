@@ -36,7 +36,7 @@ quant.normalization <- function(df, log_trans = F){
 #' @return A Matrix with normalized counts.
 #' @export
 #'
-cpm = function(df, log_trans = F){
+cpm.normalization = function(df, log_trans = F){
   sum = colSums(df)/1e6
 
 
@@ -60,7 +60,7 @@ cpm = function(df, log_trans = F){
 #' @description Normalizes a count matrix by the TPM method
 #' @return A Matrix with normalized counts.
 #' @export
-tpm = function(df, gene_length, log_trans = F){
+tpm.normalization = function(df, gene_length, log_trans = F){
 
   ### Divide counts by Gene Length
   df1 <- 1000 * df / gene_length
@@ -89,7 +89,7 @@ tpm = function(df, gene_length, log_trans = F){
 #' @description Normalizes a count matrix by the RPKM method
 #' @return A Matrix with normalized counts.
 #' @export
-rpkm = function(df, gene_length, log_trans = F){
+rpkm.normalization = function(df, gene_length, log_trans = F){
 
   sum = colSums(df)/1e6
 

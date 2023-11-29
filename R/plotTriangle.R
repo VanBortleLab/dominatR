@@ -57,7 +57,7 @@ getCOM=function(data,x=c(0,1,0.5) ,y=c(0,0,sqrt(3)/2))
 #' @import dplyr
 #'
 #'
-plotTriangle=function(data,entropyrange=c(0,1),magnituderange=c(0,1),col=c("red","green","blue"),output_table=T,plotAll=T,cex=1,pch=16)
+plot.Triangle=function(data,entropyrange=c(0,1),magnituderange=c(0,1),col=c("red","green","blue"),output_table=T,plotAll=T,cex=1,pch=16)
 {
   # require(dplyr)
   n=3
@@ -66,7 +66,7 @@ plotTriangle=function(data,entropyrange=c(0,1),magnituderange=c(0,1),col=c("red"
   final=cbind(data,getCOM(data,vrtx(n)$x,vrtx(n)$y))
 
   #Finding domination score
-  final=final %>% mutate(entropy=MinMaxNorm2(ent(data),0,1), magnitude=MinMaxNorm2(a^2+b^2+c^2,0,1))
+  final=final %>% mutate(entropy=MinMax.normalization(ent(data),0,1), magnitude=MinMax.normalization(a^2+b^2+c^2,0,1))
   final=final %>% mutate(max=pmax(a,b,c)) %>% mutate(color=ifelse(a==max,col[1],ifelse(b==max,col[2],col[3])))
   final$color[!(final$entropy>entropyrange[1] & final$entropy<entropyrange[2] & final$magnitude>magnituderange[1] & final$magnitude<magnituderange[2])]="whitesmoke"
 
@@ -95,7 +95,7 @@ plotTriangle=function(data,entropyrange=c(0,1),magnituderange=c(0,1),col=c("red"
 #' @export
 #'
 #'
-MinMaxNorm2=function(x,min,max)
+MinMax.normalization=function(x,min,max)
 {
   MIN=min(x)
   MAX=max(x)
@@ -121,7 +121,7 @@ ent=function(data)
 #' @export
 #' @import dplyr
 #'
-plotTriangle_dummy=function()
+plot.Triangle_dummy=function()
 {
   par(mar=c(1,0.5,1,0.5))
   #require(dplyr)
