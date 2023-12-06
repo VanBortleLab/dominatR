@@ -10,7 +10,7 @@ entropy(test)
 \item{test}{A Data frame, must contain numerical columns}
 }
 \value{
-Returns an extra column to the dataframe with a value related to the Entropy value.
+Returns an extra column to the dataframe with a value related to the Entropy value. :)
 }
 \description{
 Calculates the Entropy value for each row across numerical columns.

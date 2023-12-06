@@ -5,7 +5,7 @@
 #'
 #'
 #' @return
-#' Returns an extra column to the dataframe with a value related to the Entropy value.
+#' Returns an extra column to the dataframe with a value related to the Entropy value. :)
 #' @export
 #' @import dplyr forcats lubridate purrr readr stringr tibble tidyr
 #' @references
