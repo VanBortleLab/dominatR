@@ -85,7 +85,7 @@ Qentropy = function(test){
 #'
 #'
 #'
-plot.circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', 'legend'), variables = colnames(data), title = NULL, threshold = 0, col_variable = NULL, point_size = 3){
+plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', 'legend'), variables = colnames(data), title = NULL, threshold = 0, col_variable = NULL, point_size = 3){
 
   if(col_variable > 0){
     colnames(data)[which(colnames(data) == col_variable)] = 'Factor'
@@ -386,7 +386,7 @@ plot.circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
 #'
 #'
 #'
-plot.circle.frequency = function(n, circle){
+plot_circle_frequency = function(n, circle){
   data_ent = circle[[2]]
   breaks_log2 = log2(1:n)
   data_ent$bin = cut(data_ent$Entropy, breaks = breaks_log2,

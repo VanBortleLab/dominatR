@@ -57,7 +57,7 @@ getCOM=function(data,x=c(0,1,0.5) ,y=c(0,0,sqrt(3)/2))
 #' @import dplyr
 #'
 #'
-plot.Triangle=function(data,entropyrange=c(0,1),magnituderange=c(0,1),col=c("red","green","blue"),output_table=T,plotAll=T,cex=1,pch=16)
+plot_Triangle=function(data,entropyrange=c(0,1),magnituderange=c(0,1),col=c("red","green","blue"),output_table=T,plotAll=T,cex=1,pch=16)
 {
   # require(dplyr)
   n=3
@@ -121,7 +121,7 @@ ent=function(data)
 #' @export
 #' @import dplyr
 #'
-plot.Triangle_dummy=function()
+plot_Triangle_dummy=function()
 {
   par(mar=c(1,0.5,1,0.5))
   #require(dplyr)
