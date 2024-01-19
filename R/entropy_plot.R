@@ -86,8 +86,7 @@ Qentropy = function(test){
 #'
 #'
 plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', 'legend'), variables = colnames(data), title = NULL, threshold = 0, col_variable = NULL, point_size = 3){
-
-  if(col_variable > 0){
+  if(length(col_variable > 0)){
     colnames(data)[which(colnames(data) == col_variable)] = 'Factor'
     colnames(data) = substr(colnames(data), 1, 10)
     variables = substr(variables,1,10)
@@ -96,144 +95,151 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
     data = data |> relocate(Factor)
     data = data |> dplyr::filter(rowSums(select_if(data, is.numeric)) > threshold)
 
-  area = back_alpha
-  a = ifelse(n >15, 80, 70)
-  b = ifelse(n > 15, 100, 110)
-  size = point_size
-  rect1 = str
-  deg = 2 * pi / n
-  deg_sp = (2 * pi / n) / 2
-  labels1 = variables
-  location = data.frame(
-    col = colnames(select_if(data, is.numeric)),
-    deg = pi / 2 - deg * (1:n),
-    start = a * pi / 180 - deg_sp - deg * (1:n - 1),
-    end = b * pi / 180 - deg_sp - deg * (1:n),
-    curv_start = pi / 2 - deg_sp - deg * (1:n - 1) ,
-    curv_end = pi / 2 - deg_sp - deg * (1:n)
-  )
+    area = back_alpha
+    a = ifelse(n >15, 80, 70)
+    b = ifelse(n > 15, 100, 110)
+    size = point_size
+    rect1 = str
+    deg = 2 * pi / n
+    deg_sp = (2 * pi / n) / 2
+    labels1 = variables
+    location = data.frame(
+      col = colnames(select_if(data, is.numeric)),
+      deg = pi / 2 - deg * (1:n),
+      start = a * pi / 180 - deg_sp - deg * (1:n - 1),
+      end = b * pi / 180 - deg_sp - deg * (1:n),
+      curv_start = pi / 2 - deg_sp - deg * (1:n - 1) ,
+      curv_end = pi / 2 - deg_sp - deg * (1:n)
+    )
 
-  location$labels = NA
-  location$labels[location$col %in%labels1] =   location$col[location$col %in%labels1]
+    location$labels = NA
+    location$labels[location$col %in%labels1] =   location$col[location$col %in%labels1]
 
-  rad_label = ifelse(n == 3, 120, 100.5)
+    rad_label = ifelse(n == 3, 120, 100.5)
 
-  location = location |> mutate(x = rad_label*(cos(curv_start)), xend = rad_label*(cos(curv_end)), y=rad_label*(sin(curv_start)), yend =rad_label*(sin(curv_end)))
-  arc = NULL
+    location = location |> mutate(x = rad_label*(cos(curv_start)), xend = rad_label*(cos(curv_end)), y=rad_label*(sin(curv_start)), yend =rad_label*(sin(curv_end)))
+    arc = NULL
 
-  for (i in 1:n) {
-    p = ggplot() + geom_arc(aes(
-      x0 = 0,
-      y0 = 0,
-      r = 100,
-      start = deg_sp + deg * (i - 1),
-      end = deg_sp + deg * (i)
-    ))
-    poly = rbind(c(0, 0),
-                 data.frame(x = ggplot_build(p)$data[[1]]$x, y = ggplot_build(p)$data[[1]]$y),
-                 c(0, 0))
-    poly$type = colnames(data)[i + 1]
 
-    arc = rbind(arc, poly)
-  }
+    numeric_cols <- colnames(data)[sapply(data, is.numeric)]
 
-  a = 100 / (n - 1)
-  data1 = data.frame(Entropy = n:1, y = c(0, 1:(n - 1) * a))
-  lm = lm(y ~ Entropy, data = data1)
+    for (i in 1:n) {
+      p = ggplot() + geom_arc(aes(
+        x0 = 0,
+        y0 = 0,
+        r = 100,
+        start = deg_sp + deg * (i - 1),
+        end = deg_sp + deg * (i)
+      ))
+      poly = rbind(c(0, 0),
+                   data.frame(x = ggplot_build(p)$data[[1]]$x, y = ggplot_build(p)$data[[1]]$y),
+                   c(0, 0))
+      poly$type = numeric_cols[i]
 
-  data = entropy(data)
-  data_1 = Qentropy(data)
-  data_1$col = apply(data_1 |> dplyr::select(-Factor), 1, function(row)
-    colnames(data_1 |> dplyr::select(-Factor))[which.min(row)])
-  data = data |> select(Entropy, Factor) |> mutate(Entropy = 2 ^ Entropy)
-  data$rad = predict(lm, newdata = data)
-  data = data |> bind_cols(data_1[, ncol(data_1)])
-  data = data |> left_join(location, join_by(col))
-  data = data |> mutate(rand_deg = sample(seq(from=start, to=end, length.out = 10), 1))
+      arc = rbind(arc, poly)
+    }
 
-  data = data |> select(Entropy, Factor, col, rad, deg, rand_deg) |> mutate(
-    x = rad * cos(ifelse(rect1 == TRUE, deg, rand_deg)),
-    y = rad * sin(ifelse(rect1 == TRUE, deg, rand_deg)),
-    alpha = 1 - Entropy / n
-  )
+    arc$type = factor(arc$type, levels = numeric_cols)
 
-  data1 = data.frame(rad = a * (1:(n - 1)))
+    a = 100 / (n - 1)
+    data1 = data.frame(Entropy = n:1, y = c(0, 1:(n - 1) * a))
+    lm = lm(y ~ Entropy, data = data1)
 
-  if(label == 'legend'){
-    circle = ggplot2::ggplot() +  theme_minimal() +
-      geom_point(data = data,
-                 aes(x, y, fill = col),
-                 pch = 21,
-                 col = 'white',
-                 size = ifelse(n >15, 1.2, 2),
-      )+ geom_polygon(
-        data = arc,
-        aes(x, y), color = 'white',fill = 'white') +
-      geom_polygon(
-        data = arc,
-        aes(x, y, fill = type),
-        color = 'gray90',
-        show.legend = F,
-        alpha = area
-      ) +
-      geom_circle(data = data1,
-                  aes(x0 = 0, y0 = 0, r = rad),
-                  col = 'gray90')  +
-      theme(
-        aspect.ratio = 1,
-        axis.title = element_blank(),
-        axis.text = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor  = element_blank(),
-        plot.title = element_text(hjust = 0.5),
-        legend.title = element_blank(),
-        legend.background = element_blank()
-      ) + geom_jitter(
-        data = data,
-        aes(x, y, col = Factor, alpha = alpha),
-        pch = 19,
-        size = ifelse(n >15, 0.8, 1.5),
-        width = 3,
-        height = 3
-      ) +
-      scale_alpha(guide = 'none') +
-      #guides(fill = 'none') +
-      coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title)
-  }
-  else{
-    circle = ggplot() +  theme_minimal() +
-      geom_labelcurve(data = location, aes(x = x, xend = xend, y = y, yend = yend, label = labels), linecolour = 'white', curvature = -0.5, size = size, na.rm = T, show.legend = F) +
-      geom_polygon(
-        data = arc,
-        aes(x, y, fill = type),
-        color = 'gray90',
-        show.legend = F,
-        alpha = area
-      ) +
-      geom_circle(data = data1,
-                  aes(x0 = 0, y0 = 0, r = rad),
-                  col = 'gray90')  +
-      theme(
-        aspect.ratio = 1,
-        axis.title = element_blank(),
-        axis.text = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor  = element_blank(),
-        plot.title = element_text(hjust = 0.5),
-        legend.title = element_blank()
-      ) + geom_jitter(
-        data = data,
-        aes(x, y, col = Factor, alpha = alpha),
-        pch = 19,
-        size = ifelse(n >15, 0.8, 1.5),
-        width = 3,
-        height = 3, show.legend = T
-      ) +
-      scale_alpha(guide = 'none') +
-      guides(fill = 'none') +
-      coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title)
-  }
-  data = data |> select(Entropy, Factor, col, x, y) |> mutate(Entropy = log2(Entropy))
+    data = entropy(data)
+    data_1 = Qentropy(data)
+    data_1$col = suppressWarnings(apply(data_1 |> dplyr::select(-Factor), 1, function(row)
+      colnames(data_1 |> dplyr::select(-Factor))[which.min(row)]))
+    data = data |> select(Entropy, Factor) |> mutate(Entropy = 2 ^ Entropy)
+    data$rad = predict(lm, newdata = data)
+    data = data |> bind_cols(data_1[, ncol(data_1)])
+    data = data |> left_join(location, join_by(col))
+    data = data |> mutate(rand_deg = sample(seq(from=start, to=end, length.out = 10), 1))
+
+    data = data |> select(Entropy, Factor, col, rad, deg, rand_deg) |> mutate(
+      x = rad * cos(ifelse(rect1 == TRUE, deg, rand_deg)),
+      y = rad * sin(ifelse(rect1 == TRUE, deg, rand_deg)),
+      alpha = 1 - Entropy / n
+    )
+
+    data$col = factor(data$col, levels = numeric_cols)
+
+    data1 = data.frame(rad = a * (1:(n - 1)))
+
+    if(label == 'legend'){
+      circle = ggplot2::ggplot() +  theme_minimal() +
+        geom_point(data = data,
+                   aes(x, y, fill = col),
+                   pch = 21,
+                   col = 'white',
+                   size = ifelse(n >15, 1.2, 2),
+        )+ geom_polygon(
+          data = arc,
+          aes(x, y), color = 'white',fill = 'white') +
+        geom_polygon(
+          data = arc,
+          aes(x, y, fill = type),
+          color = 'gray90',
+          show.legend = F,
+          alpha = area
+        ) +
+        geom_circle(data = data1,
+                    aes(x0 = 0, y0 = 0, r = rad),
+                    col = 'gray90')  +
+        theme(
+          aspect.ratio = 1,
+          axis.title = element_blank(),
+          axis.text = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor  = element_blank(),
+          plot.title = element_text(hjust = 0.5),
+          legend.title = element_blank(),
+          legend.background = element_blank()
+        ) + geom_jitter(
+          data = data,
+          aes(x, y, col = Factor, alpha = alpha),
+          pch = 19,
+          size = ifelse(n >15, 0.8, 1.5),
+          width = 3,
+          height = 3
+        ) +
+        scale_alpha(guide = 'none') +
+        #guides(fill = 'none') +
+        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title)
+    }
+    else{
+      circle = ggplot() +  theme_minimal() +
+        geom_labelcurve(data = location, aes(x = x, xend = xend, y = y, yend = yend, label = labels), linecolour = 'white', curvature = -0.5, size = size, na.rm = T, show.legend = F) +
+        geom_polygon(
+          data = arc,
+          aes(x, y, fill = type),
+          color = 'gray90',
+          show.legend = F,
+          alpha = area
+        ) +
+        geom_circle(data = data1,
+                    aes(x0 = 0, y0 = 0, r = rad),
+                    col = 'gray90')  +
+        theme(
+          aspect.ratio = 1,
+          axis.title = element_blank(),
+          axis.text = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor  = element_blank(),
+          plot.title = element_text(hjust = 0.5),
+          legend.title = element_blank()
+        ) + geom_jitter(
+          data = data,
+          aes(x, y, col = Factor, alpha = alpha),
+          pch = 19,
+          size = ifelse(n >15, 0.8, 1.5),
+          width = 3,
+          height = 3, show.legend = T
+        ) +
+        scale_alpha(guide = 'none') +
+        guides(fill = 'none') +
+        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title)
+    }
+    data = data |> select(Entropy, Factor, col, x, y) |> mutate(Entropy = log2(Entropy))
 
   } else {
     colnames(data) = substr(colnames(data), 1, 10)
@@ -267,6 +273,8 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
     location = location |> mutate(x = rad_label*(cos(curv_start)), xend = rad_label*(cos(curv_end)), y=rad_label*(sin(curv_start)), yend =rad_label*(sin(curv_end)))
     arc = NULL
 
+    numeric_cols <- colnames(data)[sapply(data, is.numeric)]
+
     for (i in 1:n) {
       p = ggplot() + geom_arc(aes(
         x0 = 0,
@@ -278,10 +286,12 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
       poly = rbind(c(0, 0),
                    data.frame(x = ggplot_build(p)$data[[1]]$x, y = ggplot_build(p)$data[[1]]$y),
                    c(0, 0))
-      poly$type = colnames(data)[i]
+      poly$type = numeric_cols[i]
 
       arc = rbind(arc, poly)
     }
+
+    arc$type = factor(arc$type, levels = numeric_cols)
 
     a = 100 / (n - 1)
     data1 = data.frame(Entropy = n:1, y = c(0, 1:(n - 1) * a))
@@ -289,8 +299,8 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
 
     data = entropy(data)
     data_1 = Qentropy(data)
-    data_1$col = apply(data_1, 1, function(row)
-      colnames(data_1)[which.min(row)])
+    data_1$col = suppressWarnings(apply(data_1, 1, function(row)
+      colnames(data_1)[which.min(row)]))
     data = data |> select(Entropy) |> mutate(Entropy = 2 ^ Entropy)
     data$rad = predict(lm, newdata = data)
     data = data |> bind_cols(data_1[, ncol(data_1)])
@@ -302,6 +312,7 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
       y = rad * sin(ifelse(rect1 == TRUE, deg, rand_deg)),
       alpha = 1 - Entropy / n
     )
+    data$col = factor(data$col, levels = numeric_cols)
 
     data1 = data.frame(rad = a * (1:(n - 1)))
 
