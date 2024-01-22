@@ -76,6 +76,7 @@ Qentropy = function(test){
 #'@param threshold A numerical value that determines the minimum value for rows to be filtered. Any row with a rowSums value less than this threshold is removed from the subsequent analysis. Default is 0
 #'@param col_variable The name of a variable with categorical data that wants to be displayed. The function in general adds color to the observations based on their column names, if each observation has a categorical value linked to it, by providing the name of that variable, data points will be colored accordingly.
 #'@param point_size Size for the plot points, default is 3.
+#'@param text_size Size for the text. 'It works when label is around the circle.
 #' @return
 #' Returns a list of objects. It contains the domination plot, an a dataframe with the plotting coordinates with entropy and dominant variable for each point
 #' @export
@@ -85,7 +86,7 @@ Qentropy = function(test){
 #'
 #'
 #'
-plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', 'legend'), variables = colnames(data), title = NULL, threshold = 0, col_variable = NULL, point_size = 3){
+plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', 'legend'), variables = colnames(data), title = NULL, threshold = 0, col_variable = NULL, point_size = 3, text_size = 3){
   if(length(col_variable > 0)){
     colnames(data)[which(colnames(data) == col_variable)] = 'Factor'
     colnames(data) = substr(colnames(data), 1, 10)
@@ -98,7 +99,8 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
     area = back_alpha
     a = ifelse(n >15, 80, 70)
     b = ifelse(n > 15, 100, 110)
-    size = point_size
+    sizex = point_size
+    textsize = text_size
     rect1 = str
     deg = 2 * pi / n
     deg_sp = (2 * pi / n) / 2
@@ -198,7 +200,7 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
           data = data,
           aes(x, y, col = Factor, alpha = alpha),
           pch = 19,
-          size = ifelse(n >15, 0.8, 1.5),
+          size = sizex,
           width = 3,
           height = 3
         ) +
@@ -208,7 +210,7 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
     }
     else{
       circle = ggplot() +  theme_minimal() +
-        geom_labelcurve(data = location, aes(x = x, xend = xend, y = y, yend = yend, label = labels), linecolour = 'white', curvature = -0.5, size = size, na.rm = T, show.legend = F) +
+        geom_labelcurve(data = location, aes(x = x, xend = xend, y = y, yend = yend, label = labels), linecolour = 'white', curvature = -0.5, size = textsize, na.rm = T, show.legend = F) +
         geom_polygon(
           data = arc,
           aes(x, y, fill = type),
@@ -231,7 +233,7 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
           data = data,
           aes(x, y, col = Factor, alpha = alpha),
           pch = 19,
-          size = ifelse(n >15, 0.8, 1.5),
+          size = sizex,
           width = 3,
           height = 3, show.legend = T
         ) +
@@ -251,7 +253,8 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
     area = back_alpha
     a = ifelse(n >15, 80, 70)
     b = ifelse(n > 15, 100, 110)
-    size = ifelse(n >15, 2,3)
+    sizex = point_size
+    textsize = text_size
     rect1 = str
     deg = 2 * pi / n
     deg_sp = (2 * pi / n) / 2
@@ -340,7 +343,7 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
           data = data,
           aes(x, y, col = col, alpha = alpha),
           pch = 19,
-          size = ifelse(n >15, 0.8, 1.5),
+          size = sizex,
           width = 3,
           height = 3
         ) +
@@ -349,7 +352,7 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
     }
     else{
       circle = ggplot() +  theme_minimal() +
-        geom_labelcurve(data = location, aes(x = x, xend = xend, y = y, yend = yend, label = labels), linecolour = 'white', curvature = -0.5, size = size, na.rm = T) +
+        geom_labelcurve(data = location, aes(x = x, xend = xend, y = y, yend = yend, label = labels), linecolour = 'white', curvature = -0.5, size = textsize, na.rm = T) +
         geom_polygon(
           data = arc,
           aes(x, y, fill = type),
@@ -372,7 +375,7 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
           data = data,
           aes(x, y, col = col, alpha = alpha),
           pch = 19,
-          size = ifelse(n >15, 0.8, 1.5),
+          size = sizex,
           width = 1,
           height = 1, show.legend = F
         ) +

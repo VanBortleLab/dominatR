@@ -14,7 +14,8 @@ plot_circle(
   title = NULL,
   threshold = 0,
   col_variable = NULL,
-  point_size = 3
+  point_size = 3,
+  text_size = 3
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ plot_circle(
 \item{col_variable}{The name of a variable with categorical data that wants to be displayed. The function in general adds color to the observations based on their column names, if each observation has a categorical value linked to it, by providing the name of that variable, data points will be colored accordingly.}
 
 \item{point_size}{Size for the plot points, default is 3.}
+
+\item{text_size}{Size for the text. 'It works when label is around the circle.}
 }
 \value{
 Returns a list of objects. It contains the domination plot, an a dataframe with the plotting coordinates with entropy and dominant variable for each point
