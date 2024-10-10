@@ -77,6 +77,7 @@ Qentropy = function(test){
 #'@param col_variable The name of a variable with categorical data that wants to be displayed. The function in general adds color to the observations based on their column names, if each observation has a categorical value linked to it, by providing the name of that variable, data points will be colored accordingly.
 #'@param point_size Size for the plot points, default is 3.
 #'@param text_size Size for the text. 'It works when label is around the circle.
+#'@param line_col Color for the plot outline.
 #' @return
 #' Returns a list of objects. It contains the domination plot, an a dataframe with the plotting coordinates with entropy and dominant variable for each point
 #' @export
@@ -86,7 +87,10 @@ Qentropy = function(test){
 #'
 #'
 #'
-plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', 'legend'), variables = colnames(data), title = NULL, threshold = 0, col_variable = NULL, point_size = 3, text_size = 3){
+plot_circle = function(n, data, str = F,
+                       back_alpha = 0.05, label = c('curve', 'legend'), variables = colnames(data),
+                       title = NULL, threshold = 0, col_variable = NULL,
+                       point_size = 3, text_size = 3,  line_col = 'gray90'){
   if(length(col_variable > 0)){
     colnames(data)[which(colnames(data) == col_variable)] = 'Factor'
     colnames(data) = substr(colnames(data), 1, 10)
@@ -149,8 +153,21 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
 
     data = entropy(data)
     data_1 = Qentropy(data)
-    data_1$col = suppressWarnings(apply(data_1 |> dplyr::select(-Factor), 1, function(row)
-      colnames(data_1 |> dplyr::select(-Factor))[which.min(row)]))
+
+    numeric_cols1 = sapply(data_1, is.numeric)
+
+    data_1$col = suppressWarnings(
+      apply(data_1[, numeric_cols1], 1, function(row) {
+
+        min_cols = colnames(data_1)[numeric_cols1][row == min(row)]
+
+        if(length(min_cols) > 1) {
+          min_cols = sample(min_cols, 1)
+        }
+        return(min_cols)
+      })
+    )
+
     data = data |> select(Entropy, Factor) |> mutate(Entropy = 2 ^ Entropy)
     data$rad = predict(lm, newdata = data)
     data = data |> bind_cols(data_1[, ncol(data_1)])
@@ -173,20 +190,23 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
                    aes(x, y, fill = col),
                    pch = 21,
                    col = 'white',
-                   size = ifelse(n >15, 1.2, 2),
-        )+ geom_polygon(
+                   size = ifelse(n >15, 1.2, 2))+
+        geom_polygon(
           data = arc,
           aes(x, y), color = 'white',fill = 'white') +
         geom_polygon(
           data = arc,
           aes(x, y, fill = type),
-          color = 'gray90',
+          color = line_col,
           show.legend = F,
           alpha = area
         ) +
         geom_circle(data = data1,
                     aes(x0 = 0, y0 = 0, r = rad),
-                    col = 'gray90')  +
+                    col = line_col)  +
+        geom_circle(data = data1,
+                    aes(x0 = 0, y0 = 0, r = rad[nrow(data1)]),
+                    col = 'black')  +
         theme(
           aspect.ratio = 1,
           axis.title = element_blank(),
@@ -214,13 +234,16 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
         geom_polygon(
           data = arc,
           aes(x, y, fill = type),
-          color = 'gray90',
+          color = line_col,
           show.legend = F,
           alpha = area
         ) +
         geom_circle(data = data1,
                     aes(x0 = 0, y0 = 0, r = rad),
-                    col = 'gray90')  +
+                    col = line_col)  +
+        geom_circle(data = data1,
+                    aes(x0 = 0, y0 = 0, r = rad[nrow(data1)]),
+                    col = 'black') +
         theme(
           aspect.ratio = 1,
           axis.title = element_blank(),
@@ -302,8 +325,19 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
 
     data = entropy(data)
     data_1 = Qentropy(data)
-    data_1$col = suppressWarnings(apply(data_1, 1, function(row)
-      colnames(data_1)[which.min(row)]))
+    numeric_cols1 = sapply(data_1, is.numeric)
+
+    data_1$col = suppressWarnings(
+      apply(data_1[, numeric_cols1], 1, function(row) {
+
+        min_cols = colnames(data_1)[numeric_cols1][row == min(row)]
+
+        if(length(min_cols) > 1) {
+          min_cols = sample(min_cols, 1)
+        }
+        return(min_cols)
+      })
+    )
     data = data |> select(Entropy) |> mutate(Entropy = 2 ^ Entropy)
     data$rad = predict(lm, newdata = data)
     data = data |> bind_cols(data_1[, ncol(data_1)])
@@ -324,13 +358,16 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
         geom_polygon(
           data = arc,
           aes(x, y, fill = type),
-          color = 'gray90',
+          color = line_col,
           show.legend = F,
           alpha = area
         ) +
         geom_circle(data = data1,
                     aes(x0 = 0, y0 = 0, r = rad),
-                    col = 'gray90')  +
+                    col = line_col)  +
+        geom_circle(data = data1,
+                    aes(x0 = 0, y0 = 0, r = rad[nrow(data1)]),
+                    col = 'black') +
         theme(
           aspect.ratio = 1,
           axis.title = element_blank(),
@@ -356,13 +393,16 @@ plot_circle = function(n, data, str = F, back_alpha = 0.05, label = c('curve', '
         geom_polygon(
           data = arc,
           aes(x, y, fill = type),
-          color = 'gray90',
+          color = line_col,
           show.legend = F,
           alpha = area
         ) +
         geom_circle(data = data1,
                     aes(x0 = 0, y0 = 0, r = rad),
-                    col = 'gray90')  +
+                    col = line_col)  +
+        geom_circle(data = data1,
+                    aes(x0 = 0, y0 = 0, r = rad[nrow(data1)]),
+                    col = 'black') +
         theme(
           aspect.ratio = 1,
           axis.title = element_blank(),
