@@ -16,7 +16,8 @@ plot_circle(
   col_variable = NULL,
   point_size = 3,
   text_size = 3,
-  line_col = "gray90"
+  line_col = "gray90",
+  out_line = "black"
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ plot_circle(
 \item{text_size}{Size for the text. 'It works when label is around the circle.}
 
 \item{line_col}{Color for the plot outline.}
+
+\item{out_line}{Color for the outtermost circle}
 }
 \value{
 Returns a list of objects. It contains the domination plot, an a dataframe with the plotting coordinates with entropy and dominant variable for each point

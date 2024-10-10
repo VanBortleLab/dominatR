@@ -2,7 +2,7 @@ Package: dominatR
 Type: Package
 Title: This package provides different tools for ....
 Version: 0.1.0
-Author: Simon Lizarazo, Rajendra KC, David Condrosky, Kevin Van Bortle
+Author: Simon Lizarazo, Rajendra KC, Kevin Van Bortle
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: Under construction this is an attempt and we are learning from mistakes.
 License: MIT + file LICENSE
@@ -11,5 +11,6 @@ LazyData: true
 LazyDataCompression: xz
 Depends: 
     R (>= 2.10)
-Imports: dplyr, forcats, lubridate, purrr, readr, stringr, tibble, tidyr, geomtextpath, ggforce, ggplot2
+Imports: dplyr, forcats, lubridate, purrr, readr, stringr, tibble, tidyr, geomtextpath, ggforce, ggplot2, scales
+Remotes: clauswilke/relayer
 RoxygenNote: 7.3.0

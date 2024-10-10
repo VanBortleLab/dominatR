@@ -5,6 +5,7 @@ utils::globalVariables(
     'Factor',
     'geom_point',
     'guides',
+    'rename_geom_aes',
     "curv_start",
     "curv_end",
     "ggplot",
@@ -48,6 +49,7 @@ utils::globalVariables(
     'element_rect',
     'ylab',
     'xlab',
-    'facet_wrap'
+    'facet_wrap',
+    'scale_fill_manual'
   )
 )

@@ -78,6 +78,7 @@ Qentropy = function(test){
 #'@param point_size Size for the plot points, default is 3.
 #'@param text_size Size for the text. 'It works when label is around the circle.
 #'@param line_col Color for the plot outline.
+#'@param out_line Color for the outtermost circle
 #' @return
 #' Returns a list of objects. It contains the domination plot, an a dataframe with the plotting coordinates with entropy and dominant variable for each point
 #' @export
@@ -90,7 +91,7 @@ Qentropy = function(test){
 plot_circle = function(n, data, str = F,
                        back_alpha = 0.05, label = c('curve', 'legend'), variables = colnames(data),
                        title = NULL, threshold = 0, col_variable = NULL,
-                       point_size = 3, text_size = 3,  line_col = 'gray90'){
+                       point_size = 3, text_size = 3,  line_col = 'gray90', out_line = 'black'){
   if(length(col_variable > 0)){
     colnames(data)[which(colnames(data) == col_variable)] = 'Factor'
     colnames(data) = substr(colnames(data), 1, 10)
@@ -206,7 +207,7 @@ plot_circle = function(n, data, str = F,
                     col = line_col)  +
         geom_circle(data = data1,
                     aes(x0 = 0, y0 = 0, r = rad[nrow(data1)]),
-                    col = 'black')  +
+                    col = out_line)  +
         theme(
           aspect.ratio = 1,
           axis.title = element_blank(),
@@ -218,15 +219,16 @@ plot_circle = function(n, data, str = F,
           legend.background = element_blank()
         ) + geom_jitter(
           data = data,
-          aes(x, y, col = Factor, alpha = alpha),
-          pch = 19,
+          aes(x, y, fill2 = Factor, alpha = alpha),
+          pch = 21,
           size = sizex,
           width = 3,
           height = 3
-        ) +
+        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2'))  +
         scale_alpha(guide = 'none') +
         #guides(fill = 'none') +
-        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title)
+        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title) +
+        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n))
     }
     else{
       circle = ggplot() +  theme_minimal() +
@@ -243,7 +245,7 @@ plot_circle = function(n, data, str = F,
                     col = line_col)  +
         geom_circle(data = data1,
                     aes(x0 = 0, y0 = 0, r = rad[nrow(data1)]),
-                    col = 'black') +
+                    col = out_line) +
         theme(
           aspect.ratio = 1,
           axis.title = element_blank(),
@@ -254,15 +256,16 @@ plot_circle = function(n, data, str = F,
           legend.title = element_blank()
         ) + geom_jitter(
           data = data,
-          aes(x, y, col = Factor, alpha = alpha),
-          pch = 19,
+          aes(x, y, fill2 = Factor, alpha = alpha),
+          pch = 21,
           size = sizex,
           width = 3,
           height = 3, show.legend = T
-        ) +
+        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2')) +
         scale_alpha(guide = 'none') +
         guides(fill = 'none') +
-        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title)
+        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title) +
+        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n))
     }
     data = data |> select(Entropy, Factor, col, x, y) |> mutate(Entropy = log2(Entropy))
 
@@ -367,7 +370,7 @@ plot_circle = function(n, data, str = F,
                     col = line_col)  +
         geom_circle(data = data1,
                     aes(x0 = 0, y0 = 0, r = rad[nrow(data1)]),
-                    col = 'black') +
+                    col = out_line) +
         theme(
           aspect.ratio = 1,
           axis.title = element_blank(),
@@ -378,14 +381,15 @@ plot_circle = function(n, data, str = F,
           legend.title = element_blank()
         ) + geom_jitter(
           data = data,
-          aes(x, y, col = col, alpha = alpha),
-          pch = 19,
+          aes(x, y, fill2 = col, alpha = alpha),
+          pch = 21,
           size = sizex,
           width = 3,
           height = 3
-        ) +
+        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2')) +
         scale_alpha(guide = 'none') +
-        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title)
+        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title) +
+        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n))
     }
     else{
       circle = ggplot() +  theme_minimal() +
@@ -402,7 +406,7 @@ plot_circle = function(n, data, str = F,
                     col = line_col)  +
         geom_circle(data = data1,
                     aes(x0 = 0, y0 = 0, r = rad[nrow(data1)]),
-                    col = 'black') +
+                    col = out_line) +
         theme(
           aspect.ratio = 1,
           axis.title = element_blank(),
@@ -413,14 +417,15 @@ plot_circle = function(n, data, str = F,
           legend.title = element_blank()
         ) + geom_jitter(
           data = data,
-          aes(x, y, col = col, alpha = alpha),
-          pch = 19,
+          aes(x, y, fill2 = col, alpha = alpha),
+          pch = 21,
           size = sizex,
           width = 1,
           height = 1, show.legend = F
-        ) +
+        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2')) +
         scale_alpha(guide = 'none') +
-        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title)
+        coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title) +
+        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n))
     }
     data = data |> select(Entropy, col, x, y) |> mutate(Entropy = log2(Entropy))}
   return(list(circle, data ))
