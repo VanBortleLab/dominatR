@@ -219,16 +219,17 @@ plot_circle = function(n, data, str = F,
           legend.background = element_blank()
         ) + geom_jitter(
           data = data,
-          aes(x, y, fill2 = Factor, alpha = alpha),
+          aes(x, y, fill2 = Factor, alpha = alpha, col2 = Factor ),
           pch = 21,
           size = sizex,
           width = 3,
           height = 3
-        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2'))  +
+        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2', 'col' = 'col2'))  +
         scale_alpha(guide = 'none') +
         #guides(fill = 'none') +
         coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title) +
-        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n))
+        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n)) +
+        scale_color_manual(aesthetics = 'col2', values = rep('black', n))
     }
     else{
       circle = ggplot() +  theme_minimal() +
@@ -256,16 +257,17 @@ plot_circle = function(n, data, str = F,
           legend.title = element_blank()
         ) + geom_jitter(
           data = data,
-          aes(x, y, fill2 = Factor, alpha = alpha),
+          aes(x, y, fill2 = Factor, alpha = alpha, col2 = Factor),
           pch = 21,
           size = sizex,
           width = 3,
           height = 3, show.legend = T
-        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2')) +
+        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2', 'col' = 'col2')) +
         scale_alpha(guide = 'none') +
         guides(fill = 'none') +
         coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title) +
-        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n))
+        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n)) +
+        scale_color_manual(aesthetics = 'col2', values = rep('black', n))
     }
     data = data |> select(Entropy, Factor, col, x, y) |> mutate(Entropy = log2(Entropy))
 
@@ -381,15 +383,16 @@ plot_circle = function(n, data, str = F,
           legend.title = element_blank()
         ) + geom_jitter(
           data = data,
-          aes(x, y, fill2 = col, alpha = alpha),
+          aes(x, y, fill2 = col, alpha = alpha, col2 = col),
           pch = 21,
           size = sizex,
           width = 3,
           height = 3
-        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2')) +
+        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2', 'col' = 'col2')) +
         scale_alpha(guide = 'none') +
         coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title) +
-        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n))
+        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n)) +
+        scale_color_manual(aesthetics = 'col2', values = rep('black', n))
     }
     else{
       circle = ggplot() +  theme_minimal() +
@@ -417,15 +420,16 @@ plot_circle = function(n, data, str = F,
           legend.title = element_blank()
         ) + geom_jitter(
           data = data,
-          aes(x, y, fill2 = col, alpha = alpha),
+          aes(x, y, fill2 = col, alpha = alpha, col2 = col),
           pch = 21,
           size = sizex,
           width = 1,
           height = 1, show.legend = F
-        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2')) +
+        ) |> rename_geom_aes(new_aes = c('fill' = 'fill2', 'col' = 'col2')) +
         scale_alpha(guide = 'none') +
         coord_equal(xlim = c(-105,105), ylim = c(-105,105)) + ggtitle(title) +
-        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n))
+        scale_fill_manual(aesthetics = 'fill2', values = scales::hue_pal()(n)) +
+        scale_color_manual(aesthetics = 'col2', values = rep('black', n))
     }
     data = data |> select(Entropy, col, x, y) |> mutate(Entropy = log2(Entropy))}
   return(list(circle, data ))
