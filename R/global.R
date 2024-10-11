@@ -50,6 +50,7 @@ utils::globalVariables(
     'ylab',
     'xlab',
     'facet_wrap',
-    'scale_fill_manual'
+    'scale_fill_manual',
+    'scale_color_manual'
   )
 )
