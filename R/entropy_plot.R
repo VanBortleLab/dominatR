@@ -432,7 +432,7 @@ plot_circle = function(n, data, str = F,
         scale_color_manual(aesthetics = 'col2', values = rep('black', n))
     }
     data = data |> select(Entropy, col, x, y) |> mutate(Entropy = log2(Entropy))}
-  return(list(circle, data ))
+  return(list(circle, data, data_1 ))
   }
 
 #' Dominance Distribution Plotter
