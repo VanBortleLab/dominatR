@@ -14,3 +14,6 @@ Depends:
 Imports: dplyr, forcats, lubridate, purrr, readr, stringr, tibble, tidyr, geomtextpath, ggforce, ggplot2, scales
 Remotes: clauswilke/relayer
 RoxygenNote: 7.3.0
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
