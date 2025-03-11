@@ -8,12 +8,12 @@
 #' @return A Matrix with normalized counts.
 #' @export
 #'
-cpm.normalization = function(df, log_trans = F){
+cpm_normalization = function(df, log_trans = F){
   sum = colSums(df)/1e6
-  
-  
+
+
   df = mapply('/', df, sum)
-  
+
   if(log_trans == F){
     return(df)
   } else {
