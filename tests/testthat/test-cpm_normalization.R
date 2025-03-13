@@ -8,7 +8,7 @@ test_that("CPM normalization works correctly", {
   expected_cpm <- as.matrix(sweep(test_data, 2, colSums(test_data) / 1e6, "/"))
 
   ### Using our function
-  result <- cpm.normalization(test_data, log_trans = FALSE)
+  result <- cpm_normalization(test_data, log_trans = FALSE)
 
   ## It should be a matrix
    expect_true(is.matrix(result))
@@ -20,7 +20,7 @@ test_that("CPM normalization works correctly", {
   expect_equal(result, expected_cpm, tolerance = 1e-6)
 
   ## Using the log feature.
-  result_log <- cpm.normalization(test_data, log_trans = TRUE)
+  result_log <- cpm_normalization(test_data, log_trans = TRUE)
 
   ## Adding a count to our primary calculation
   expected_log_cpm <- log2(expected_cpm + 1)

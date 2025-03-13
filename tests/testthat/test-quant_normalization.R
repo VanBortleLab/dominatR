@@ -5,10 +5,10 @@ test_that("Quantile normalization works correctly", {
     sample3 = c(2, 12, 22, 32, 42)
   )
 
-  result <- quant.normalization(test_data, log_trans = FALSE)
+  result <- quant_normalization(test_data, log_trans = FALSE)
   expect_true(is.matrix(result))
   expect_equal(dim(result), dim(test_data))
-  result_log <- quant.normalization(test_data, log_trans = TRUE)
+  result_log <- quant_normalization(test_data, log_trans = TRUE)
   expect_equal(result_log, log2(result + 1))
   expect_equal(rownames(result), rownames(test_data))
 })

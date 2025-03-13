@@ -11,10 +11,10 @@ test_that("TPM normalization works correctly", {
 
   # Calculate manual TPM
   df1 <- 1000 * test_data / gene_length
-  expected_tpm <- sweep(df1, 2, colSums(df1) / 1e6, "/")
+  expected_tpm <- as.matrix(sweep(df1, 2, colSums(df1) / 1e6, "/"))
 
   # Run TPM Normalization (without log2 transformation)
-  result <- tpm.normalization(test_data, gene_length, log_trans = FALSE)
+  result <- tpm_normalization(test_data, gene_length, log_trans = FALSE)
 
   # Expected to return a matrix
   expect_true(is.matrix(result))
@@ -26,7 +26,7 @@ test_that("TPM normalization works correctly", {
   expect_equal(result, expected_tpm, tolerance = 1e-6)
 
   # Run the version with log2 transformation
-  result_log <- tpm.normalization(test_data, gene_length, log_trans = TRUE)
+  result_log <- tpm_normalization(test_data, gene_length, log_trans = TRUE)
 
   # Calculate the expected log2 transformation
   expected_log_tpm <- log2(expected_tpm + 1)

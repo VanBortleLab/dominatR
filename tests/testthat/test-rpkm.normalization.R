@@ -11,10 +11,10 @@ test_that("RPKM normalization works correctly", {
 
   # Calculate manual RPKM
   counts_per_million <- sweep(test_data, 2, colSums(test_data) / 1e6, "/")
-  expected_rpkm <- sweep(counts_per_million * 1000, 1, gene_length, "/")
+  expected_rpkm <- as.matrix(sweep(counts_per_million * 1000, 1, gene_length, "/"))
 
   # Run RPKM normalization (without log2 transformation)
-  result <- rpkm.normalization(test_data, gene_length, log_trans = FALSE)
+  result <- rpkm_normalization(test_data, gene_length, log_trans = FALSE)
 
   # Expected to return a matrix(according to return)
   expect_true(is.matrix(result))
@@ -26,7 +26,7 @@ test_that("RPKM normalization works correctly", {
   expect_equal(result, expected_rpkm, tolerance = 1e-6)
 
   # Run the version with log2 transformation
-  result_log <- rpkm.normalization(test_data, gene_length, log_trans = TRUE)
+  result_log <- rpkm_normalization(test_data, gene_length, log_trans = TRUE)
 
   # Calculate the expected log2 transformation
   expected_log_rpkm <- log2(expected_rpkm + 1)
