@@ -1,6 +1,6 @@
 
 
-#' Plotting Triangle with center of mass
+#' Dominance Plot in Three Dimensions - Plot Triangle
 #'
 #' @param data a table with three columns
 #' @param entropyrange a vector with 2 elements in the range [0,1] i.e. c(minimum entropy , maximum entropy)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_triangle.R
 \name{plot_triangle}
 \alias{plot_triangle}
-\title{Plotting Triangle with center of mass}
+\title{Dominance Plot in Three Dimensions - Plot Triangle}
 \usage{
 plot_triangle(
   data,
@@ -39,5 +39,5 @@ If T, all the points that are out of entropyrange or magnitude range are plotted
 Returns a table with the coordinates of center of mass entropy(in the range of 0 and 1) and magnitude(in the range of 0 and 1)
 }
 \description{
-Plotting Triangle with center of mass
+Dominance Plot in Three Dimensions - Plot Triangle
 }
