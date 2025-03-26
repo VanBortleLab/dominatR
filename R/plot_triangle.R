@@ -70,9 +70,9 @@ plot_triangle=function(data,
          pch=16,
          xlab = "",
          ylab="",
-         frame.plot = F,
-         ann = F,
-         axes = F,
+         frame.plot = FALSE,
+         ann = FALSE,
+         axes = FALSE,
          col="transparent")
 
     if(plotAll==TRUE){

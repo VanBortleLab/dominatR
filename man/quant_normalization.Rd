@@ -4,7 +4,7 @@
 \alias{quant_normalization}
 \title{Quantile Normalization}
 \usage{
-quant_normalization(df, log_trans = F)
+quant_normalization(df, log_trans = FALSE)
 }
 \arguments{
 \item{df}{A dataframe or matrix, must contain only numerical values}

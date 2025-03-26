@@ -4,7 +4,7 @@
 \alias{rpkm_normalization}
 \title{Reads Per Kilobase Million}
 \usage{
-rpkm_normalization(df, gene_length, log_trans = F)
+rpkm_normalization(df, gene_length, log_trans = FALSE)
 }
 \arguments{
 \item{df}{A dataframe or matrix, must contain only numerical valeus}

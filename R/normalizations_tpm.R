@@ -8,7 +8,7 @@
 #' @description Normalizes a count matrix by the TPM method
 #' @return A Matrix with normalized counts.
 #' @export
-tpm_normalization = function(df, gene_length, log_trans = F){
+tpm_normalization = function(df, gene_length, log_trans = FALSE){
 
   ### Divide counts by Gene Length
   df1 <- 1000 * df / gene_length
@@ -19,7 +19,7 @@ tpm_normalization = function(df, gene_length, log_trans = F){
   ### Divide previous by Sequencing depth
   df1 <- mapply('/', df1, counts)
 
-  if(log_trans == F){
+  if(log_trans == FALSE){
     return(df1)
   } else {
     df1 = log2(df1 + 1)

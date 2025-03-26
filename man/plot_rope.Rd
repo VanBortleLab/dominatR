@@ -9,7 +9,7 @@ plot_rope(
   push_text = 1,
   rope_width = 1,
   rope_color = "#CCCCCCCC",
-  rope_border = T,
+  rope_border = TRUE,
   col = c("red", "blue"),
   col_bg = "whitesmoke",
   pch = c(21, 21),
@@ -17,10 +17,10 @@ plot_rope(
   cex = 1,
   entropyrange = c(0, Inf),
   maxvaluerange = c(0, Inf),
-  plotAll = T,
-  label = T,
+  plotAll = TRUE,
+  label = TRUE,
   title = "title",
-  output_table = T
+  output_table = TRUE
 )
 }
 \arguments{

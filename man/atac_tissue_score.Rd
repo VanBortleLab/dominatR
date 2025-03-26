@@ -20,9 +20,13 @@ A dataframe with 9817 rows and 23 variables:
 {Created by The VanBortle lab at UIUC to serve as an example}
 }
 \usage{
-atac_tissue_score
+data(atac_tissue_counts)
 }
 \description{
 A list of tissues and the corresponding counts for RNA POL3 genes for each of them. Values are represented as the -log10(p-value)
+}
+\examples{
+data('atac_tissue_score')
+head(atac_tissue_score)
 }
 \keyword{datasets}

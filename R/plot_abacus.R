@@ -101,8 +101,8 @@ plot_abacus = function(data,
   data$bin = cut(data$Qentropy,
                  breaks = c(0, range),
                  labels = format(round(seq(1/percentiles,1, by = 1/percentiles), 2),2),
-                 include.lowest = T,
-                 right = F)
+                 include.lowest = TRUE,
+                 right = FALSE)
 
   data$Variable = factor(data$Variable, levels = y_variables)
   data$bin = factor(data$bin, levels = format(round(seq(1/percentiles,1, by = 1/percentiles), 2),2))

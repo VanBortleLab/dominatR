@@ -4,7 +4,7 @@
 \alias{tpm_normalization}
 \title{Transcripts per Million}
 \usage{
-tpm_normalization(df, gene_length, log_trans = F)
+tpm_normalization(df, gene_length, log_trans = FALSE)
 }
 \arguments{
 \item{df}{A dataframe or matrix, must contain only numerical valeus}

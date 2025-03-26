@@ -31,7 +31,7 @@ plot_rope <- function(data,
                       push_text = 1,
                       rope_width = 1,
                       rope_color = "#CCCCCCCC",
-                      rope_border = T,
+                      rope_border = TRUE,
                       col = c("red", "blue"),
                       col_bg = "whitesmoke",
                       pch = c(21, 21),
@@ -39,10 +39,10 @@ plot_rope <- function(data,
                       cex = 1,
                       entropyrange = c(0, Inf),
                       maxvaluerange = c(0, Inf),
-                      plotAll = T,
-                      label = T,
+                      plotAll = TRUE,
+                      label = TRUE,
                       title = "title",
-                      output_table = T)
+                      output_table = TRUE)
 {
   rope_width = rope_width * 0.25
   n = ncol(data)
@@ -53,7 +53,7 @@ plot_rope <- function(data,
   colnames(data) = c("a", "b")
 
   final = cbind(data, centmass(data, px, py))
-  final$comy = rope_width * sample(c(-500:500), nrow(final), replace = T) /
+  final$comy = rope_width * sample(c(-500:500), nrow(final), replace = TRUE) /
     500
   final = final %>%
     dplyr::mutate(color = ifelse(a > b, col[1], col[2]))
@@ -74,9 +74,9 @@ plot_rope <- function(data,
     pch = 16,
     xlab = "",
     ylab = "",
-    frame.plot = F,
-    ann = T,
-    axes = F,
+    frame.plot = FALSE,
+    ann = TRUE,
+    axes = FALSE,
     col = "transparent",
     main = title
   )

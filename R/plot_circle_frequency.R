@@ -31,7 +31,7 @@ plot_circle_frequency = function(n,
   data_ent$bin = cut(as.numeric(data_ent$Entropy),
                      breaks =breaks_log2,
                      labels =  2^(breaks_log2[-length(breaks_log2)]) |> ceiling(),
-                     include.lowest = F, right = T)
+                     include.lowest = FALSE, right = TRUE)
 
   data_ent = data_ent |>
     group_by(bin, Factor) |>
@@ -62,7 +62,7 @@ plot_circle_frequency = function(n,
                    y = proportion,
                    fill = Factor,
                    group = Factor),
-               show.legend = F,
+               show.legend = FALSE,
                pch = 21,
                size = point_size) +
     theme_minimal() +
@@ -90,7 +90,7 @@ plot_circle_frequency = function(n,
     scale_y_continuous(limits = c(0,1), n.breaks =5) +
     scale_x_discrete(limits = factor(seq(1, n)) )
 
-  if(single == F){
+  if(single == FALSE){
     plot_stat = plot_stat + facet_wrap(~Factor, ncol = numb_columns)
   }
   return(list(plot_stat, data_ent))

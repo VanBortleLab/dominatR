@@ -4,7 +4,7 @@
 \alias{cpm_normalization}
 \title{Counts Per Million}
 \usage{
-cpm_normalization(df, log_trans = F)
+cpm_normalization(df, log_trans = FALSE)
 }
 \arguments{
 \item{df}{A dataframe or matrix, must contain only numerical valeus}

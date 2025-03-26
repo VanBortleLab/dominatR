@@ -7,7 +7,7 @@
 #' @description Normalizes a count matrix by the RPKM method
 #' @return A Matrix with normalized counts.
 #' @export
-rpkm_normalization = function(df, gene_length, log_trans = F){
+rpkm_normalization = function(df, gene_length, log_trans = FALSE){
 
   sum = colSums(df)/1e6
 
@@ -15,7 +15,7 @@ rpkm_normalization = function(df, gene_length, log_trans = F){
 
   df = df * 1000 / gene_length
 
-  if(log_trans == F){
+  if(log_trans == FALSE){
     return(df)
   } else {
     df = log2(df + 1)

@@ -2,6 +2,7 @@
 #'
 #' A subset of data obtained from CHIP-Seq Data for RNA Polymerase I, II and III
 #'
+#' @docType data
 #' @format A dataframe with 1061 rows and 7 variables:
 #' \describe{
 #' \item{Chr}{Chromosome where the gene is located}
@@ -13,7 +14,12 @@
 #' \item{pol3}{Raw counts for RNA Polymerase III Chip-Seq}}
 #'
 #' @source  {Created by The VanBortle lab at UIUC to serve as an example}
-#' @eval data(rnapol_counts)
+#' @usage data(rnapol_counts)
+#' @examples
+#' data('rnapol_counts')
+#' head(rnapol_counts)
+#'
+#'
 'rnapol_counts'
 
 
@@ -21,6 +27,7 @@
 #'
 #' A subset of data obtained from CHIP-Seq Data for RNA Polymerase I, II and III. Values are represented as the -log10(p-value)
 #'
+#' @docType data
 #' @format A dataframe with 1061 rows and 7 variables:
 #' \describe{
 #' \item{Chr}{Chromosome where the gene is located}
@@ -32,7 +39,10 @@
 #' \item{pol3}{Score for RNA Polymerase III Chip-Seq}}
 #'
 #' @source  {Created by The VanBortle lab at UIUC to serve as an example}
-#' @eval data(rnapol_score)
+#' @usage data(rnapol_score)
+#' @examples
+#' data('rnapol_score')
+#' head(rnapol_score)
 'rnapol_score'
 
 
@@ -42,6 +52,7 @@
 #'
 #' A list of tissues and the corresponding counts for RNA POL3 genes for each of them.
 #'
+#' @docType data
 #' @format A dataframe with 9817 rows and 26 variables:
 #' \describe{
 #' \item{core_type}{Category for genes based on their expression across tissues}
@@ -55,13 +66,17 @@
 #'
 #'
 #' @source  {Created by The VanBortle lab at UIUC to serve as an example}
-#' @eval data(atac_tissue_counts)
+#' @usage data(atac_tissue_counts)
+#' @examples
+#' data('atac_tissue_counts')
+#' head(atac_tissue_counts)
 'atac_tissue_counts'
 
 #' ATAC-Seq Score for POL3 Genes Dataframe
 #'
 #' A list of tissues and the corresponding counts for RNA POL3 genes for each of them. Values are represented as the -log10(p-value)
 #'
+#' @docType data
 #' @format A dataframe with 9817 rows and 23 variables:
 #' \describe{
 #' \item{core_type}{Category for genes based on their expression across tissues}
@@ -75,5 +90,8 @@
 #'
 #'
 #' @source  {Created by The VanBortle lab at UIUC to serve as an example}
-#' @eval data(atac_tissue_counts)
+#' @usage data(atac_tissue_counts)
+#' @examples
+#' data('atac_tissue_score')
+#' head(atac_tissue_score)
 'atac_tissue_score'
