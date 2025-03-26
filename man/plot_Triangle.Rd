@@ -9,8 +9,8 @@ plot_triangle(
   entropyrange = c(0, 1),
   magnituderange = c(0, 1),
   col = c("red", "green", "blue"),
-  output_table = T,
-  plotAll = T,
+  output_table = TRUE,
+  plotAll = TRUE,
   cex = 1,
   pch = 16
 )
@@ -26,10 +26,10 @@ only the entries that has their magnitude within this range are highlighted}
 
 \item{col}{a vector of 3 elements that contains color names}
 
-\item{output_table}{a boolean value of T or F indicating whether to return the output table or not}
+\item{output_table}{a boolean value of TRUE or FALSE indicating whether to return the output table or not}
 
 \item{plotAll}{a boolean value
-If T, all the points that are out of entropyrange or magnitude range are plotted in whitesmoke color, else they are not plotted at all.}
+If TRUE, all the points that are out of entropyrange or magnitude range are plotted in whitesmoke color, else they are not plotted at all.}
 
 \item{cex}{a numeric value indicating the size of the points}
 
@@ -39,5 +39,5 @@ If T, all the points that are out of entropyrange or magnitude range are plotted
 Returns a table with the coordinates of center of mass entropy(in the range of 0 and 1) and magnitude(in the range of 0 and 1)
 }
 \description{
-Dominance Plot in Three Dimensions - Plot Triangle
+Creates a triangle plot based on the center of mass scores for each row in a dataset
 }

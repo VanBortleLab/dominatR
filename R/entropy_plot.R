@@ -18,7 +18,7 @@ plot_circle_frequency = function(n, circle){
   breaks_log2 = log2(1:n)
   data_ent$bin = cut(data_ent$Entropy, breaks = breaks_log2,
                      labels = paste0(floor(2^(round(breaks_log2[-length(breaks_log2)], 2)))),
-                     include.lowest = T)
+                     include.lowest = TRUE)
 
   data_ent = data_ent |> group_by(bin, Factor) |> dplyr::select(bin, Factor) |> summarise(n = n(), .groups = 'drop')
   data_ent = data_ent |> group_by(Factor) |> mutate(proportion = n/sum(n))

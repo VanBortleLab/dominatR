@@ -7,7 +7,7 @@
 plot_circle(
   n,
   data,
-  str = F,
+  str = FALSE,
   back_alpha = 0.05,
   label = c("curve", "legend"),
   variables = colnames(data),
@@ -20,8 +20,7 @@ plot_circle(
   out_line = "black",
   background_colors = NULL,
   point_fill_colors = NULL,
-  point_line_colors = NULL,
-  seed = 123
+  point_line_colors = NULL
 )
 }
 \arguments{
@@ -56,8 +55,6 @@ plot_circle(
 \item{point_fill_colors}{Colors for the points in the plot}
 
 \item{point_line_colors}{Colors for the outline of the point in the plot}
-
-\item{seed}{Seed value for reproducibility}
 }
 \value{
 Returns a list of objects. It contains the circular dominance plot and a dataframe with the plotting coordinates, entropy and the dominant variable for each row

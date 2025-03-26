@@ -18,7 +18,6 @@
 #' @param background_colors Colors for the background of the plot
 #' @param point_fill_colors Colors for the points in the plot
 #' @param point_line_colors Colors for the outline of the point in the plot
-#' @param seed Seed value for reproducibility
 #'
 #' @returns
 #' Returns a list of objects. It contains the circular dominance plot and a dataframe with the plotting coordinates, entropy and the dominant variable for each row
@@ -30,7 +29,7 @@
 #'
 plot_circle = function(n,
                        data,
-                       str = F,
+                       str = FALSE,
                        back_alpha = 0.05,
                        label = c('curve', 'legend'),
                        variables = colnames(data),
@@ -43,12 +42,10 @@ plot_circle = function(n,
                        out_line = 'black',
                        background_colors = NULL,
                        point_fill_colors = NULL,
-                       point_line_colors = NULL,
-                       seed = 123){
-  set.seed(seed)
+                       point_line_colors = NULL){
+
   if(!is.null(col_variable) && length(col_variable) > 0){
 
-    print('We are working with a specific column')
     colnames(data)[which(colnames(data) == col_variable)] = 'Factor'
     ## removing rows where sum = 0
     data = data |> relocate(Factor)
@@ -223,7 +220,7 @@ plot_circle = function(n,
       data = arc,
       aes(x, y, fill = type),
       color = line_col,
-      show.legend = F,
+      show.legend = FALSE,
       alpha = area
     ) +
     geom_circle(data = data1,
@@ -232,7 +229,7 @@ plot_circle = function(n,
     geom_circle(aes(x0 = 0,
                     y0 =0,
                     r = data1$rad[nrow(data1)]),
-                col = out_line, inherit.aes = F) +
+                col = out_line, inherit.aes = FALSE) +
     coord_equal(xlim = c(-105,105), ylim = c(-105,105)) +
     scale_fill_manual(values = polygon_colors, na.value = 'whitesmoke' ) +
     ggtitle(title)
@@ -247,7 +244,7 @@ plot_circle = function(n,
 
   if(!is.null(col_variable) && length(col_variable) > 0 && label == 'legend'){
 
-    print('This set up is for specific column and label legend')
+
 
     n2 = length(unique(data$Factor))
 
@@ -281,7 +278,7 @@ plot_circle = function(n,
       scale_alpha(guide = 'none')
 
   }else if(!is.null(col_variable) && length(col_variable) > 0 && label == 'curve'){
-    print('This set up is for a specific column and label curved')
+
     n2 = length(unique(data$Factor))
 
     point_fill = if (!is.null(point_fill_colors) && length(point_fill_colors) > 0) {
@@ -309,7 +306,7 @@ plot_circle = function(n,
                   size = sizex,
                   width = 3,
                   height = 3,
-                  show.legend = F) +
+                  show.legend = FALSE) +
       geom_textcurve(data = location,
                      aes(x = x,
                          xend = xend,
@@ -319,8 +316,8 @@ plot_circle = function(n,
                      linecolour = NA,
                      curvature = -0.4,
                      size = textsize,
-                     na.rm = T,
-                     show.legend = F) +
+                     na.rm = TRUE,
+                     show.legend = FALSE) +
       scale_fill_manual(values = point_fill,
                         na.value = 'whitesmoke') +
       scale_color_manual(values = point_line,
@@ -331,7 +328,7 @@ plot_circle = function(n,
 
   }else if(is.null(col_variable) && label == 'legend'){
 
-    print('This set up is for NO specific column and label legend')
+
 
     point_fill = if (!is.null(point_fill_colors) && length(point_fill_colors) > 0) {
       point_fill_colors
@@ -366,7 +363,7 @@ plot_circle = function(n,
 
   }else if(is.null(col_variable) && label == 'curve'){
 
-    print('This set up is for NO specific column and label curved')
+
 
     point_fill = if (!is.null(point_fill_colors) && length(point_fill_colors) > 0) {
       point_fill_colors
@@ -392,7 +389,7 @@ plot_circle = function(n,
                   size = sizex,
                   width = 3,
                   height = 3,
-                  show.legend = F) +
+                  show.legend = FALSE) +
       geom_textcurve(data = location,
                      aes(x = x,
                          xend = xend,
@@ -402,14 +399,15 @@ plot_circle = function(n,
                      linecolour = NA,
                      curvature = -0.4,
                      size = textsize,
-                     na.rm = T,
-                     show.legend = F) +
+                     na.rm = TRUE,
+                     show.legend = FALSE) +
       scale_fill_manual(values = point_fill,
                         na.value = 'whitesmoke') +
       scale_color_manual(values = point_line,
                          na.value = 'whitesmoke', guide = 'none') +
       scale_alpha(guide = 'none')
   } else {
+
     print('There is something wrong with the data. Returning NULL')
     return(NULL)
   }

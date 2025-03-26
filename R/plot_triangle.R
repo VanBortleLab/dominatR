@@ -2,15 +2,17 @@
 
 #' Dominance Plot in Three Dimensions - Plot Triangle
 #'
+#'  Creates a triangle plot based on the center of mass scores for each row in a dataset
+#'
 #' @param data a table with three columns
 #' @param entropyrange a vector with 2 elements in the range [0,1] i.e. c(minimum entropy , maximum entropy)
 #' only the entries that has their entropy within this range are highlighted
 #' @param magnituderange a vector with 2 elements in the range [0,1] i.e. c(minimum magnitude , maximum magnitude)
 #' only the entries that has their magnitude within this range are highlighted
 #' @param col a vector of 3 elements that contains color names
-#' @param output_table a boolean value of T or F indicating whether to return the output table or not
+#' @param output_table a boolean value of TRUE or FALSE indicating whether to return the output table or not
 #' @param plotAll a boolean value
-#' If T, all the points that are out of entropyrange or magnitude range are plotted in whitesmoke color, else they are not plotted at all.
+#' If TRUE, all the points that are out of entropyrange or magnitude range are plotted in whitesmoke color, else they are not plotted at all.
 #' @param cex a numeric value indicating the size of the points
 #' @param pch a integer value indicating different shapes of the points
 #'
@@ -24,8 +26,8 @@ plot_triangle=function(data,
                        entropyrange=c(0,1),
                        magnituderange=c(0,1),
                        col=c("red","green","blue"),
-                       output_table=T,
-                       plotAll=T,
+                       output_table=TRUE,
+                       plotAll=TRUE,
                        cex=1,
                        pch=16)
 {
@@ -73,7 +75,7 @@ plot_triangle=function(data,
          axes = F,
          col="transparent")
 
-    if(plotAll==T){
+    if(plotAll==TRUE){
       badpoints=final %>%
         filter(color=="whitesmoke")
 
@@ -97,5 +99,5 @@ plot_triangle=function(data,
             pch=16)
   }##Luka##
 
-  if(output_table==T) return(final)
+  if(output_table==TRUE) return(final)
 }

@@ -9,8 +9,8 @@
 #'
 minmax_normalization=function(x,min,max)
 {
-  MIN=min(x)
-  MAX=max(x)
+  MIN=min(x, na.rm = TRUE)
+  MAX=max(x, na.rm = TRUE)
   y=as.double((x-MIN)*(max-min)/(MAX-MIN)+min)
   return(y)
 }

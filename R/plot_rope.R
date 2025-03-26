@@ -27,27 +27,24 @@
 #' @seealso [entropy()], [Qentropy()], [centmass()]
 #'
 #'
-plot_rope=function(data,
-                  push_text=1,
-                  rope_width=1,
-                  rope_color="#CCCCCCCC",
-                  rope_border=T,
-                  col=c("red","blue"),
-                  col_bg="whitesmoke",
-                  pch = c(21,21),
-                  pch_bg=19,
-                  cex=1,
-                  entropyrange=c(0,Inf),
-                  maxvaluerange=c(0,Inf),
-                  plotAll=T,
-                  label=T,
-                  title="title",
-                  output_table=T
-)
+plot_rope <- function(data,
+                      push_text = 1,
+                      rope_width = 1,
+                      rope_color = "#CCCCCCCC",
+                      rope_border = T,
+                      col = c("red", "blue"),
+                      col_bg = "whitesmoke",
+                      pch = c(21, 21),
+                      pch_bg = 19,
+                      cex = 1,
+                      entropyrange = c(0, Inf),
+                      maxvaluerange = c(0, Inf),
+                      plotAll = T,
+                      label = T,
+                      title = "title",
+                      output_table = T)
 {
-
   rope_width = rope_width * 0.25
-  # data=as.data.frame(abs(matrix(rnorm(nu*2,100,sd=100),nrow=nu,ncol=2)))
   n = ncol(data)
   px = c(-1, 1)
   py = c(0, 0)
@@ -62,7 +59,7 @@ plot_rope=function(data,
     dplyr::mutate(color = ifelse(a > b, col[1], col[2]))
 
   ##Filtering on the basis of maxvalue and entropy
-  final = final %>% dplyr::mutate(maxvalue = pmax(a, b), entropy = entropy(data)$Entropy)
+  final = final %>% mutate(maxvalue = pmax(a, b), entropy = entropy(data)$Entropy)
   final$color[!(final$entropy >= entropyrange[1] &
                   final$entropy <= entropyrange[2])] = col_bg
   final$color[!(final$max >= maxvaluerange[1] &
@@ -89,7 +86,7 @@ plot_rope=function(data,
     col = rope_color,
     border = rope_border
   )
-  if (plotAll == T) {
+  if (plotAll == TRUE) {
     badpoints = final %>% dplyr::filter(color == col_bg)
     points(
       badpoints$comx,
@@ -137,9 +134,9 @@ plot_rope=function(data,
 
 
 
-  if (label == T)
+  if (label == TRUE)
     text(colu, x = px * push_text * 1.2, y = py)
-  if (output_table == T)
+  if (output_table == TRUE)
     return(final)
 
 }

@@ -4,9 +4,25 @@
 \alias{plot_circle_frequency}
 \title{Dominance Distribution Plotter}
 \usage{
-plot_circle_frequency(n, circle, single = F, legend = T, numb_columns = 1)
+plot_circle_frequency(
+  n,
+  circle,
+  single = FALSE,
+  legend = TRUE,
+  numb_columns = 1,
+  filter_class = NULL,
+  point_size = 2
+)
 
-plot_circle_frequency(n, circle, single = F, legend = T, numb_columns = 1)
+plot_circle_frequency(
+  n,
+  circle,
+  single = FALSE,
+  legend = TRUE,
+  numb_columns = 1,
+  filter_class = NULL,
+  point_size = 2
+)
 }
 \arguments{
 \item{n}{Number of Variables, must be the same as the ones used in the function}
@@ -18,6 +34,10 @@ plot_circle_frequency(n, circle, single = F, legend = T, numb_columns = 1)
 \item{legend}{A logical parameter. If TRUE legends will appear}
 
 \item{numb_columns}{A numerical value. Number of columns for plotting when single is FALSE}
+
+\item{filter_class}{Name or names of classes of interest for display}
+
+\item{point_size}{Size of the point}
 }
 \value{
 Returns a list of objects, a frequency distribution plot for each category and the respective dataframe
