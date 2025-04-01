@@ -14,7 +14,7 @@ centmass(data, x = c(0, 1, 0.5), y = c(0, 0, sqrt(3)/2))
 \item{y}{a vector that provides y coordinates of  objects}
 }
 \value{
-Returns a table with 2 columns(i.e. comx and comy) containing x coordinate and y coordinate of the center of mass
+Returns a table with 2 columns with x and y coordinate of the center of mass
 }
 \description{
 Returns coordinates of center of mass from the data provided.

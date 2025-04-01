@@ -2,26 +2,45 @@
 % Please edit documentation in R/calculations_entropy.R
 \name{entropy}
 \alias{entropy}
-\title{Entropy - Shannon Information}
+\title{Compute Shannon Entropy on row-normalized data}
 \usage{
-entropy(test)
+entropy(x, assay_name = NULL, new_assay_name = "Entropy")
 }
 \arguments{
-\item{test}{A Data frame, must contain numerical columns}
+\item{x}{A data.frame (with numeric columns)
+or a SummarizedExperiment (with an assay of numeric data).}
+
+\item{assay_name}{(SummarizedExperiment only) The name of the assay
+to transform and compute Entropy on. If NULL, uses the first assay.}
+
+\item{new_assay_name}{If you prefer to store Q-values in a
+*new* assay, provide a name. By default `Entropy`}
 }
 \value{
-Returns an extra column to the dataframe with a value related to the Entropy value. :)
+- If `x` is a data.frame: returns the same data.frame in which
+    numeric columns have been replaced by their row-wise proportions,
+    and an `Entropy` column is appended.
+  - If `x` is a SummarizedExperiment: returns the same
+    SummarizedExperiment in with a new assay (Default name is `Entropy`)
+    and `rowData(x)$Entropy` is added.
 }
 \description{
-Calculates the Entropy value for each row across numerical columns.
+Compute Shannon Entropy on row-normalized data
 }
 \examples{
-data(rnapol_score)
-test =  entropy(rnapol_score)
+df <- data.frame(A = c(10, 0, 30),
+                 B = c(5,  5, 0),
+                 C = c(0,  0, 10))
+# Original function row-normalizes the numeric columns, then calculates Entropy
+df2 <- entropy(df)
+df2
 
+# SummarizedExperiment example
+# library(SummarizedExperiment)
+# mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
+# se <- SummarizedExperiment(assays = list(counts=mat))
+# se2 <- entropy(se)
+# assay(se2, "counts")  # row-normalized
+# rowData(se2)$Entropy  # computed entropy
 
-
-}
-\references{
-https://en.wikipedia.org/wiki/Entropy_(information_theory)
 }

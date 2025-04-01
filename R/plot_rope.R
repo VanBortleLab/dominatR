@@ -59,7 +59,8 @@ plot_rope <- function(data,
     dplyr::mutate(color = ifelse(a > b, col[1], col[2]))
 
   ##Filtering on the basis of maxvalue and entropy
-  final = final %>% mutate(maxvalue = pmax(a, b), entropy = entropy(data)$Entropy)
+  final = final %>% mutate(maxvalue = pmax(a, b),
+                           entropy = entropy(data)$Entropy)
   final$color[!(final$entropy >= entropyrange[1] &
                   final$entropy <= entropyrange[2])] = col_bg
   final$color[!(final$max >= maxvaluerange[1] &

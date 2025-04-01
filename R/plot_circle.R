@@ -42,10 +42,8 @@ plot_circle = function(n,
                        out_line = 'black',
                        background_colors = NULL,
                        point_fill_colors = NULL,
-                       point_line_colors = NULL){
-
-  if(!is.null(col_variable) && length(col_variable) > 0){
-
+                       point_line_colors = NULL) {
+  if (!is.null(col_variable) && length(col_variable) > 0) {
     colnames(data)[which(colnames(data) == col_variable)] = 'Factor'
     ## removing rows where sum = 0
     data = data |> relocate(Factor)
@@ -53,7 +51,7 @@ plot_circle = function(n,
 
   ## Shortening column names
   colnames(data) = substr(colnames(data), 1, 10)
-  variables = substr(variables,1,10)
+  variables = substr(variables, 1, 10)
 
   ## Subsetting for observations below the threshold
   data = data |>
@@ -61,7 +59,7 @@ plot_circle = function(n,
 
   ## Key Plot setting
   area = back_alpha
-  a = ifelse(n >15, 80, 70)
+  a = ifelse(n > 15, 80, 70)
   b = ifelse(n > 15, 100, 110)
   deg = 2 * pi / n
   deg_sp = (2 * pi / n) / 2
@@ -75,16 +73,17 @@ plot_circle = function(n,
   ## Location data
   location = data.frame(
     col = colnames(select_if(data, is.numeric)),
-    deg = pi / 2 - deg * (1:n),
-    start = a * pi / 180 - deg_sp - deg * (1:n - 1),
-    end = b * pi / 180 - deg_sp - deg * (1:n),
-    curv_start = pi / 2 - deg_sp - deg * (1:n - 1) ,
-    curv_end = pi / 2 - deg_sp - deg * (1:n)
+    deg = pi / 2 - deg * (seq(1, n)),
+    start = a * pi / 180 - deg_sp - deg * (seq(1, n - 1)),
+    end = b * pi / 180 - deg_sp - deg * (seq(1, n)),
+    curv_start = pi / 2 - deg_sp - deg * (seq(1, n - 1)) ,
+    curv_end = pi / 2 - deg_sp - deg * (seq(1, n))
   )
 
   ## For those specific variables we want to label
   location$labels = NA
-  location$labels[location$col %in%labels1] =   location$col[location$col %in%labels1]
+  location$labels[location$col %in% labels1] =   location$col[location$col %in%
+                                                                labels1]
 
   rad_label = ifelse(n == 3, 120, 100.5)
 
@@ -98,10 +97,10 @@ plot_circle = function(n,
 
 
   ## Generate arc polygons with the information
-  numeric_cols <- colnames(data)[sapply(data, is.numeric)]
+  numeric_cols <- colnames(data)[vapply(data, is.numeric, logical(1))]
 
   arc = NULL
-  for (i in 1:n) {
+  for (i in seq(1, n)) {
     p = ggplot() +
       geom_arc(aes(
         x0 = 0,
@@ -111,8 +110,7 @@ plot_circle = function(n,
         end = deg_sp + deg * (i)
       ))
     poly = rbind(c(0, 0),
-                 data.frame(x = ggplot_build(p)$data[[1]]$x,
-                            y = ggplot_build(p)$data[[1]]$y),
+                 data.frame(x = ggplot_build(p)$data[[1]]$x, y = ggplot_build(p)$data[[1]]$y),
                  c(0, 0))
     poly$type = numeric_cols[i]
 
@@ -123,8 +121,7 @@ plot_circle = function(n,
 
   ## Calculating Entropy and fitting a small linear model for prediction.
   a = 100 / (n - 1)
-  data1 = data.frame(Entropy = n:1,
-                     y = c(0, 1:(n - 1) * a))
+  data1 = data.frame(Entropy = seq(n, 1), y = c(0, seq(1, (n - 1) * a)))
 
   lm = lm(y ~ Entropy, data = data1)
 
@@ -134,35 +131,36 @@ plot_circle = function(n,
 
   data_1 = Qentropy(data)
 
-  numeric_cols1 = sapply(data_1, is.numeric)
+  numeric_cols1 <- vapply(data_1, is.numeric, logical(1))
 
   ## Determine column with minimum categorical entropy
-  data_1$col = suppressWarnings(
-    apply(data_1[, numeric_cols1], 1, function(row) {
+  data_1$col = suppressWarnings(apply(data_1[, numeric_cols1], 1, function(row) {
+    min_cols = colnames(data_1)[numeric_cols1][row == min(row)]
 
-      min_cols = colnames(data_1)[numeric_cols1][row == min(row)]
-
-      if(length(min_cols) > 1) {
-        min_cols = sample(min_cols, 1)
-      }
-      return(min_cols)
-    })
-  )
+    if (length(min_cols) > 1) {
+      min_cols = sample(min_cols, 1)
+    }
+    return(min_cols)
+  }))
 
 
   ## Mapping entropy values to radial coordinates
 
 
-  if(!is.null(col_variable) && length(col_variable) > 0){
+  if (!is.null(col_variable) && length(col_variable) > 0) {
     data = data |>
       select(Entropy, Factor) |>
-      mutate(Entropy = 2 ^ Entropy)
+      mutate(Entropy = 2^Entropy)
 
 
     data$rad = predict(lm, newdata = data)
     data = data |> bind_cols(data_1[, ncol(data_1)])
     data = data |> left_join(location, join_by(col))
-    data = data |> mutate(rand_deg = sample(seq(from=start, to=end, length.out = 10), 1))
+    data = data |> mutate(rand_deg = sample(seq(
+      from = start,
+      to = end,
+      length.out = 10
+    ), 1))
 
     ## Computing final positions for each observation
     data = data |> select(Entropy, Factor, col, rad, deg, rand_deg) |> mutate(
@@ -174,13 +172,17 @@ plot_circle = function(n,
   } else {
     data = data |>
       select(Entropy) |>
-      mutate(Entropy = 2 ^ Entropy)
+      mutate(Entropy = 2^Entropy)
 
 
     data$rad = predict(lm, newdata = data)
     data = data |> bind_cols(data_1[, ncol(data_1)])
     data = data |> left_join(location, join_by(col))
-    data = data |> mutate(rand_deg = sample(seq(from=start, to=end, length.out = 10), 1))
+    data = data |> mutate(rand_deg = sample(seq(
+      from = start,
+      to = end,
+      length.out = 10
+    ), 1))
 
     ## Computing final positions for each observation
     data = data |> select(Entropy, col, rad, deg, rand_deg) |> mutate(
@@ -194,11 +196,12 @@ plot_circle = function(n,
   ## factor levels
   data$col = factor(data$col, levels = numeric_cols)
 
-  data1 = data.frame(rad = a * (1:(n - 1)))
+  data1 = data.frame(rad = a * (seq(1, (n - 1))))
 
   ## Base plot
 
-  polygon_colors <- if (!is.null(background_colors) && length(background_colors) > 0) {
+  polygon_colors <- if (!is.null(background_colors) &&
+                        length(background_colors) > 0) {
     background_colors
   } else {
     scales::hue_pal()(n)
@@ -213,7 +216,8 @@ plot_circle = function(n,
     panel.grid.minor  = element_blank(),
     plot.title = element_text(hjust = 0.5),
     legend.title = element_blank(),
-    legend.background = element_blank())
+    legend.background = element_blank()
+  )
 
   base_plot = ggplot2::ggplot() +
     geom_polygon(
@@ -223,38 +227,36 @@ plot_circle = function(n,
       show.legend = FALSE,
       alpha = area
     ) +
-    geom_circle(data = data1,
-                aes(x0 = 0, y0 = 0, r = rad),
-                col = line_col)  +
-    geom_circle(aes(x0 = 0,
-                    y0 =0,
-                    r = data1$rad[nrow(data1)]),
-                col = out_line, inherit.aes = FALSE) +
-    coord_equal(xlim = c(-105,105), ylim = c(-105,105)) +
-    scale_fill_manual(values = polygon_colors, na.value = 'whitesmoke' ) +
+    geom_circle(data = data1, aes(x0 = 0, y0 = 0, r = rad), col = line_col)  +
+    geom_circle(aes(x0 = 0, y0 = 0, r = data1$rad[nrow(data1)]),
+                col = out_line,
+                inherit.aes = FALSE) +
+    coord_equal(xlim = c(-105, 105), ylim = c(-105, 105)) +
+    scale_fill_manual(values = polygon_colors, na.value = 'whitesmoke') +
     ggtitle(title)
 
 
-  if(!is.null(point_fill_colors) && length(point_fill_colors) > 0) {
+  if (!is.null(point_fill_colors) &&
+      length(point_fill_colors) > 0) {
     point_fill_colors
   } else {
     scales::hue_pal()(n)
   }
 
 
-  if(!is.null(col_variable) && length(col_variable) > 0 && label == 'legend'){
-
-
-
+  if (!is.null(col_variable) &&
+      length(col_variable) > 0 && label == 'legend') {
     n2 = length(unique(data$Factor))
 
-    point_fill = if (!is.null(point_fill_colors) && length(point_fill_colors) > 0) {
+    point_fill = if (!is.null(point_fill_colors) &&
+                     length(point_fill_colors) > 0) {
       point_fill_colors
     } else {
       scales::hue_pal()(n2)
     }
 
-    point_line  = if (!is.null(point_line_colors) && length(point_line_colors) > 0) {
+    point_line  = if (!is.null(point_line_colors) &&
+                      length(point_line_colors) > 0) {
       point_line_colors
     } else {
       scales::hue_pal()(n2)
@@ -264,30 +266,41 @@ plot_circle = function(n,
     circle_plot = base_plot +
       new_scale('color') +
       new_scale('fill') +
-      geom_jitter(data = data,
-                  aes(x, y,
-                      fill = Factor,
-                      alpha = alpha,
-                      col = Factor),
-                  pch = 21,
-                  size = sizex,
-                  width = 3,
-                  height = 3) +
+      geom_jitter(
+        data = data,
+        aes(
+          x,
+          y,
+          fill = Factor,
+          alpha = alpha,
+          col = Factor
+        ),
+        pch = 21,
+        size = sizex,
+        width = 3,
+        height = 3
+      ) +
       scale_fill_manual(values = point_fill, na.value = 'whitesmoke') +
-      scale_color_manual(values = point_line, na.value = 'whitesmoke', guide = 'none') +
+      scale_color_manual(
+        values = point_line,
+        na.value = 'whitesmoke',
+        guide = 'none'
+      ) +
       scale_alpha(guide = 'none')
 
-  }else if(!is.null(col_variable) && length(col_variable) > 0 && label == 'curve'){
-
+  } else if (!is.null(col_variable) &&
+             length(col_variable) > 0 && label == 'curve') {
     n2 = length(unique(data$Factor))
 
-    point_fill = if (!is.null(point_fill_colors) && length(point_fill_colors) > 0) {
+    point_fill = if (!is.null(point_fill_colors) &&
+                     length(point_fill_colors) > 0) {
       point_fill_colors
     } else {
       scales::hue_pal()(n2)
     }
 
-    point_line  = if (!is.null(point_line_colors) && length(point_line_colors) > 0) {
+    point_line  = if (!is.null(point_line_colors) &&
+                      length(point_line_colors) > 0) {
       point_line_colors
     } else {
       scales::hue_pal()(n2)
@@ -297,81 +310,99 @@ plot_circle = function(n,
     circle_plot = base_plot +
       new_scale('color') +
       new_scale('fill') +
-      geom_jitter(data = data,
-                  aes(x, y,
-                      fill = Factor,
-                      alpha = alpha,
-                      col = Factor),
-                  pch = 21,
-                  size = sizex,
-                  width = 3,
-                  height = 3,
-                  show.legend = FALSE) +
-      geom_textcurve(data = location,
-                     aes(x = x,
-                         xend = xend,
-                         y = y,
-                         yend = yend,
-                         label = labels),
-                     linecolour = NA,
-                     curvature = -0.4,
-                     size = textsize,
-                     na.rm = TRUE,
-                     show.legend = FALSE) +
-      scale_fill_manual(values = point_fill,
-                        na.value = 'whitesmoke') +
-      scale_color_manual(values = point_line,
-                         na.value = 'whitesmoke', guides = 'none') +
-      scale_alpha(guide = 'none')
-
-
-
-  }else if(is.null(col_variable) && label == 'legend'){
-
-
-
-    point_fill = if (!is.null(point_fill_colors) && length(point_fill_colors) > 0) {
-      point_fill_colors
-    } else {
-      scales::hue_pal()(n)
-    }
-
-    point_line  = if (!is.null(point_line_colors) && length(point_line_colors) > 0) {
-      point_line_colors
-    } else {
-      scales::hue_pal()(n)
-    }
-
-
-    circle_plot = base_plot +
-      new_scale('color') +
-      new_scale('fill') +
-      geom_jitter(data = data,
-                  aes(x, y,
-                      fill = col,
-                      alpha = alpha,
-                      col = col),
-                  pch = 21,
-                  size = sizex,
-                  width = 3,
-                  height = 3) +
+      geom_jitter(
+        data = data,
+        aes(
+          x,
+          y,
+          fill = Factor,
+          alpha = alpha,
+          col = Factor
+        ),
+        pch = 21,
+        size = sizex,
+        width = 3,
+        height = 3,
+        show.legend = FALSE
+      ) +
+      geom_textcurve(
+        data = location,
+        aes(
+          x = x,
+          xend = xend,
+          y = y,
+          yend = yend,
+          label = labels
+        ),
+        linecolour = NA,
+        curvature = -0.4,
+        size = textsize,
+        na.rm = TRUE,
+        show.legend = FALSE
+      ) +
       scale_fill_manual(values = point_fill, na.value = 'whitesmoke') +
-      scale_color_manual(values = point_line, na.value = 'whitesmoke', guide = 'none') +
+      scale_color_manual(
+        values = point_line,
+        na.value = 'whitesmoke',
+        guides = 'none'
+      ) +
       scale_alpha(guide = 'none')
 
 
 
-  }else if(is.null(col_variable) && label == 'curve'){
-
-
-
-    point_fill = if (!is.null(point_fill_colors) && length(point_fill_colors) > 0) {
+  } else if (is.null(col_variable) && label == 'legend') {
+    point_fill = if (!is.null(point_fill_colors) &&
+                     length(point_fill_colors) > 0) {
       point_fill_colors
     } else {
       scales::hue_pal()(n)
     }
 
-    point_line  = if (!is.null(point_line_colors) && length(point_line_colors) > 0) {
+    point_line  = if (!is.null(point_line_colors) &&
+                      length(point_line_colors) > 0) {
+      point_line_colors
+    } else {
+      scales::hue_pal()(n)
+    }
+
+
+    circle_plot = base_plot +
+      new_scale('color') +
+      new_scale('fill') +
+      geom_jitter(
+        data = data,
+        aes(
+          x,
+          y,
+          fill = col,
+          alpha = alpha,
+          col = col
+        ),
+        pch = 21,
+        size = sizex,
+        width = 3,
+        height = 3
+      ) +
+      scale_fill_manual(values = point_fill, na.value = 'whitesmoke') +
+      scale_color_manual(
+        values = point_line,
+        na.value = 'whitesmoke',
+        guide = 'none'
+      ) +
+      scale_alpha(guide = 'none')
+
+
+
+  } else if (is.null(col_variable) && label == 'curve') {
+    point_fill = if (!is.null(point_fill_colors) &&
+                     length(point_fill_colors) > 0) {
+      point_fill_colors
+    } else {
+      scales::hue_pal()(n)
+    }
+
+    point_line  = if (!is.null(point_line_colors) &&
+                      length(point_line_colors) > 0) {
       point_line_colors
     } else {
       scales::hue_pal()(n)
@@ -380,35 +411,45 @@ plot_circle = function(n,
     circle_plot = base_plot +
       new_scale('color') +
       new_scale('fill') +
-      geom_jitter(data = data,
-                  aes(x, y,
-                      fill = col,
-                      alpha = alpha,
-                      col = col),
-                  pch = 21,
-                  size = sizex,
-                  width = 3,
-                  height = 3,
-                  show.legend = FALSE) +
-      geom_textcurve(data = location,
-                     aes(x = x,
-                         xend = xend,
-                         y = y,
-                         yend = yend,
-                         label = labels),
-                     linecolour = NA,
-                     curvature = -0.4,
-                     size = textsize,
-                     na.rm = TRUE,
-                     show.legend = FALSE) +
-      scale_fill_manual(values = point_fill,
-                        na.value = 'whitesmoke') +
-      scale_color_manual(values = point_line,
-                         na.value = 'whitesmoke', guide = 'none') +
+      geom_jitter(
+        data = data,
+        aes(
+          x,
+          y,
+          fill = col,
+          alpha = alpha,
+          col = col
+        ),
+        pch = 21,
+        size = sizex,
+        width = 3,
+        height = 3,
+        show.legend = FALSE
+      ) +
+      geom_textcurve(
+        data = location,
+        aes(
+          x = x,
+          xend = xend,
+          y = y,
+          yend = yend,
+          label = labels
+        ),
+        linecolour = NA,
+        curvature = -0.4,
+        size = textsize,
+        na.rm = TRUE,
+        show.legend = FALSE
+      ) +
+      scale_fill_manual(values = point_fill, na.value = 'whitesmoke') +
+      scale_color_manual(
+        values = point_line,
+        na.value = 'whitesmoke',
+        guide = 'none'
+      ) +
       scale_alpha(guide = 'none')
   } else {
-
-    print('There is something wrong with the data. Returning NULL')
+    show('There is something wrong with the data. Returning NULL')
     return(NULL)
   }
 

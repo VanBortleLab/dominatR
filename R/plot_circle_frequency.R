@@ -22,16 +22,19 @@ plot_circle_frequency = function(n,
                                  legend = TRUE,
                                  numb_columns = 1,
                                  filter_class = NULL,
-                                 point_size = 2){
+                                 point_size = 2) {
   data_ent = circle[[2]]
 
-  breaks_log2 = log2(seq(0,n) + 0.5)
+  breaks_log2 = log2(seq(0, n) + 0.5)
 
 
-  data_ent$bin = cut(as.numeric(data_ent$Entropy),
-                     breaks =breaks_log2,
-                     labels =  2^(breaks_log2[-length(breaks_log2)]) |> ceiling(),
-                     include.lowest = FALSE, right = TRUE)
+  data_ent$bin = cut(
+    as.numeric(data_ent$Entropy),
+    breaks = breaks_log2,
+    labels =  2^(breaks_log2[-length(breaks_log2)]) |> ceiling(),
+    include.lowest = FALSE,
+    right = TRUE
+  )
 
   data_ent = data_ent |>
     group_by(bin, Factor) |>
@@ -40,31 +43,39 @@ plot_circle_frequency = function(n,
 
   data_ent = data_ent |>
     group_by(Factor) |>
-    mutate(proportion = n/sum(n))
+    mutate(proportion = n / sum(n))
 
   data_ent$Factor = factor(data_ent$Factor)
 
 
-  if(!is.null(filter_class)){
+  if (!is.null(filter_class)) {
     data_ent = data_ent |>
       dplyr::filter(Factor %in% filter_class)
   }
 
   plot_stat = data_ent |>
     ggplot() +
-    geom_line(aes(x = bin,
-                  y = proportion,
-                  col = Factor,
-                  group = Factor),
-              linewidth = 1,
-              show.legend = legend) +
-    geom_point(aes(x = bin,
-                   y = proportion,
-                   fill = Factor,
-                   group = Factor),
-               show.legend = FALSE,
-               pch = 21,
-               size = point_size) +
+    geom_line(
+      aes(
+        x = bin,
+        y = proportion,
+        col = Factor,
+        group = Factor
+      ),
+      linewidth = 1,
+      show.legend = legend
+    ) +
+    geom_point(
+      aes(
+        x = bin,
+        y = proportion,
+        fill = Factor,
+        group = Factor
+      ),
+      show.legend = FALSE,
+      pch = 21,
+      size = point_size
+    ) +
     theme_minimal() +
     theme(
       panel.grid.major = element_line(colour = 'gray95', linetype = 'dotted'),
@@ -75,9 +86,22 @@ plot_circle_frequency = function(n,
       legend.title = element_text(size = 10, face =
                                     'bold'),
       legend.key.size = unit(15, 'points'),
-      axis.title.y = element_text( size = 20, color = 'black', face = 'bold', vjust = 1),
-      axis.title.x = element_text(size = 20, color = 'black', face = 'bold'),
-      axis.text.x = element_text(size = 15,color = 'black',hjust = 0.5),
+      axis.title.y = element_text(
+        size = 20,
+        color = 'black',
+        face = 'bold',
+        vjust = 1
+      ),
+      axis.title.x = element_text(
+        size = 20,
+        color = 'black',
+        face = 'bold'
+      ),
+      axis.text.x = element_text(
+        size = 15,
+        color = 'black',
+        hjust = 0.5
+      ),
       axis.text.y = element_text(size = 15, color = 'black'),
       axis.ticks = element_line(),
       panel.border = element_rect(
@@ -87,11 +111,11 @@ plot_circle_frequency = function(n,
       )
     ) +
     xlab('Dominance') +
-    scale_y_continuous(limits = c(0,1), n.breaks =5) +
-    scale_x_discrete(limits = factor(seq(1, n)) )
+    scale_y_continuous(limits = c(0, 1), n.breaks = 5) +
+    scale_x_discrete(limits = factor(seq(1, n)))
 
-  if(single == FALSE){
-    plot_stat = plot_stat + facet_wrap(~Factor, ncol = numb_columns)
+  if (single == FALSE) {
+    plot_stat = plot_stat + facet_wrap( ~ Factor, ncol = numb_columns)
   }
   return(list(plot_stat, data_ent))
 }

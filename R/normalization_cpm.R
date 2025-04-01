@@ -1,4 +1,5 @@
 
+
 #' Counts Per Million
 #'
 #' @param df A dataframe or matrix, must contain only numerical valeus
@@ -8,13 +9,12 @@
 #' @return A Matrix with normalized counts.
 #' @export
 #'
-cpm_normalization = function(df, log_trans = FALSE){
-
-  sum = colSums(df)/1e6
+cpm_normalization = function(df, log_trans = FALSE) {
+  sum = colSums(df) / 1e6
 
   df = mapply('/', df, sum)
 
-  if(log_trans == FALSE){
+  if (log_trans == FALSE) {
     return(df)
   } else {
     df = log2(df + 1)

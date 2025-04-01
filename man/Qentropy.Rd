@@ -2,25 +2,52 @@
 % Please edit documentation in R/calculations_Qentropy.R
 \name{Qentropy}
 \alias{Qentropy}
-\title{Categorical Entropy}
+\title{Compute Q-Entropy using existing row-normalized data + Entropy}
 \usage{
-Qentropy(test)
+Qentropy(x, assay_name = "Entropy", new_assay_name = "Qentropy")
 }
 \arguments{
-\item{test}{A Data frame, must contain numerical columns and Entropy should be calculated already}
+\item{x}{A data.frame (already processed by `entropy()`)
+or a SummarizedExperiment (already processed by `entropy()`).}
+
+\item{assay_name}{(SummarizedExperiment only) The name of the assay
+whose row-normalized data will be replaced by Q-values. If NULL,
+uses the first assay.}
+
+\item{new_assay_name}{If you prefer to store Q-values in a
+*new* assay, provide a name. By default `Qentropy`}
 }
 \value{
-Returns the data frame with modified values for numerical columns.
+- If `x` is a data.frame: returns the same data.frame with numeric
+    columns replaced by \eqn{Q_{ij}} values and `Entropy` column removed.
+  - If `x` is a SummarizedExperiment: returns the same object with
+    the specified assay replaced by \eqn{Q_{ij}} values (or a new assay
+    if `new_assay_name` is set) and `rowData(x)$Entropy` removed.
 }
 \description{
-Calculates the Categorical Entropy value related to each column. Entropy calculation should be performed before using this function
+#' Transform entropy scores into categorical entropy scores
+\eqn{Q_{ij} = \mathrm{Entropy}_i - \log_2(x_{ij})}, or \code{Inf} if
+\eqn{x_{ij} == 0}.
+
+#' @details
+For each row \eqn{i} and column \eqn{j}, \eqn{Q_{ij}} is defined as
+\eqn{\mathrm{Entropy}_i - \log_2\bigl(x_{ij}\bigr)} if \eqn{x_{ij}} is
+positive, or \code{Inf} otherwise.
 }
 \examples{
-data(rnapol_score)
-test =  entropy(rnapol_score)
-test = Qentropy(test)
+df <- data.frame(A = c(10,0,30), B = c(5,5,0), C = c(0,0,10))
+# Normalize and get Entropy
+df_e <- entropy(df)
+df_q <- Qentropy(df_e)
+df_q
 
-}
-\seealso{
-[entropy()]
+# SummarizedExperiment example
+# library(SummarizedExperiment)
+# mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
+# se <- SummarizedExperiment(list(counts=mat))
+# se_e <- entropy(se)
+# se_q <- Qentropy(se_e)
+# # Overwrites the "counts" assay with Q-values
+# # rowData(se_q)$Entropy was removed
+
 }
