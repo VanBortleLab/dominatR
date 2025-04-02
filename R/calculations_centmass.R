@@ -1,23 +1,136 @@
 
-
-#' Center of Mass
-#' @description Returns coordinates of center of mass from the data provided.
+#' Compute the "center of mass" for rows of a data frame or SummarizedExperiment
 #'
-#' @param data a table that provides mass of different objects
-#' @param x a vector that provides x coordinates of  objects
-#' @param y a vector that provides y coordinates of  objects
+#' @description
+#' For each row of the numeric data, \code{centmass()} computes a 2D center of mass
+#' with coordinates (\code{comx}, \code{comy}). The \code{x_coord} and \code{y_coord}
+#' vectors specify the location for each column's "mass."
+#'
+#' The original usage assumes a ternary coordinate system by default, but this
+#' can be generalized to any scenario where columns represent discrete "masses"
+#' at known (x,y) positions.
+#'
+#' By default, \code{x_coord = c(0, 1, 0.5)} and
+#' \code{y_coord = c(0, 0, sqrt(3)/2)}, which correspond to the corners
+#' of an equilateral triangle (often used in ternary plots).
+#'
+#' @param x A data.frame (with numeric columns) or a SummarizedExperiment.
+#' @param x_coord Numeric vector of length equal to the number of columns
+#'   in \code{x}, specifying the x-coordinates of each column's mass.
+#' @param y_coord Numeric vector of length equal to the number of columns
+#'   in \code{x}, specifying the y-coordinates of each column's mass.
+#' @param assay_name If \code{x} is a SummarizedExperiment, the name of the
+#'   assay to use. Defaults to the first assay if not specified.
+#'
 #' @return
-#' Returns a table with 2 columns with x and y coordinate of the center of mass
+#'   - If \code{x} is a data.frame, returns a new \code{data.frame} with
+#'     columns \code{comx} and \code{comy}.
+#'   - If \code{x} is a SummarizedExperiment, returns the same object but
+#'     with two new columns \code{comx} and \code{comy} in \code{rowData(x)}.
+#'
+#' @import SummarizedExperiment
 #' @export
 #'
+#' @examples
+#' # -------------------------------
+#' # 1) Using a data.frame
+#' # -------------------------------
+#' df <- data.frame(A = c(10, 0, 30),
+#'                  B = c( 5, 5,  0),
+#'                  C = c( 0, 0, 10))
+#' df_com <- centmass(df)
+#' df_com
 #'
-centmass = function(data,
-                x = c(0, 1, 0.5) ,
-                y = c(0, 0, sqrt(3) / 2)) {
-        sum = rowSums(data)
-        data = data.frame(comx = rowSums(as.matrix(data) %*% diag(x)),
-                comy = rowSums(as.matrix(data) %*% diag(y)))
-        data = data / sum
+#' # -------------------------------
+#' # 2) Using a SummarizedExperiment
+#' # -------------------------------
+#'  library(SummarizedExperiment)
+#'  mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
+#'  se <- SummarizedExperiment(assays = list(counts=mat))
+#'  se_com <- centmass(se)   # comx & comy stored in rowData(se_com)
+#'  rowData(se_com)
+#'
+#'
+centmass <- function(
+    x,
+    x_coord = c(0, 1, 0.5),
+    y_coord = c(0, 0, sqrt(3)/2),
+    assay_name = NULL
+) {
+  #----------------------------------#
+  # Handle SummarizedExperiment case #
+  #----------------------------------#
+  if (inherits(x, "SummarizedExperiment")) {
+    if (is.null(assay_name)) {
+      # use the first assay by default
+      all_assays <- assayNames(x)
+      if (length(all_assays) < 1) {
+        stop("No assays found in the SummarizedExperiment.")
+      }
+      assay_name <- all_assays[[1]]
+    }
 
-  return(data)
+    mat <- assay(x, assay_name)
+    if (is.null(mat)) {
+      stop("No assay named '", assay_name, "' found in the SummarizedExperiment.")
+    }
+
+    # check length of x_coord, y_coord
+    if (ncol(mat) != length(x_coord) || ncol(mat) != length(y_coord)) {
+      stop("Length of x_coord or y_coord does not match the number of columns in the assay.")
+    }
+
+    # row sums
+    row_sums <- rowSums(mat, na.rm = TRUE)
+    # avoid division by 0
+    row_sums <- ifelse(row_sums > 0, row_sums, 1)
+
+    # compute weighted sums in x and y directions
+    # vectorize by repeating x_coord across rows
+    comx_vals <- rowSums(mat * matrix(rep(x_coord, each=nrow(mat)),
+                                      nrow=nrow(mat)), na.rm=TRUE)
+    comy_vals <- rowSums(mat * matrix(rep(y_coord, each=nrow(mat)),
+                                      nrow=nrow(mat)), na.rm=TRUE)
+
+    # divide by row sum
+    comx_vals <- comx_vals / row_sums
+    comy_vals <- comy_vals / row_sums
+
+    # store in rowData
+    SummarizedExperiment::rowData(x)$comx <- comx_vals
+    SummarizedExperiment::rowData(x)$comy <- comy_vals
+
+    return(x)
+
+    #-----------------------#
+    # Handle data.frame case
+    #-----------------------#
+  } else if (is.data.frame(x)) {
+    # Convert entire data.frame to matrix (assuming it's numeric columns
+    # or user has made sure it is).
+    # If your real use-case has non-numeric columns that you need to skip,
+    # you can subset them similarly to the entropy approach.
+    mat <- as.matrix(x)
+
+    # Dimension checks
+    if (ncol(mat) != length(x_coord) || ncol(mat) != length(y_coord)) {
+      stop("Length of x_coord or y_coord does not match the number of columns in 'x'.")
+    }
+
+    row_sums <- rowSums(mat, na.rm = TRUE)
+    row_sums <- ifelse(row_sums > 0, row_sums, 1)
+
+    comx_vals <- rowSums(mat * matrix(rep(x_coord, each=nrow(mat)), nrow=nrow(mat)), na.rm=TRUE)
+    comy_vals <- rowSums(mat * matrix(rep(y_coord, each=nrow(mat)), nrow=nrow(mat)), na.rm=TRUE)
+
+    # divide by row sum
+    comx_vals <- comx_vals / row_sums
+    comy_vals <- comy_vals / row_sums
+
+    # return a small data.frame with comx, comy
+    return(data.frame(comx = comx_vals, comy = comy_vals))
+
+  } else {
+    stop("Input must be either a data.frame or a SummarizedExperiment.")
+  }
 }

@@ -2,20 +2,62 @@
 % Please edit documentation in R/calculations_centmass.R
 \name{centmass}
 \alias{centmass}
-\title{Center of Mass}
+\title{Compute the "center of mass" for rows of a data frame or SummarizedExperiment}
 \usage{
-centmass(data, x = c(0, 1, 0.5), y = c(0, 0, sqrt(3)/2))
+centmass(
+  x,
+  x_coord = c(0, 1, 0.5),
+  y_coord = c(0, 0, sqrt(3)/2),
+  assay_name = NULL
+)
 }
 \arguments{
-\item{data}{a table that provides mass of different objects}
+\item{x}{A data.frame (with numeric columns) or a SummarizedExperiment.}
 
-\item{x}{a vector that provides x coordinates of  objects}
+\item{x_coord}{Numeric vector of length equal to the number of columns
+in \code{x}, specifying the x-coordinates of each column's mass.}
 
-\item{y}{a vector that provides y coordinates of  objects}
+\item{y_coord}{Numeric vector of length equal to the number of columns
+in \code{x}, specifying the y-coordinates of each column's mass.}
+
+\item{assay_name}{If \code{x} is a SummarizedExperiment, the name of the
+assay to use. Defaults to the first assay if not specified.}
 }
 \value{
-Returns a table with 2 columns with x and y coordinate of the center of mass
+- If \code{x} is a data.frame, returns a new \code{data.frame} with
+    columns \code{comx} and \code{comy}.
+  - If \code{x} is a SummarizedExperiment, returns the same object but
+    with two new columns \code{comx} and \code{comy} in \code{rowData(x)}.
 }
 \description{
-Returns coordinates of center of mass from the data provided.
+For each row of the numeric data, \code{centmass()} computes a 2D center of mass
+with coordinates (\code{comx}, \code{comy}). The \code{x_coord} and \code{y_coord}
+vectors specify the location for each column's "mass."
+
+The original usage assumes a ternary coordinate system by default, but this
+can be generalized to any scenario where columns represent discrete "masses"
+at known (x,y) positions.
+
+By default, \code{x_coord = c(0, 1, 0.5)} and
+\code{y_coord = c(0, 0, sqrt(3)/2)}, which correspond to the corners
+of an equilateral triangle (often used in ternary plots).
+}
+\examples{
+# -------------------------------
+# 1) Using a data.frame
+# -------------------------------
+df <- data.frame(A = c(10, 0, 30),
+                 B = c( 5, 5,  0),
+                 C = c( 0, 0, 10))
+df_com <- centmass(df)
+df_com
+
+# -------------------------------
+# 2) Using a SummarizedExperiment
+# -------------------------------
+# library(SummarizedExperiment)
+# mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
+# se <- SummarizedExperiment(assays = list(counts=mat))
+# se_com <- centmass(se)   # comx & comy stored in rowData(se_com)
+# rowData(se_com)
 }
