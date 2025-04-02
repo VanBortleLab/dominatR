@@ -55,9 +55,11 @@ df_com
 # -------------------------------
 # 2) Using a SummarizedExperiment
 # -------------------------------
-# library(SummarizedExperiment)
-# mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
-# se <- SummarizedExperiment(assays = list(counts=mat))
-# se_com <- centmass(se)   # comx & comy stored in rowData(se_com)
-# rowData(se_com)
+ library(SummarizedExperiment)
+ mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
+ se <- SummarizedExperiment(assays = list(counts=mat))
+ se_com <- centmass(se)   # comx & comy stored in rowData(se_com)
+ rowData(se_com)
+
+
 }
