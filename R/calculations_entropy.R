@@ -22,18 +22,17 @@
 #' df <- data.frame(A = c(10, 0, 30),
 #'                  B = c(5,  5, 0),
 #'                  C = c(0,  0, 10))
-
 #' # Original function row-normalizes the numeric columns, then calculates Entropy
 #' df2 <- entropy(df)
 #' df2
 #'
 #' # SummarizedExperiment example
-#' # library(SummarizedExperiment)
-#' # mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
-#' # se <- SummarizedExperiment(assays = list(counts=mat))
-#' # se2 <- entropy(se)
-#' # assay(se2, "counts")  # row-normalized
-#' # rowData(se2)$Entropy  # computed entropy
+#'  library(SummarizedExperiment)
+#'  mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
+#'  se <- SummarizedExperiment(assays = list(counts=mat))
+#'  se2 <- entropy(se)
+#'  assay(se2, "counts")  # row-normalized
+#'  rowData(se2)$Entropy  # computed entropy
 #'
 #'@export
 

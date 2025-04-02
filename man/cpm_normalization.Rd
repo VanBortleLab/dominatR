@@ -2,18 +2,64 @@
 % Please edit documentation in R/normalization_cpm.R
 \name{cpm_normalization}
 \alias{cpm_normalization}
-\title{Counts Per Million}
+\title{Counts Per Million normalization}
 \usage{
-cpm_normalization(df, log_trans = FALSE)
+cpm_normalization(
+  x,
+  log_trans = FALSE,
+  assay_name = NULL,
+  new_assay_name = NULL
+)
 }
 \arguments{
-\item{df}{A dataframe or matrix, must contain only numerical valeus}
+\item{x}{A \code{matrix}, \code{data.frame}, or a \code{SummarizedExperiment} object.}
 
-\item{log_trans}{Logical attribute, determines if normalized data should be log2 transformed. Note: An extra count is added.}
+\item{log_trans}{Logical. If \code{TRUE}, apply \code{log2(... + 1)} transform
+to the CPM-normalized values.}
+
+\item{assay_name}{If \code{x} is a \code{SummarizedExperiment}, name of the assay
+to normalize (defaults to the first assay). Ignored otherwise.}
+
+\item{new_assay_name}{If \code{x} is a \code{SummarizedExperiment}, name of a new
+assay where results should be stored (defaults to \code{NULL}, meaning the existing
+assay is overwritten).}
 }
 \value{
-A Matrix with normalized counts.
+\itemize{
+    \item If \code{x} is a \code{matrix} or \code{data.frame}, returns a \strong{matrix}
+      of CPM-normalized (and optionally \code{log2}-transformed) counts.
+    \item If \code{x} is a \code{SummarizedExperiment}, returns the same \code{SummarizedExperiment}
+      object with the specified assay replaced or a new assay created containing
+      the CPM-normalized data.
+  }
 }
 \description{
-Normalizes a count matrix by the counts per million method
+Normalizes a count matrix (or a SummarizedExperiment assay) by the
+counts-per-million (CPM) method. Specifically:
+  \enumerate{
+    \item If \code{log_trans = TRUE}, a \code{log2(x + 1)} transform is applied afterward.
+  }
+}
+\examples{
+# --------------------------------
+# 1) Using a matrix or data.frame
+# --------------------------------
+mat <- matrix(c(10, 20, 30,
+                40, 50, 60),
+              nrow=2, byrow=TRUE)
+rownames(mat) <- c("gene1", "gene2")
+colnames(mat) <- c("sample1", "sample2", "sample3")
+
+cpm_result <- cpm_normalization(mat, log_trans = FALSE)
+cpm_log    <- cpm_normalization(mat, log_trans = TRUE)
+
+# --------------------------------
+# 2) Using SummarizedExperiment
+# --------------------------------
+ library(SummarizedExperiment)
+ se <- SummarizedExperiment(assays=list(counts=mat))
+ se_norm <- cpm_normalization(se, log_trans = TRUE)
+# This overwrite the 'counts' assay with log2-CPM data
+ assay(se_norm, "counts")
+
 }

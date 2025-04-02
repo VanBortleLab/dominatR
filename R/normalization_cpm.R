@@ -1,23 +1,125 @@
-
-
-#' Counts Per Million
+#' Counts Per Million normalization
 #'
-#' @param df A dataframe or matrix, must contain only numerical valeus
-#' @param log_trans Logical attribute, determines if normalized data should be log2 transformed. Note: An extra count is added.
+#' @description
+#' Normalizes a count matrix (or a SummarizedExperiment assay) by the
+#' counts-per-million (CPM) method. Specifically:
+#'   \enumerate{
+#'     \item If \code{log_trans = TRUE}, a \code{log2(x + 1)} transform is applied afterward.
+#'   }
 #'
-#' @description Normalizes a count matrix by the counts per million method
-#' @return A Matrix with normalized counts.
+#' @param x A \code{matrix}, \code{data.frame}, or a \code{SummarizedExperiment} object.
+#' @param log_trans Logical. If \code{TRUE}, apply \code{log2(... + 1)} transform
+#'   to the CPM-normalized values.
+#' @param assay_name If \code{x} is a \code{SummarizedExperiment}, name of the assay
+#'   to normalize (defaults to the first assay). Ignored otherwise.
+#' @param new_assay_name If \code{x} is a \code{SummarizedExperiment}, name of a new
+#'   assay where results should be stored (defaults to \code{NULL}, meaning the existing
+#'   assay is overwritten).
+#'
+#' @return
+#'   \itemize{
+#'     \item If \code{x} is a \code{matrix} or \code{data.frame}, returns a \strong{matrix}
+#'       of CPM-normalized (and optionally \code{log2}-transformed) counts.
+#'     \item If \code{x} is a \code{SummarizedExperiment}, returns the same \code{SummarizedExperiment}
+#'       object with the specified assay replaced or a new assay created containing
+#'       the CPM-normalized data.
+#'   }
+#'
+#' @examples
+#' # --------------------------------
+#' # 1) Using a matrix or data.frame
+#' # --------------------------------
+#' mat <- matrix(c(10, 20, 30,
+#'                 40, 50, 60),
+#'               nrow=2, byrow=TRUE)
+#' rownames(mat) <- c("gene1", "gene2")
+#' colnames(mat) <- c("sample1", "sample2", "sample3")
+#'
+#' cpm_result <- cpm_normalization(mat, log_trans = FALSE)
+#' cpm_log    <- cpm_normalization(mat, log_trans = TRUE)
+#'
+#' # --------------------------------
+#' # 2) Using SummarizedExperiment
+#' # --------------------------------
+#'  library(SummarizedExperiment)
+#'  se <- SummarizedExperiment(assays=list(counts=mat))
+#'  se_norm <- cpm_normalization(se, log_trans = TRUE)
+#' # This overwrite the 'counts' assay with log2-CPM data
+#'  assay(se_norm, "counts")
+#'
 #' @export
-#'
-cpm_normalization = function(df, log_trans = FALSE) {
-  sum = colSums(df) / 1e6
 
-  df = mapply('/', df, sum)
+cpm_normalization <- function(x,
+                              log_trans       = FALSE,
+                              assay_name      = NULL,
+                              new_assay_name  = NULL) {
+  if (inherits(x, "SummarizedExperiment")) {
+    #-----------------------------#
+    # SummarizedExperiment branch
+    #-----------------------------#
+    if (is.null(assay_name)) {
+      # Default: use the first assay
+      all_assays <- assayNames(x)
+      if (length(all_assays) < 1) {
+        stop("No assays found in the SummarizedExperiment.")
+      }
+      assay_name <- all_assays[[1]]
+    }
 
-  if (log_trans == FALSE) {
-    return(df)
+    mat <- assay(x, assay_name)
+    if (is.null(mat)) {
+      stop("No assay named '", assay_name, "' found in the SummarizedExperiment.")
+    }
+
+    if (!is.numeric(mat)) {
+      stop("Selected assay is not numeric.")
+    }
+
+    col_millions <- colSums(mat, na.rm = TRUE) / 1e6
+
+    col_millions[col_millions <= 0] <- 1
+
+    mat_cpm <- sweep(mat, 2, col_millions, FUN="/")
+
+    if (log_trans) {
+      mat_cpm <- log2(mat_cpm + 1)
+    }
+
+    if (is.null(new_assay_name)) {
+      # Overwrite existing assay
+      assay(x, assay_name) <- mat_cpm
+    } else {
+      # Create a new assay
+      assay(x, new_assay_name) <- mat_cpm
+    }
+
+    return(x)
+
+  } else if (is.data.frame(x) || is.matrix(x)) {
+    #-------------------#
+    # data.frame/matrix
+    #-------------------#
+    # Convert data.frame to matrix if needed
+    if (is.data.frame(x)) {
+      x <- as.matrix(x)
+    }
+    # Ensure numeric
+    if (!is.numeric(x)) {
+      stop("Input data is not numeric.")
+    }
+
+    col_millions <- colSums(x, na.rm = TRUE) / 1e6
+    col_millions[col_millions <= 0] <- 1
+
+    x_cpm <- sweep(x, 2, col_millions, FUN="/")
+
+    if (log_trans) {
+      x_cpm <- log2(x_cpm + 1)
+    }
+
+    return(x_cpm)
+
   } else {
-    df = log2(df + 1)
-    return(df)
+    stop("Input must be a matrix/data.frame or a SummarizedExperiment.")
   }
 }
