@@ -2,20 +2,78 @@
 % Please edit documentation in R/normalizations_tpm.R
 \name{tpm_normalization}
 \alias{tpm_normalization}
-\title{Transcripts per Million}
+\title{TPM Normalization}
 \usage{
-tpm_normalization(df, gene_length, log_trans = FALSE)
+tpm_normalization(
+  x,
+  gene_length = NULL,
+  log_trans = FALSE,
+  assay_name = NULL,
+  new_assay_name = NULL
+)
 }
 \arguments{
-\item{df}{A dataframe or matrix, must contain only numerical valeus}
+\item{x}{A numeric \code{matrix} or \code{data.frame} of gene counts,
+or a \code{SummarizedExperiment} containing such counts.
+\describe{
+  \item{If a \code{SummarizedExperiment},}{the function retrieves
+    \code{gene_length} from \code{rowData(x)$gene_length}.}
+  \item{If a \code{data.frame}/\code{matrix},}{the user must provide the
+    \code{gene_length} argument.}
+}}
 
-\item{gene_length}{A vector with the length for the genes in the dataframe in basepair format}
+\item{gene_length}{A numeric vector of gene lengths (one per row), used
+only if \code{x} is a data.frame or matrix. Must match the number of rows in
+\code{x}. Ignored if \code{x} is a SummarizedExperiment.}
 
-\item{log_trans}{Logical attribute, determines if normalized data should be log2 transformed. Note: An extra count is added.}
+\item{log_trans}{Logical. If \code{TRUE}, apply \code{log2(... + 1)} transform
+to the TPM-normalized values.}
+
+\item{assay_name}{If \code{x} is a SummarizedExperiment, name of the assay to
+normalize. Defaults to the first assay if not specified.}
+
+\item{new_assay_name}{If \code{x} is a SummarizedExperiment, name of a new
+assay in which to store the TPM (or log2-TPM). If \code{NULL}, overwrites
+the assay specified in \code{assay_name}.}
 }
 \value{
-A Matrix with normalized counts.
+A numeric \strong{matrix} of TPM or log2(TPM + 1) values if
+  \code{x} is a data.frame or matrix. If \code{x} is a SummarizedExperiment,
+  returns the modified SummarizedExperiment with the TPM data placed in the
+  existing or new assay.
 }
 \description{
-Normalizes a count matrix by the TPM method
+Normalizes read counts by the TPM (Transcripts Per Million) method:
+  \enumerate{
+    \item If \code{log_trans = TRUE}, applies \code{log2(TPM + 1)}.
+  }
+}
+\details{
+If \code{x} is a \code{SummarizedExperiment}, this function looks for a
+numeric column named \code{"gene_length"} in \code{rowData(x)}. That column
+must have length equal to the number of rows in the assay being normalized.
+}
+\examples{
+# -------------------------
+# 1) Using data.frame/matrix
+# -------------------------
+mat <- matrix(c(10,20,30,  40,50,60),
+              nrow=2, byrow=TRUE)
+rownames(mat) <- c("gene1", "gene2")
+colnames(mat) <- c("sample1", "sample2", "sample3")
+gene_len <- c(1000, 2000)  # length of gene1, gene2
+
+tpm_result <- tpm_normalization(mat, gene_length = gene_len)
+tpm_log    <- tpm_normalization(mat, gene_length = gene_len, log_trans=TRUE)
+
+# ----------------------------------
+# 2) Using SummarizedExperiment
+# ----------------------------------
+ library(SummarizedExperiment)
+ se <- SummarizedExperiment(assays=list(counts=mat))
+ rowData(se)$gene_length <- gene_len  # store gene lengths in rowData
+ se_tpm <- tpm_normalization(se, log_trans=TRUE)
+
+ assay(se_tpm, "counts")
+
 }
