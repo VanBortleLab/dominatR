@@ -54,26 +54,62 @@ numeric column named \code{"gene_length"} in \code{rowData(x)}. That column
 must have length equal to the number of rows in the assay being normalized.
 }
 \examples{
-# -------------------------
-# 1) Using data.frame/matrix
-# -------------------------
-mat <- matrix(c(10,20,30,  40,50,60),
-              nrow=2, byrow=TRUE)
-rownames(mat) <- c("gene1", "gene2")
-colnames(mat) <- c("sample1", "sample2", "sample3")
-gene_len <- c(1000, 2000)  # length of gene1, gene2
+library(SummarizedExperiment)
+library(airway)
+data('airway')
 
-tpm_result <- tpm_normalization(mat, gene_length = gene_len)
-tpm_log    <- tpm_normalization(mat, gene_length = gene_len, log_trans=TRUE)
+se = airway
 
-# ----------------------------------
-# 2) Using SummarizedExperiment
-# ----------------------------------
- library(SummarizedExperiment)
- se <- SummarizedExperiment(assays=list(counts=mat))
- rowData(se)$gene_length <- gene_len  # store gene lengths in rowData
- se_tpm <- tpm_normalization(se, log_trans=TRUE)
+### Adding a column in rowData regarding the gene_length
+rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
 
- assay(se_tpm, "counts")
+# -------------------------------
+# 1) Using a data.frame
+# -------------------------------
 
+gene_length = rowData(se)$gene_length
+
+df = assay(se)
+
+## Without log transformation
+df = tpm_normalization(df, gene_length = gene_length)
+
+df[1:5, 1:5]
+
+## With log transformation
+df = tpm_normalization(df, gene_length = gene_length, log_trans = TRUE)
+
+df[1:5, 1:5]
+
+# -------------------------------
+# 2) Using a SummarizedExperiment
+# -------------------------------
+
+# If now new_assay_name is provided, then overwrites existing assay
+se2 = tpm_normalization(se, log_trans = FALSE)
+
+head(assay(se2))
+
+# If new new_assay_name, normalization stored in a new object
+se2 = tpm_normalization(se, log_trans = FALSE, new_assay_name = 'tpm_counts')
+
+head(assay(se2, 'tpm_counts'))
+
+# A specific assay can also be selected
+new_matrix =  matrix(data = sample(x = seq(1, 100000),
+                                  size = nrow(se) * ncol(se),
+                                  replace = TRUE),
+                    nrow = nrow(se),
+                    ncol = ncol(se))
+rownames(new_matrix) = rownames(se)
+colnames(new_matrix) = colnames(se)
+
+## Creating a new assay called new counts
+assay(se, 'new_counts') = new_matrix
+
+se2 = tpm_normalization(se, new_assay_name = 'tpm_counts_new', assay_name = 'new_counts')
+
+se2
+
+head(assay(se2, 'tpm_counts_new'))
 }

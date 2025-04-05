@@ -24,10 +24,12 @@ in \code{x}, specifying the y-coordinates of each column's mass.}
 assay to use. Defaults to the first assay if not specified.}
 }
 \value{
-- If \code{x} is a data.frame, returns a new \code{data.frame} with
+\itemize{
+  \item If \code{x} is a data.frame, returns a new \code{data.frame} with
     columns \code{comx} and \code{comy}.
-  - If \code{x} is a SummarizedExperiment, returns the same object but
+  \item If \code{x} is a SummarizedExperiment, returns the same object but
     with two new columns \code{comx} and \code{comy} in \code{rowData(x)}.
+}
 }
 \description{
 For each row of the numeric data, \code{centmass()} computes a 2D center of mass
@@ -43,23 +45,31 @@ By default, \code{x_coord = c(0, 1, 0.5)} and
 of an equilateral triangle (often used in ternary plots).
 }
 \examples{
+library(SummarizedExperiment)
+library(airway)
+data('airway')
+
+se = airway
+# Let's subset for the first 3 columns for this example
+se = se[,1:3]
 # -------------------------------
 # 1) Using a data.frame
 # -------------------------------
-df <- data.frame(A = c(10, 0, 30),
-                 B = c( 5, 5,  0),
-                 C = c( 0, 0, 10))
-df_com <- centmass(df)
-df_com
+
+
+df = assay(se) |> as.data.frame()
+
+df = centmass(df)
+head(df)
 
 # -------------------------------
 # 2) Using a SummarizedExperiment
 # -------------------------------
- library(SummarizedExperiment)
- mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
- se <- SummarizedExperiment(assays = list(counts=mat))
- se_com <- centmass(se)   # comx & comy stored in rowData(se_com)
- rowData(se_com)
+
+se2 = centmass(se)
+
+## X and Y coordinates are stored in rowData(se2)
+head(rowData(se2))
 
 
 }

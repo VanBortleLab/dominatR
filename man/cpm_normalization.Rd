@@ -41,25 +41,59 @@ counts-per-million (CPM) method. Specifically:
   }
 }
 \examples{
-# --------------------------------
-# 1) Using a matrix or data.frame
-# --------------------------------
-mat <- matrix(c(10, 20, 30,
-                40, 50, 60),
-              nrow=2, byrow=TRUE)
-rownames(mat) <- c("gene1", "gene2")
-colnames(mat) <- c("sample1", "sample2", "sample3")
 
-cpm_result <- cpm_normalization(mat, log_trans = FALSE)
-cpm_log    <- cpm_normalization(mat, log_trans = TRUE)
+library(SummarizedExperiment)
+library(airway)
+data('airway')
 
-# --------------------------------
-# 2) Using SummarizedExperiment
-# --------------------------------
- library(SummarizedExperiment)
- se <- SummarizedExperiment(assays=list(counts=mat))
- se_norm <- cpm_normalization(se, log_trans = TRUE)
-# This overwrite the 'counts' assay with log2-CPM data
- assay(se_norm, "counts")
+se = airway
 
+# -------------------------------
+# 1) Using a data.frame
+# -------------------------------
+
+df = assay(se)
+
+## Without log transformation
+df1 = cpm_normalization(df, log_trans = FALSE)
+
+df1[1:5,1:5]
+
+## With log transformation
+df1 = cpm_normalization(df, log_trans = TRUE)
+
+df1[1:5,1:5]
+
+# -------------------------------
+# 2) Using a SummarizedExperiment
+# -------------------------------
+
+# If now new_assay_name is provided, then overwrites existing assay
+se2 = cpm_normalization(se, log_trans = FALSE)
+
+se2
+head(assay(se2))
+
+# If new new_assay_name, normalization stored in a new object
+se2 = cpm_normalization(se, log_trans = FALSE, new_assay_name = 'cpm_counts')
+
+se2
+head(assay(se2, 'cpm_counts'))
+
+# A specific assay can also be selected
+new_matrix =  matrix(data = sample(x = seq(1, 100000),
+                                  size = nrow(se) * ncol(se),
+                                  replace = TRUE),
+                    nrow = nrow(se),
+                    ncol = ncol(se))
+rownames(new_matrix) = rownames(se)
+colnames(new_matrix) = colnames(se)
+
+## Creating a new assay called new counts
+assay(se, 'new_counts') = new_matrix
+
+se2 = cpm_normalization(se, new_assay_name = 'cpm_counts_new', assay_name = 'new_counts')
+
+se2
+head(assay(se2, 'cpm_counts_new'))
 }

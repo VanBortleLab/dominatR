@@ -18,36 +18,56 @@ uses the first assay.}
 *new* assay, provide a name. By default `Qentropy`}
 }
 \value{
-- If `x` is a data.frame: returns the same data.frame with numeric
-    columns replaced by \eqn{Q_{ij}} values and `Entropy` column removed.
-  - If `x` is a SummarizedExperiment: returns the same object with
+\itemize{
+  \item If \code{x} is a data.frame: returns the same data.frame with numeric
+    columns replaced by \eqn{Q_{ij}} values and \code{Entropy} column removed.
+  \item If \code{x} is a SummarizedExperiment: returns the same object with
     the specified assay replaced by \eqn{Q_{ij}} values (or a new assay
-    if `new_assay_name` is set) and `rowData(x)$Entropy` removed.
+    if \code{new_assay_name} is set) and \code{rowData(x)$Entropy} removed.
+    }
 }
 \description{
 #' Transform entropy scores into categorical entropy scores
 \eqn{Q_{ij} = \mathrm{Entropy}_i - \log_2(x_{ij})}, or \code{Inf} if
 \eqn{x_{ij} == 0}.
 
-#' @details
+ @details
 For each row \eqn{i} and column \eqn{j}, \eqn{Q_{ij}} is defined as
 \eqn{\mathrm{Entropy}_i - \log_2\bigl(x_{ij}\bigr)} if \eqn{x_{ij}} is
 positive, or \code{Inf} otherwise.
 }
 \examples{
-df <- data.frame(A = c(10,0,30), B = c(5,5,0), C = c(0,0,10))
-# Normalize and get Entropy
-df_e <- entropy(df)
-df_q <- Qentropy(df_e)
-df_q
 
-# SummarizedExperiment example
-# library(SummarizedExperiment)
-# mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
-# se <- SummarizedExperiment(list(counts=mat))
-# se_e <- entropy(se)
-# se_q <- Qentropy(se_e)
-# # Overwrites the "counts" assay with Q-values
-# # rowData(se_q)$Entropy was removed
+library(SummarizedExperiment)
+library(airway)
+data('airway')
+
+se = airway
+# -------------------------------
+# 1) Using a data.frame
+# -------------------------------
+df = assay(se) |> as.data.frame()
+
+## Entropy needs to be calculated first
+df = entropy(df)
+
+## Then you can apply the Qentropy function
+df = Qentropy(df)
+
+head(df)
+
+# -------------------------------
+# 2) Using a SummarizedExperiment
+# -------------------------------
+
+## Calculate Entropy first
+se2 = entropy(se, new_assay_name = 'Entropy')
+
+## Transform entropy into Qentropy. new_assay_name specify a new assay
+## where data is going to be stored. Assay_name must have Entropy transformed values
+## By default function will look for an assay_name `Entropy` and assign a new assay to `Qentropy`
+se2 = Qentropy(se2, new_assay_name = 'Qentropy', assay_name = 'Entropy')
+
+se2
 
 }

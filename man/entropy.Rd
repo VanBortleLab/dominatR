@@ -17,30 +17,61 @@ to transform and compute Entropy on. If NULL, uses the first assay.}
 *new* assay, provide a name. By default `Entropy`}
 }
 \value{
-- If `x` is a data.frame: returns the same data.frame in which
+\itemize{
+  \item If \code{x} is a data.frame: returns the same data.frame in which
     numeric columns have been replaced by their row-wise proportions,
-    and an `Entropy` column is appended.
-  - If `x` is a SummarizedExperiment: returns the same
-    SummarizedExperiment in with a new assay (Default name is `Entropy`)
-    and `rowData(x)$Entropy` is added.
+    and an \code{Entropy} column is appended.
+  \item If \code{x} is a SummarizedExperiment: returns the same
+    SummarizedExperiment in with a new assay (Default name is \code{Entropy})
+    and \code{rowData(x)$Entropy} is added.
+    }
 }
 \description{
 Compute Shannon Entropy on row-normalized data
 }
 \examples{
-df <- data.frame(A = c(10, 0, 30),
-                 B = c(5,  5, 0),
-                 C = c(0,  0, 10))
-# Original function row-normalizes the numeric columns, then calculates Entropy
-df2 <- entropy(df)
-df2
+library(SummarizedExperiment)
+library(airway)
+data('airway')
 
-# SummarizedExperiment example
- library(SummarizedExperiment)
- mat <- matrix(c(10,0,30, 5,5,0, 0,0,10), nrow=3, byrow=TRUE)
- se <- SummarizedExperiment(assays = list(counts=mat))
- se2 <- entropy(se)
- assay(se2, "counts")  # row-normalized
- rowData(se2)$Entropy  # computed entropy
+se = airway
+# -------------------------------
+# 1) Using a data.frame
+# -------------------------------
+df = assay(se) |> as.data.frame()
+df = entropy(df)
+
+## The function adds a new column called Entropy and transform all the counts accordingly
+head(df)
+
+# -------------------------------
+# 2) Using a SummarizedExperiment
+# -------------------------------
+
+## The function adds a new assay called 'Entropy' with the transformed counts.
+## This name can be modified with the `new_assay_name` parameter
+## In the rowData dataframe a new column called Entropy is added.
+se2 = entropy(se, new_assay_name = 'Entropy')
+se2
+
+## In case the experiment has multiple assays, the function allows you to choose which assay to use.
+new_matrix =  matrix(data = sample(x = seq(1, 100000),
+                                   size = nrow(se) * ncol(se),
+                                   replace = TRUE),
+                     nrow = nrow(se),
+                     ncol = ncol(se))
+rownames(new_matrix) = rownames(se)
+colnames(new_matrix) = colnames(se)
+
+## Creating a new assay called new counts
+assay(se, 'new_counts') = new_matrix
+
+
+## Saving the entropy values as Entropy_newmatrix using the assay 'new counts'
+se2 = entropy(se,
+              new_assay_name = 'Entropy_newmatrix',
+              assay_name = 'new_counts')
+
+se2
 
 }
