@@ -46,20 +46,20 @@ library(SummarizedExperiment)
 library(airway)
 data('airway')
 
-se = airway
+se <- airway
 
 # -------------------------------
 # 1) Using a data.frame
 # -------------------------------
 
-df = assay(se)
+df <- assay(se)
 
-df1 = minmax_normalization(df)
+df1 <- minmax_normalization(df)
 
 apply(df1, 2, range)
 
 ## Using a new range
-df1 = minmax_normalization(df, new_min = 5, new_max = 10)
+df1 <- minmax_normalization(df, new_min = 5, new_max = 10)
 
 apply(df1, 2, range)
 
@@ -68,36 +68,36 @@ apply(df1, 2, range)
 # -------------------------------
 
 # If now new_assay_name is provided, then overwrites existing assay
-se2 = minmax_normalization(se)
+se2 <- minmax_normalization(se)
 
 apply(assay(se2), 2, range)
 
 
 # If new new_assay_name, normalization stored in a new object
-se2 = minmax_normalization(se, new_assay_name = 'minmax_counts')
+se2 <- minmax_normalization(se, new_assay_name = 'minmax_counts')
 
 apply(assay(se2, 'minmax_counts'), 2, range)
 
 # A specific assay can also be selected
-new_matrix =  matrix(data = sample(x = seq(1, 100000),
+new_matrix <-  matrix(data = sample(x = seq(1, 100000),
                                    size = nrow(se) * ncol(se),
                                    replace = TRUE),
                      nrow = nrow(se),
                      ncol = ncol(se))
-rownames(new_matrix) = rownames(se)
-colnames(new_matrix) = colnames(se)
+rownames(new_matrix) <- rownames(se)
+colnames(new_matrix) <- colnames(se)
 
 ## Creating a new assay called new counts
-assay(se, 'new_counts') = new_matrix
+assay(se, 'new_counts') <- new_matrix
 
-se2 = minmax_normalization(se,
+se2 <- minmax_normalization(se,
                            new_assay_name = 'minmax_counts_new',
                            assay_name = 'new_counts')
 
 apply(assay(se2, 'minmax_counts_new'), 2, range)
 
 ## Using a different range
-se2 = minmax_normalization(se,
+se2 <- minmax_normalization(se,
                            new_assay_name = 'minmax_counts_new',
                            assay_name = 'new_counts',
                            new_min = 10,

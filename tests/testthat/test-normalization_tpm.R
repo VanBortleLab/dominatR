@@ -1,5 +1,4 @@
 
-
 test_that("tpm_normalization on matrix (no log) with user-supplied gene_length", {
   # Simple 2x3 matrix
   mat <- matrix(c(10,20,30,  40,50,60), nrow=2, byrow=TRUE)

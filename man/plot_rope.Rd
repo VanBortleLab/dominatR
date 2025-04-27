@@ -2,10 +2,11 @@
 % Please edit documentation in R/plot_rope.R
 \name{plot_rope}
 \alias{plot_rope}
-\title{Dominance Plot in Two Dimensions - Plot Rope}
+\title{Plot Rope}
 \usage{
 plot_rope(
-  data,
+  x,
+  column_name = NULL,
   push_text = 1,
   rope_width = 1,
   rope_color = "#CCCCCCCC",
@@ -20,48 +21,188 @@ plot_rope(
   plotAll = TRUE,
   label = TRUE,
   title = "title",
-  output_table = TRUE
+  output_table = TRUE,
+  assay_name = NULL
 )
 }
 \arguments{
-\item{data}{A data frame with two columns, one for each variable of interest}
+\item{x}{A \code{data.frame} or \code{matrix} with numeric columns, or
+a \code{SummarizedExperiment} containing such data in one of its assays.}
 
-\item{push_text}{The distance from the label to the plot}
+\item{column_name}{Character. The name of the two variables that will be used for the analysis. By default it is \code{NULL}.}
 
-\item{rope_width}{Width of the rope, default is 1}
+\item{push_text}{Numeric. Expands or contracts text label positions along the x-axis.}
 
-\item{rope_color}{Color of the rope}
+\item{rope_width}{Numeric. Thickness of the "rope" drawn in the center.}
 
-\item{rope_border}{A logical parameter, if TRUE, the rope will have a border}
+\item{rope_color}{Character. Color for the rope's fill.}
 
-\item{col}{A list of two colors used for the observations that pass the threshold}
+\item{rope_border}{Logical or a color. Whether or how to draw the rope border.}
 
-\item{col_bg}{The color used for the observations that do not pass the threshold}
+\item{col}{Character vector of length 2. Colors assigned when \code{a > b} or \code{b > a}, respectively.}
 
-\item{pch}{A list of two shapes used for the observations that pass the threshold}
+\item{col_bg}{Background color (used when a row is filtered out by entropy or max value).}
 
-\item{pch_bg}{The shape of the points that do not pass the threshold}
+\item{pch}{Integer or vector specifying point types for the main two categories.}
 
-\item{cex}{Point size}
+\item{pch_bg}{Integer specifying the point type for the "gray" points (if \code{plotAll=TRUE}).}
 
-\item{entropyrange}{Range to filter observations based on their entropy score}
+\item{cex}{Numeric. Expansion factor for point size.}
 
-\item{maxvaluerange}{Range to filter observations based on their value}
+\item{entropyrange}{Numeric vector of length 2. Rows with \code{entropy} outside this range become background color.}
 
-\item{plotAll}{A logical parameter, if TRUE, all the points will be plot, if FALSE only points above threshold}
+\item{maxvaluerange}{Numeric vector of length 2. Rows with \code{max(a,b)} outside this range become background color.}
 
-\item{label}{A logical parameter. if TRUE, the names of each variable will be written on each side of the rope}
+\item{plotAll}{Logical. If \code{TRUE}, also draw "filtered" points in \code{col_bg} color. If \code{FALSE}, only highlight active points.}
 
-\item{title}{Title for the plot}
+\item{label}{Logical. If \code{TRUE}, label the two columns near the rope ends.}
 
-\item{output_table}{A logical parameter, if TRUE the dataframe used for making the plot will be returned}
+\item{title}{Character. Plot title.}
+
+\item{output_table}{Logical. If \code{TRUE}, return the processed data frame with added columns.}
+
+\item{assay_name}{(SummarizedExperiment only) Name of the assay containing
+the 2-column data. If not specified, the first assay is used.}
 }
 \value{
-A rope plot and a dataframe with the information used to build the plot
+\itemize{
+    \item If \code{output_table=TRUE}, returns a data frame with extra columns
+      (\code{comx}, \code{comy}, \code{color}, \code{maxvalue}, \code{entropy})
+      used in the plot.
+    \item If \code{output_table=FALSE}, invisibly returns \code{NULL}.
+  }
 }
 \description{
-Creates a rope plot based on the entropy scores for each row in a dataset
+Creates a rope-like visualization comparing two numeric columns
+(e.g., "a" vs. "b"), with optional color filtering based on
+maximum value range and entropy range.
 }
-\seealso{
-[entropy()], [Qentropy()], [centmass()]
+\details{
+The function expects two numeric columns. If the experiment has more than two columns, the name of the columns of interest can be specificed by using the parameter \code{column_name}. If \code{x} is
+a \code{SummarizedExperiment}, it extracts the indicated assay and extracts the columns of interest
+
+It also uses:
+  - \code{centmass()} for computing \code{comx}.
+  - \code{entropy()} for computing Shannon entropy, stored in the \code{entropy} column.  Between two variables, entropy rangeS between 0 and 1.
+
+The rope is drawn in the middle of the plot (the x-axis from -1 to 1, y = 0),
+with thickness \code{rope_width}. Points are scattered in \code{comy}
+direction for a bit of jitter within the rope.
+#' @examples
+library(SummarizedExperiment)
+library(airway)
+data('airway')
+se <- airway
+
+## Normalize the data first using tpm_normalization
+rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se#' )$gene_seq_start
+
+se <- tpm_normalization(se, log_trans = T, new_assay_name = 'tpm_norm')
+
+# -------------------------------
+# 1) Using a data.frame
+# -------------------------------
+
+df <- assay(se, 'tpm_norm')
+df <- as.data.frame(df)
+
+# Choose two columns of interest, in this case 'SRR1039508' and #' SRR1039516'
+
+# Default Behaviour
+plot_rope(df,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F)
+
+# Colors can be modified
+plot_rope(df,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F,
+          col = c('darkgreen', 'darkred'))
+
+# Emphasis can be applied to highly dominant variables by controling #' entropy parameter,
+# values outside of that range will be colored smokewhite.
+plot_rope(df,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F,
+          col = c('darkgreen', 'darkred'),
+          entropyrange = c(0,0.1))
+
+# Points in the center are a reflection of genes with expression levels = #' 0.
+# This can be modified by adjusting the maxvalue range
+
+plot_rope(df,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F,
+          col = c('darkgreen', 'darkred'),
+          entropyrange = c(0,0.1),
+          maxvaluerange = c(2, Inf))
+
+# By controling entropy range, you can observe different types of genes.
+# Values closer to 0 represent dominance and closer to 1 shareness.
+
+# Exploring genes with high normalized expression values across different #' entropy ranges
+
+
+
+# Looking for genes with a Log2(TPM) score between 4 and 8
+plot_rope(df,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F,
+          col = c('darkgreen', 'darkred'),
+          entropyrange = c(0,0.1),
+          maxvaluerange = c(4, 8))
+
+
+plot_rope(df,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F,
+          col = c('darkgreen', 'darkred'),
+          entropyrange = c(0.1,0.8),
+          maxvaluerange = c(4, 8))
+
+
+plot_rope(df,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F,
+          col = c('darkgreen', 'darkred'),
+          entropyrange = c(0.8,1),
+          maxvaluerange = c(4, 8))
+
+#' # -------------------------------
+# 1) Using a SummarizedExperiment
+# -------------------------------
+
+plot_rope(se,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F,
+          col = c('lightgreen', 'indianred'),
+          entropyrange = c(0,0.1),
+          maxvaluerange = c(4, 8))
+
+
+plot_rope(se,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F,
+          col =c('lightgreen', 'indianred'),
+          entropyrange = c(0.1,0.8),
+          maxvaluerange = c(4, 8))
+
+
+plot_rope(se,
+          column_name = c("SRR1039508", "SRR1039516"),
+          output_table = F,
+          col = c('lightgreen', 'indianred'),
+          entropyrange = c(0.8,1),
+          maxvaluerange = c(4, 8))
+
+### Obtaining the DF output for the analysis
+
+object <- plot_rope(se,
+                   column_name = c("SRR1039508", "SRR1039516"),
+                   output_table = T,
+                   col = c('lightgreen', 'indianred'),
+                   entropyrange = c(0.8,1),
+                   maxvaluerange = c(4, 8))
+
+head(object)
 }
