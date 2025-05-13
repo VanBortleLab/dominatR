@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_rope.R
 \name{plot_rope}
 \alias{plot_rope}
-\title{Plot Rope}
+\title{Rope (binary) dominance plot}
 \usage{
 plot_rope(
   x,
@@ -76,6 +76,9 @@ the 2-column data. If not specified, the first assay is used.}
 Creates a rope-like visualization comparing two numeric columns
 (e.g., "a" vs. "b"), with optional color filtering based on
 maximum value range and entropy range.
+
+The plot is useful for visualising “winner-takes-all” behaviour in two-way
+comparisons, e.g. gene expression in *A* and *B* conditions.
 }
 \details{
 The function expects two numeric columns. If the experiment has more than two columns, the name of the columns of interest can be specificed by using the parameter \code{column_name}. If \code{x} is
@@ -88,16 +91,17 @@ It also uses:
 The rope is drawn in the middle of the plot (the x-axis from -1 to 1, y = 0),
 with thickness \code{rope_width}. Points are scattered in \code{comy}
 direction for a bit of jitter within the rope.
-#' @examples
+}
+\examples{
 library(SummarizedExperiment)
 library(airway)
 data('airway')
 se <- airway
 
 ## Normalize the data first using tpm_normalization
-rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se#' )$gene_seq_start
+rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
 
-se <- tpm_normalization(se, log_trans = T, new_assay_name = 'tpm_norm')
+se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
 
 # -------------------------------
 # 1) Using a data.frame
@@ -111,19 +115,19 @@ df <- as.data.frame(df)
 # Default Behaviour
 plot_rope(df,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F)
+          output_table = FALSE)
 
 # Colors can be modified
 plot_rope(df,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F,
+          output_table = FALSE,
           col = c('darkgreen', 'darkred'))
 
 # Emphasis can be applied to highly dominant variables by controling #' entropy parameter,
 # values outside of that range will be colored smokewhite.
 plot_rope(df,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F,
+          output_table = FALSE,
           col = c('darkgreen', 'darkred'),
           entropyrange = c(0,0.1))
 
@@ -132,7 +136,7 @@ plot_rope(df,
 
 plot_rope(df,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F,
+          output_table = FALSE,
           col = c('darkgreen', 'darkred'),
           entropyrange = c(0,0.1),
           maxvaluerange = c(2, Inf))
@@ -147,7 +151,7 @@ plot_rope(df,
 # Looking for genes with a Log2(TPM) score between 4 and 8
 plot_rope(df,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F,
+          output_table = FALSE,
           col = c('darkgreen', 'darkred'),
           entropyrange = c(0,0.1),
           maxvaluerange = c(4, 8))
@@ -155,7 +159,7 @@ plot_rope(df,
 
 plot_rope(df,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F,
+          output_table = FALSE,
           col = c('darkgreen', 'darkred'),
           entropyrange = c(0.1,0.8),
           maxvaluerange = c(4, 8))
@@ -163,18 +167,18 @@ plot_rope(df,
 
 plot_rope(df,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F,
+          output_table = FALSE,
           col = c('darkgreen', 'darkred'),
           entropyrange = c(0.8,1),
           maxvaluerange = c(4, 8))
 
-#' # -------------------------------
+# -------------------------------
 # 1) Using a SummarizedExperiment
 # -------------------------------
 
 plot_rope(se,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F,
+          output_table = FALSE,
           col = c('lightgreen', 'indianred'),
           entropyrange = c(0,0.1),
           maxvaluerange = c(4, 8))
@@ -182,7 +186,7 @@ plot_rope(se,
 
 plot_rope(se,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F,
+          output_table = FALSE,
           col =c('lightgreen', 'indianred'),
           entropyrange = c(0.1,0.8),
           maxvaluerange = c(4, 8))
@@ -190,7 +194,7 @@ plot_rope(se,
 
 plot_rope(se,
           column_name = c("SRR1039508", "SRR1039516"),
-          output_table = F,
+          output_table = FALSE,
           col = c('lightgreen', 'indianred'),
           entropyrange = c(0.8,1),
           maxvaluerange = c(4, 8))
@@ -199,10 +203,11 @@ plot_rope(se,
 
 object <- plot_rope(se,
                    column_name = c("SRR1039508", "SRR1039516"),
-                   output_table = T,
+                   output_table = TRUE,
                    col = c('lightgreen', 'indianred'),
                    entropyrange = c(0.8,1),
                    maxvaluerange = c(4, 8))
 
 head(object)
+
 }

@@ -51,6 +51,9 @@ utils::globalVariables(
     'xlab',
     'facet_wrap',
     'scale_fill_manual',
-    'scale_color_manual'
+    'scale_color_manual',
+    'comx',
+    'comy',
+    'max_counts'
   )
 )
