@@ -244,6 +244,10 @@ plot_triangle <- function(x,
     if (is.data.frame(x)) {
       mat <- as.data.frame(x)
     }
+    # Data.frame or matrix
+    if (is.matrix(x)) {
+      mat <- as.matrix(x)
+    }
     if (!is.numeric(as.matrix(x))) {
       stop("Data is not numeric.")
     }
