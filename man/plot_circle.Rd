@@ -2,66 +2,388 @@
 % Please edit documentation in R/plot_circle.R
 \name{plot_circle}
 \alias{plot_circle}
-\title{Dominance Plot in any Dimension - Plot Circle}
+\title{Circular Dominance Plot (N ≥ 3 variables)}
 \usage{
 plot_circle(
+  x,
   n,
-  data,
-  str = FALSE,
-  back_alpha = 0.05,
-  label = c("curve", "legend"),
-  variables = colnames(data),
-  title = NULL,
-  threshold = 0,
-  col_variable = NULL,
-  point_size = 3,
-  text_size = 3,
+  column_variable_factor = NULL,
+  variables_highlight = NULL,
+  entropyrange = c(0, Inf),
+  magnituderange = c(0, Inf),
+  background_alpha_polygon = 0.05,
+  background_polygon = NULL,
+  background_na_polygon = "whitesmoke",
+  point_size = 1,
+  point_fill_colors = NULL,
+  point_fill_na_colors = "whitesmoke",
+  point_line_colors = NULL,
+  point_line_na_colors = "whitesmoke",
   line_col = "gray90",
   out_line = "black",
-  background_colors = NULL,
-  point_fill_colors = NULL,
-  point_line_colors = NULL
+  label = c("legend", "curve"),
+  text_label_curve_size = 3,
+  assay_name = NULL,
+  output_table = TRUE
 )
 }
 \arguments{
-\item{n}{Total number of variables to account for entropy calculation.}
+\item{x}{A numeric \code{data.frame}, \code{matrix}, or
+a \code{SummarizedExperiment}.}
 
-\item{data}{A numerical dataframe. Each column represent the variable used to calculate the entropy and build the plot}
+\item{n}{Integer (\eqn{\ge 3}). How many numeric variables to visualise.
+Must match \code{length(column_variable_factor)} when supplied.}
 
-\item{str}{A logical parameter. If TRUE points will be displayed in a single rect line}
+\item{column_variable_factor}{Character. Name of a column (or rowData
+column in a SummarizedExperiment) holding a categorical variable whose
+levels will colour the points.  If \code{NULL} (default) points are
+coloured by their dominant variable.}
 
-\item{back_alpha}{A numerical parameter, controls the intensity of the background for the plot}
+\item{variables_highlight}{Character vector naming which variables
+should receive curved text labels when \code{label = "curve"}.
+Defaults to all variables.}
 
-\item{label}{It determies if the variables are labeled around the circle or displayed as a legend. Two options are available 'curve' or 'legend'}
+\item{entropyrange, magnituderange}{Numeric length-2 vectors.
+Rows falling outside either interval are excluded from the plot/data.}
 
-\item{variables}{A vector that contains the name of the columns that should appear in the plot when label == 'curve'}
+\item{background_alpha_polygon}{Alpha level (0–1) for the coloured
+background slices.}
 
-\item{title}{Title of the plot}
+\item{background_polygon}{Character vector of slice fill colours;
+defaults to \code{scales::hue_pal()(n)}.  \code{background_na_polygon}
+sets the colour for missing values.}
 
-\item{threshold}{A numerical value that determines the minmum values for rows to be filtered. Any row with a rowSums value less than this threshold is removed from the subsequent analysis. Default is 0}
+\item{background_na_polygon, point_fill_na_colors, point_line_na_colors}{Sets the colour for missing values.}
 
-\item{col_variable}{The name of a variable with categorical data that wants to be displayed. The function in general adds color to the observations based on their column names, if each observation has a category linked to it, by providing the name of that variable, data points will be colored accordingly}
+\item{point_size}{Numeric; plotted point size.}
 
-\item{point_size}{Size for the plot points, default is 3}
+\item{point_fill_colors, point_line_colors}{Optional colour vectors for
+point fill / outline.}
 
-\item{text_size}{Size for the text. It works when label is 'curve'}
+\item{line_col}{Colour for the inner grid / slice borders.}
 
-\item{line_col}{Color for the plot outline.}
+\item{out_line}{Colour for the outermost circle.}
 
-\item{out_line}{Color for the outtermost circle}
+\item{label}{Either \code{"legend"} (default) to list variables in a
+legend or \code{"curve"} to print them around the rim.}
 
-\item{background_colors}{Colors for the background of the plot}
+\item{text_label_curve_size}{Numeric font size for curved labels.}
 
-\item{point_fill_colors}{Colors for the points in the plot}
+\item{assay_name}{(SummarizedExperiment only) Which assay to use.
+Defaults to the first assay.}
 
-\item{point_line_colors}{Colors for the outline of the point in the plot}
+\item{output_table}{Logical.  Also return the underlying data frame?}
 }
 \value{
-Returns a list of objects. It contains the circular dominance plot and a dataframe with the plotting coordinates, entropy and the dominant variable for each row
+If \code{output_table = TRUE} a list with:
+\itemize{
+  \item \code{circle_plot} — a \link[ggplot2]{ggplot} object;
+  \item \code{data}        — the augmented data frame containing
+        entropy, radius, (x,y) coordinates, dominant variable and
+        optional factor.
+}
+Otherwise only the \code{ggplot} object is returned.
 }
 \description{
-Creates a circular plot based on the entropy scores for each row in a dataset
+Produces a radial dominance plot in which each observation is located by:
+\itemize{
+  \item \strong{Angle (θ)} – the variable with the greatest value
+        (ties broken at random).
+  \item \strong{Radius (r)} – a monotone mapping of the row‐wise Shannon
+        entropy: points with low entropy (one variable dominates)
+        are near the edge; points with high entropy lie toward the centre.
 }
-\seealso{
-[entropy()], [Qentropy()]
+The circle is partitioned into \eqn{n} coloured slices; optional factor
+information can colour/jitter points independently.  Labels for each
+slice may be drawn as curved text on the circle or shown in a legend.
+}
+\details{
+\subsection{Radius mapping}{
+A linear map is used
+\deqn{ r \;=\; 100 \,\frac{n - 2^{H}}{n-1} }
+where \eqn{H} is the Shannon entropy of the row after log base 2, so
+\eqn{H \in [0,\log_2 n]}.
+}
+}
+\examples{
+library(SummarizedExperiment)
+library(airway)
+library(tidyverse)
+data('airway')
+se = airway
+
+## Normalize the data first using tpm_normalization
+rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+
+se = tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
+
+# -------------------------------
+# 1) Using a data.frame
+# -------------------------------
+
+df <- assay(se, 'tpm_norm') |> as.data.frame()
+
+## For simplicity let's rename the columns
+colnames(df) <- paste('Column_', 1:8, sep ='')
+
+# Default
+plot_circle(
+  x = df,
+  n = 8,
+  entropyrange     = c(0, 3),
+  magnituderange   = c(0, Inf),
+  label  = 'legend', output_table = F
+)
+
+# Filtering by entropy, 8 variables, max entropy value is log2(8)
+plot_circle(
+  x = df,
+  n = 8,
+  entropyrange     = c(2, 3),
+  magnituderange   = c(0, Inf),
+  label  = 'legend', output_table = F
+)
+
+plot_circle(
+  x = df,
+  n = 8,
+  entropyrange     = c(0, 2),
+  magnituderange   = c(0, Inf),
+  label  = 'legend', output_table = F
+)
+
+# Aesthetics modification
+plot_circle(
+  x = df,
+  n = 8,
+  entropyrange     = c(0, 2),
+  magnituderange   = c(0, Inf),
+  label  = 'curve',
+  output_table = F
+)
+
+# It is possible to highlight only a specific variable
+plot_circle(
+  x = df,
+  n = 8,
+  entropyrange     = c(0, 2),
+  magnituderange   = c(0, Inf),
+  label  = 'legend',
+  output_table = F,
+  background_alpha_polygon = 0.2,
+  background_na_polygon = 'transparent',
+  background_polygon = c('Column_1'  = 'indianred',
+                         'Column_3' = 'lightblue',
+                         'Column_5' = 'lightgreen'),
+  point_fill_colors = c('Column_1'  = 'darkred',
+                        'Column_3' = 'darkblue',
+                        'Column_5' = 'darkgreen'),
+  point_line_colors = c('Column_1'  = 'black',
+                        'Column_3' = 'black',
+                        'Column_5' = 'black')
+)
+
+# Let's create a factor column in our df
+df$factor <- sample(c('A', 'B', 'C', 'D'), size = nrow(df), replace = TRUE)
+
+# It is possible to visualize things by this specific factor column using
+# column_variable_factor
+plot_circle(
+  x = df,
+  n = 8,
+  column_variable_factor = 'factor',
+  entropyrange     = c(0, 2),
+  magnituderange   = c(0, Inf),
+  label  = 'legend',
+  output_table = F,
+  background_alpha_polygon = 0.2,
+  background_na_polygon = 'transparent',
+  background_polygon = c('Column_1'  = 'indianred',
+                         'Column_3' = 'lightblue',
+                         'Column_5' = 'lightgreen')
+)
+
+# Colors can be modified
+plot_circle(
+  x = df,
+  n = 8,
+  column_variable_factor = 'factor',
+  entropyrange     = c(0, 2),
+  magnituderange   = c(0, Inf),
+  label  = 'curve',
+  output_table = F,
+  background_alpha_polygon = 0.02,
+  background_na_polygon = 'transparent',
+  point_fill_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange'),
+  point_line_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange')
+)
+
+# Size of the points can be modified too
+plot_circle(
+  x = df,
+  n = 8,
+  point_size =  2,
+  column_variable_factor = 'factor',
+  entropyrange     = c(0, 2),
+  magnituderange   = c(0, Inf),
+  label  = 'curve',
+  output_table = F,
+  background_alpha_polygon = 0.02,
+  background_na_polygon = 'transparent',
+  point_fill_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange'),
+  point_line_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange')
+)
+
+# Retrieving a dataframe with the results used for plotting, set output_table = TRUE
+plot <- plot_circle(
+  x = df,
+  n = 8,
+  point_size =  2,
+  column_variable_factor = 'factor',
+  entropyrange     = c(0, 2),
+  magnituderange   = c(0, Inf),
+  label  = 'curve',
+  output_table = TRUE,
+  background_alpha_polygon = 0.02,
+  background_na_polygon = 'transparent',
+  point_fill_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange'),
+  point_line_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange')
+)
+
+
+# The first object is the plot
+plot[[1]]
+
+# The second the dataframe with information for each row, including
+# Entropy and the variable that dominates that particular observation.
+
+
+head(plot[[2]])
+
+
+
+# -------------------------------
+# 1) Using a SummarizedExperiment
+# -------------------------------
+# Changing column names
+colnames(se) <- paste('Column_', 1:8, sep ='')
+
+# Default
+plot_circle(
+  x = se,
+  n = 8,
+  entropyrange     = c(0, 3),
+  magnituderange   = c(0, Inf),
+  label  = 'legend',
+  output_table = FALSE,
+  assay_name = 'tpm_norm'
+)
+
+# Filtering High Entropy genes
+plot_circle(
+  x = se,
+  n = 8,
+  entropyrange     = c(0, 1.5),
+  magnituderange   = c(0, Inf),
+  label  = 'legend',
+  output_table = FALSE,
+  assay_name = 'tpm_norm'
+)
+
+# Filtering Low Entropy genes
+plot_circle(
+  x = se,
+  n = 8,
+  entropyrange     = c(2, 3),
+  magnituderange   = c(0, Inf),
+  label  = 'legend',
+  output_table = FALSE,
+  assay_name = 'tpm_norm'
+)
+
+
+# Using a character column from rowData
+
+plot_circle(
+  x = se,
+  n = 8,
+  column_variable_factor = 'gene_biotype',
+  entropyrange     = c(2,3),
+  magnituderange   = c(0, Inf),
+  label  = 'legend',
+  output_table = FALSE,
+  assay_name = 'tpm_norm'
+)
+
+plot_circle(
+  x = se,
+  n = 8,
+  column_variable_factor = 'gene_biotype',
+  point_size = 3,
+  entropyrange     = c(0,1.5),
+  magnituderange   = c(2, Inf),
+  label  = 'legend',
+  output_table = FALSE,
+  assay_name = 'tpm_norm',
+)
+
+# Highlighting only a class of interest
+
+plot_circle(
+  x = se,
+  n = 8,
+  column_variable_factor = 'gene_biotype',
+  point_size = 3,
+  entropyrange     = c(0,1.5),
+  magnituderange   = c(2, Inf),
+  label  = 'legend',
+  output_table = FALSE,
+  assay_name = 'tpm_norm',
+  point_fill_colors = c('miRNA' = 'orange'),
+  point_line_colors = c('miRNA' = 'orange')
+)
+
+
+# Retrieving a dataframe with the results used for plotting, set output_table = TRUE
+
+plot <- plot_circle(
+  x = se,
+  n = 8,
+  column_variable_factor = 'gene_biotype',
+  point_size = 3,
+  entropyrange     = c(0,1.5),
+  magnituderange   = c(2, Inf),
+  label  = 'legend',
+  output_table = TRUE,
+  assay_name = 'tpm_norm',
+  point_fill_colors = c('miRNA' = 'orange'),
+  point_line_colors = c('miRNA' = 'orange')
+)
+
+# It returns a list.
+# The first object is the plot
+plot[[1]]
+
+# The second the dataframe with information for each row, including
+# Entropy and the variable that dominates that particular observation.
+head(plot[[2]])
+
 }
