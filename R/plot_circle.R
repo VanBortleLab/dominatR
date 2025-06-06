@@ -388,7 +388,7 @@ plot_circle <- function(x,
     mat <- as.data.frame(x)
 
     if(!is.null(column_variable_factor)){
-      colnames(mat)[which(colnames(mat) == column_variable_factor)] = 'Factor'
+      colnames(mat)[which(colnames(mat) == column_variable_factor)] <- 'Factor'
       mat <- mat |> relocate(Factor)
 
     }

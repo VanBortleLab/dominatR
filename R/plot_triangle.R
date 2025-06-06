@@ -228,7 +228,7 @@ plot_triangle <- function(x,
     }
 
     ### Extracting the columns of interest. Default the first three columns
-    if (is.null(column_name)) column_name <- colnames(mat)[1:3]
+    if (is.null(column_name)) column_name <- colnames(mat)[seq_len(3)]
 
     if (length(column_name) != 3)
       stop("Exactly three columns are required.")
@@ -252,10 +252,11 @@ plot_triangle <- function(x,
       stop("Data is not numeric.")
     }
     if (length(column_name) == 3){
-      mat = mat[,column_name]
+      mat <- mat[,column_name]
     }
     if (ncol(mat) != 3) {
-      stop("plot_triangle() requires exactly 2 columns of data; found ", ncol(mat))
+      stop("plot_triangle() requires exactly 2 columns of data; found ",
+           ncol(mat))
     }
     data <- as.data.frame(mat)
     original_colnames <- colnames(data)

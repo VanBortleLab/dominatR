@@ -207,7 +207,7 @@ plot_rope <- function(x,
       stop("The selected assay must be a numeric matrix.")
     }
     if (length(column_name) == 2){
-      mat = mat[,column_name]
+      mat <- mat[,column_name]
     }
     if (ncol(mat) != 2) {
       stop("plot_rope() requires exactly 2 columns of data; found ", ncol(mat))
@@ -223,7 +223,7 @@ plot_rope <- function(x,
       stop("Data is not numeric.")
     }
     if (length(column_name) == 2){
-      mat = mat[,column_name]
+      mat <- mat[,column_name]
     }
     if (ncol(mat) != 2) {
       stop("plot_rope() requires exactly 2 columns of data; found ", ncol(mat))
