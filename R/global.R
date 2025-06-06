@@ -1,11 +1,12 @@
 utils::globalVariables(
   c(
     "Entropy",
+    'se',
+    'm',
     'suma',
     'Factor',
     'geom_point',
     'guides',
-    'rename_geom_aes',
     "curv_start",
     "curv_end",
     "ggplot",

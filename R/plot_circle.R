@@ -37,6 +37,7 @@
 #' @param background_na_polygon,point_fill_na_colors,point_line_na_colors  Sets the colour for missing values.
 #' @param line_col Colour for the inner grid / slice borders.
 #' @param out_line Colour for the outermost circle.
+#' @param straight_points Logical. If TRUE points are plotted in a straight line.
 #' @param label Either \code{"legend"} (default) to list variables in a
 #'   legend or \code{"curve"} to print them around the rim.
 #' @param text_label_curve_size Numeric font size for curved labels.
@@ -62,7 +63,7 @@
 #' \eqn{H \in [0,\log_2 n]}.
 #' }
 #'
-#' @import SummarizedExperiment
+#' @import SummarizedExperiment tidyverse forcats ggforce ggnewscale lubridate purrr readr stringr tibble tidyr dplyr ggplot2 utils
 #' @export
 #'
 #' @examples
@@ -92,7 +93,7 @@
 #'   n = 8,
 #'   entropyrange     = c(0, 3),
 #'   magnituderange   = c(0, Inf),
-#'   label  = 'legend', output_table = F
+#'   label  = 'legend', output_table = FALSE
 #' )
 #'
 #' # Filtering by entropy, 8 variables, max entropy value is log2(8)
@@ -101,7 +102,7 @@
 #'   n = 8,
 #'   entropyrange     = c(2, 3),
 #'   magnituderange   = c(0, Inf),
-#'   label  = 'legend', output_table = F
+#'   label  = 'legend', output_table = FALSE
 #' )
 #'
 #' plot_circle(
@@ -109,7 +110,7 @@
 #'   n = 8,
 #'   entropyrange     = c(0, 2),
 #'   magnituderange   = c(0, Inf),
-#'   label  = 'legend', output_table = F
+#'   label  = 'legend', output_table = FALSE
 #' )
 #'
 #' # Aesthetics modification
@@ -119,7 +120,7 @@
 #'   entropyrange     = c(0, 2),
 #'   magnituderange   = c(0, Inf),
 #'   label  = 'curve',
-#'   output_table = F
+#'   output_table = FALSE
 #' )
 #'
 #' # It is possible to highlight only a specific variable
@@ -129,7 +130,7 @@
 #'   entropyrange     = c(0, 2),
 #'   magnituderange   = c(0, Inf),
 #'   label  = 'legend',
-#'   output_table = F,
+#'   output_table = FALSE,
 #'   background_alpha_polygon = 0.2,
 #'   background_na_polygon = 'transparent',
 #'   background_polygon = c('Column_1'  = 'indianred',
@@ -155,7 +156,7 @@
 #'   entropyrange     = c(0, 2),
 #'   magnituderange   = c(0, Inf),
 #'   label  = 'legend',
-#'   output_table = F,
+#'   output_table = FALSE,
 #'   background_alpha_polygon = 0.2,
 #'   background_na_polygon = 'transparent',
 #'   background_polygon = c('Column_1'  = 'indianred',
@@ -171,7 +172,7 @@
 #'   entropyrange     = c(0, 2),
 #'   magnituderange   = c(0, Inf),
 #'   label  = 'curve',
-#'   output_table = F,
+#'   output_table = FALSE,
 #'   background_alpha_polygon = 0.02,
 #'   background_na_polygon = 'transparent',
 #'   point_fill_colors = c('A' = 'black',
@@ -193,7 +194,7 @@
 #'   entropyrange     = c(0, 2),
 #'   magnituderange   = c(0, Inf),
 #'   label  = 'curve',
-#'   output_table = F,
+#'   output_table = FALSE,
 #'   background_alpha_polygon = 0.02,
 #'   background_na_polygon = 'transparent',
 #'   point_fill_colors = c('A' = 'black',
@@ -362,6 +363,7 @@ plot_circle <- function(x,
                         point_fill_na_colors = 'whitesmoke',
                         point_line_colors = NULL,
                         point_line_na_colors = 'whitesmoke',
+                        straight_points = TRUE,
                         line_col = 'gray90',
                         out_line = 'black',
                         label  = c("legend", "curve"),
@@ -379,7 +381,7 @@ plot_circle <- function(x,
 
     if(!is.null(column_variable_factor)){
       mat <- cbind(mat, rowData(x)[which(colnames(rowData(se)) == column_variable_factor)])
-      colnames(mat)[ncol(m)] = 'Factor'
+      colnames(mat)[ncol(mat)] = 'Factor'
 
     }
   } else {
@@ -397,7 +399,7 @@ plot_circle <- function(x,
   area <- background_alpha_polygon
   sizex <- point_size
   textsize <- text_label_curve_size
-  rect1 <- str
+  rect1 <- straight_points
 
   if(is.null(variables_highlight)){
     variables_highlight <- colnames(mat)

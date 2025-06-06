@@ -19,6 +19,7 @@ plot_circle(
   point_fill_na_colors = "whitesmoke",
   point_line_colors = NULL,
   point_line_na_colors = "whitesmoke",
+  straight_points = TRUE,
   line_col = "gray90",
   out_line = "black",
   label = c("legend", "curve"),
@@ -59,6 +60,8 @@ sets the colour for missing values.}
 
 \item{point_fill_colors, point_line_colors}{Optional colour vectors for
 point fill / outline.}
+
+\item{straight_points}{Logical. If TRUE points are plotted in a straight line.}
 
 \item{line_col}{Colour for the inner grid / slice borders.}
 
@@ -132,7 +135,7 @@ plot_circle(
   n = 8,
   entropyrange     = c(0, 3),
   magnituderange   = c(0, Inf),
-  label  = 'legend', output_table = F
+  label  = 'legend', output_table = FALSE
 )
 
 # Filtering by entropy, 8 variables, max entropy value is log2(8)
@@ -141,7 +144,7 @@ plot_circle(
   n = 8,
   entropyrange     = c(2, 3),
   magnituderange   = c(0, Inf),
-  label  = 'legend', output_table = F
+  label  = 'legend', output_table = FALSE
 )
 
 plot_circle(
@@ -149,7 +152,7 @@ plot_circle(
   n = 8,
   entropyrange     = c(0, 2),
   magnituderange   = c(0, Inf),
-  label  = 'legend', output_table = F
+  label  = 'legend', output_table = FALSE
 )
 
 # Aesthetics modification
@@ -159,7 +162,7 @@ plot_circle(
   entropyrange     = c(0, 2),
   magnituderange   = c(0, Inf),
   label  = 'curve',
-  output_table = F
+  output_table = FALSE
 )
 
 # It is possible to highlight only a specific variable
@@ -169,7 +172,7 @@ plot_circle(
   entropyrange     = c(0, 2),
   magnituderange   = c(0, Inf),
   label  = 'legend',
-  output_table = F,
+  output_table = FALSE,
   background_alpha_polygon = 0.2,
   background_na_polygon = 'transparent',
   background_polygon = c('Column_1'  = 'indianred',
@@ -195,7 +198,7 @@ plot_circle(
   entropyrange     = c(0, 2),
   magnituderange   = c(0, Inf),
   label  = 'legend',
-  output_table = F,
+  output_table = FALSE,
   background_alpha_polygon = 0.2,
   background_na_polygon = 'transparent',
   background_polygon = c('Column_1'  = 'indianred',
@@ -211,7 +214,7 @@ plot_circle(
   entropyrange     = c(0, 2),
   magnituderange   = c(0, Inf),
   label  = 'curve',
-  output_table = F,
+  output_table = FALSE,
   background_alpha_polygon = 0.02,
   background_na_polygon = 'transparent',
   point_fill_colors = c('A' = 'black',
@@ -233,7 +236,7 @@ plot_circle(
   entropyrange     = c(0, 2),
   magnituderange   = c(0, Inf),
   label  = 'curve',
-  output_table = F,
+  output_table = FALSE,
   background_alpha_polygon = 0.02,
   background_na_polygon = 'transparent',
   point_fill_colors = c('A' = 'black',
