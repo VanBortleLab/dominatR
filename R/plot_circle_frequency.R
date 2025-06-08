@@ -1,121 +1,158 @@
-#' Dominance Distribution Plotter
+#' Dominance–Entropy Frequency Plot
 #'
-#' This function depends on the plot_circle function when the parameter col_variable is used. It plots the dominance frequency distribution of each of the categories present in col_variable.
+#' @description
+#' Visualises how often each categorical level ( `Factor` ) is dominant at a
+#' given entropy score.  The function expects the \strong{second} element of the
+#' list returned by \code{\link{plot_circle}()}.
 #'
-#' @param n Number of Variables, must be the same as the ones used in the function
-#' @param circle An object type list obtained from the plot_circle function
-#' @param single A logical parameter. If TRUE a single plot will be produced otherwise a plot will be faceted
-#' @param legend A logical parameter. If TRUE legends will appear
-#' @param numb_columns A numerical value. Number of columns for plotting when single is FALSE
-#' @param filter_class Name or names of classes of interest for display
-#' @param point_size Size of the point
+#' @param n              Integer. Number of numeric variables used in
+#'   \code{plot_circle()}.
+#' @param circle         The list returned by \code{plot_circle()}.
+#' @param single         Logical.  If \code{TRUE} draw one combined panel;
+#'   otherwise facet by \code{Factor}.
+#' @param legend         Logical.  Show a legend for the plot
+#' @param numb_columns   Faceting columns when \code{single = FALSE}.
+#' @param filter_class   Character vector of levels to keep; \code{NULL} keeps all.
+#' @param point_size     Numeric.  Size of jitter points.
 #'
-#' @returns
-#' Returns a list of objects, a frequency distribution plot for each category and the respective dataframe
-#'
+#' @return
+#' A list with
+#' \itemize{
+#'   \item \code{plot_stat} — a \link[ggplot2]{ggplot} object.
+#'   \item \code{data}      — the aggregated frequency table.
+#' }
 #' @export
-#' @seealso [entropy()], [Qentropy()], [plot_circle()]
 #'
-plot_circle_frequency = function(n,
-                                 circle,
-                                 single = FALSE,
-                                 legend = TRUE,
-                                 numb_columns = 1,
-                                 filter_class = NULL,
-                                 point_size = 2) {
-  data_ent = circle[[2]]
+#' @seealso \code{\link{plot_circle}}
+#'
+#' @examples
+#'library(SummarizedExperiment)
+#'library(airway)
+#'data('airway')
+#'se = airway
+#'
+#'## Normalize the data first using tpm_normalization
+#'rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+#'
+#'se = tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
+#'
+#'## Creating a plot_circle list using the 'gene_biotype' column as factor
+#'plot_test <- plot_circle(
+#'  x = se,
+#'  n = 8,
+#'  column_variable_factor = 'gene_biotype',
+#'  entropyrange     = c(0,Inf),
+#'  magnituderange   = c(0, Inf),
+#'  label  = 'legend',
+#'  output_table = TRUE,
+#'  assay_name = 'tpm_norm'
+#')
+#'
+#'## Using the plot_test object created above
+#'## Default
+#'plot <- plot_circle_frequency(n = 8,
+#'                      circle = plot_test,
+#'                      single = TRUE,
+#'                      legend = TRUE,
+#'                      numb_columns = 1,
+#'                      filter_class = NULL,
+#'                      point_size = 2)
+#'
+#'plot[[1]]
+#'
+#'## Facetting by factor is possible, adjusting the number of columns
+#'plot <- plot_circle_frequency(n = 8,
+#'                      circle = plot_test,
+#'                      single = FALSE,
+#'                      legend = TRUE,
+#'                      numb_columns = 3,
+#'                      filter_class = NULL,
+#'                      point_size = 2)
+#'
+#'plot[[1]]
+#'
+#'## Subsetting by a specific class present in Factor
+#'plot_circle_frequency(n = 8,
+#'                      circle = plot_test,
+#'                      single = FALSE,
+#'                      legend = TRUE,
+#'                      numb_columns = 1,
+#'                      filter_class = c('protein_coding', 'snoRNA', 'miRNA'),
+#'                      point_size = 2)
+#'
+#'plot[[1]]
+#'
+plot_circle_frequency <- function(n,
+                                  circle,
+                                  single        = FALSE,
+                                  legend        = TRUE,
+                                  numb_columns  = 1,
+                                  filter_class  = NULL,
+                                  point_size    = 2)
+{
+  ## ---------------- 1. sanity checks ----------------------------------------
+  stopifnot(length(circle) >= 2,
+            is.list(circle),
+            "data.frame" %in% class(circle[[2]]))
+  dat <- circle[[2]]
 
-  breaks_log2 = log2(seq(0, n) + 0.5)
+  if (!"Factor" %in% colnames(dat)){
+    stop("`plot_circle_frequency()` requires the `plot_circle()` call ",
+         "to include a categorical column called 'Factor'.")
+  }
+  if (!is.numeric(dat$Entropy)){
+    stop("Second element of `circle` does not contain numeric 'Entropy'.")
+  }
 
-
-  data_ent$bin = cut(
-    as.numeric(data_ent$Entropy),
-    breaks = breaks_log2,
-    labels =  2^(breaks_log2[-length(breaks_log2)]) |> ceiling(),
-    include.lowest = FALSE,
-    right = TRUE
+  ## ---------------- 2. bin Entropy in log2 bands ----------------------------
+  breaks   <- log2(seq(0, n) + 0.5)
+  labels   <- ceiling(2^(breaks[-length(breaks)]))                         # 1,2,4,8,…
+  dat$bin  <- factor(
+    cut(dat$Entropy,
+        breaks      = breaks,
+        labels      = labels,
+        include.lowest = FALSE, right = TRUE),
+    levels = labels
   )
 
-  data_ent = data_ent |>
-    group_by(bin, Factor) |>
-    dplyr::select(bin, Factor) |>
-    dplyr::summarise(n = dplyr::n(), .groups = 'drop')
+  ## ---------------- 3. fast frequency & proportion table --------------------
+  tab <- as.data.frame.table(table(dat$bin, dat$Factor),
+                             responseName = "n",
+                             stringsAsFactors = FALSE)
+  names(tab) <- c("bin", "Factor", "n")
+  tab$bin    <- factor(tab$bin, levels = labels)
 
-  data_ent = data_ent |>
-    group_by(Factor) |>
-    mutate(proportion = n / sum(n))
-
-  data_ent$Factor = factor(data_ent$Factor)
+  # proportions within each Factor
+  totals     <- tapply(tab$n, tab$Factor, sum)
+  tab$proportion <- tab$n / totals[tab$Factor]
 
 
-  if (!is.null(filter_class)) {
-    data_ent = data_ent |>
-      dplyr::filter(Factor %in% filter_class)
+  ## optional filtering
+  if (!is.null(filter_class)){
+    tab <- tab[tab$Factor %in% filter_class, , drop = FALSE]
   }
 
-  plot_stat = data_ent |>
-    ggplot() +
-    geom_line(
-      aes(
-        x = bin,
-        y = proportion,
-        col = Factor,
-        group = Factor
-      ),
-      linewidth = 1,
-      show.legend = legend
-    ) +
-    geom_point(
-      aes(
-        x = bin,
-        y = proportion,
-        fill = Factor,
-        group = Factor
-      ),
-      show.legend = FALSE,
-      pch = 21,
-      size = point_size
-    ) +
-    theme_minimal() +
+  ## ---------------- 4. build ggplot -----------------------------------------
+  p <- ggplot(tab,
+              aes(x = bin, y = proportion,
+                  group = Factor, colour = Factor, fill = Factor)) +
+    geom_line(linewidth = 1, show.legend = legend) +
+    geom_point(data = tab |> filter(proportion > 0),
+               aes(x = bin, y = proportion),
+               shape = 21,  size = point_size, show.legend = FALSE, col = 'black') +
+    scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, .25)) +
+    scale_x_discrete(limits = factor(seq(1, n))) +
+    labs(x = "Dominance", y = "Proportion") +
+    theme_minimal(base_size = 12) +
     theme(
-      panel.grid.major = element_line(colour = 'gray95', linetype = 'dotted'),
-      panel.spacing.y = unit(0.4, "cm"),
-      panel.spacing.x = unit(0.2, 'cm'),
-      strip.placement = "outside",
-      legend.text = element_text(size = 10),
-      legend.title = element_text(size = 10, face =
-                                    'bold'),
-      legend.key.size = unit(15, 'points'),
-      axis.title.y = element_text(
-        size = 20,
-        color = 'black',
-        face = 'bold',
-        vjust = 1
-      ),
-      axis.title.x = element_text(
-        size = 20,
-        color = 'black',
-        face = 'bold'
-      ),
-      axis.text.x = element_text(
-        size = 15,
-        color = 'black',
-        hjust = 0.5
-      ),
-      axis.text.y = element_text(size = 15, color = 'black'),
-      axis.ticks = element_line(),
-      panel.border = element_rect(
-        color = "black",
-        fill = NA,
-        size = 1
-      )
-    ) +
-    xlab('Dominance') +
-    scale_y_continuous(limits = c(0, 1), n.breaks = 5) +
-    scale_x_discrete(limits = factor(seq(1, n)))
+      panel.grid.major = element_line(colour = "grey92", linetype = "dotted"),
+      panel.border     = element_rect(colour = "black", fill = NA),
+      legend.title     = element_blank()
+    )
 
-  if (single == FALSE) {
-    plot_stat = plot_stat + facet_wrap( ~ Factor, ncol = numb_columns)
+  if (!single){
+    p <- p + facet_wrap(~ Factor, ncol = numb_columns)
   }
-  return(list(plot_stat, data_ent))
+
+  return(list(plot_stat = p, data = tab))
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_circle_frequency.R
 \name{plot_circle_frequency}
 \alias{plot_circle_frequency}
-\title{Dominance Distribution Plotter}
+\title{Dominance–Entropy Frequency Plot}
 \usage{
 plot_circle_frequency(
   n,
@@ -15,26 +15,92 @@ plot_circle_frequency(
 )
 }
 \arguments{
-\item{n}{Number of Variables, must be the same as the ones used in the function}
+\item{n}{Integer. Number of numeric variables used in
+\code{plot_circle()}.}
 
-\item{circle}{An object type list obtained from the plot_circle function}
+\item{circle}{The list returned by \code{plot_circle()}.}
 
-\item{single}{A logical parameter. If TRUE a single plot will be produced otherwise a plot will be faceted}
+\item{single}{Logical.  If \code{TRUE} draw one combined panel;
+otherwise facet by \code{Factor}.}
 
-\item{legend}{A logical parameter. If TRUE legends will appear}
+\item{legend}{Logical.  Show a legend for the plot}
 
-\item{numb_columns}{A numerical value. Number of columns for plotting when single is FALSE}
+\item{numb_columns}{Faceting columns when \code{single = FALSE}.}
 
-\item{filter_class}{Name or names of classes of interest for display}
+\item{filter_class}{Character vector of levels to keep; \code{NULL} keeps all.}
 
-\item{point_size}{Size of the point}
+\item{point_size}{Numeric.  Size of jitter points.}
 }
 \value{
-Returns a list of objects, a frequency distribution plot for each category and the respective dataframe
+A list with
+\itemize{
+  \item \code{plot_stat} — a \link[ggplot2]{ggplot} object.
+  \item \code{data}      — the aggregated frequency table.
+}
 }
 \description{
-This function depends on the plot_circle function when the parameter col_variable is used. It plots the dominance frequency distribution of each of the categories present in col_variable.
+Visualises how often each categorical level ( `Factor` ) is dominant at a
+given entropy score.  The function expects the \strong{second} element of the
+list returned by \code{\link{plot_circle}()}.
+}
+\examples{
+library(SummarizedExperiment)
+library(airway)
+data('airway')
+se = airway
+
+## Normalize the data first using tpm_normalization
+rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+
+se = tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
+
+## Creating a plot_circle list using the 'gene_biotype' column as factor
+plot_test <- plot_circle(
+ x = se,
+ n = 8,
+ column_variable_factor = 'gene_biotype',
+ entropyrange     = c(0,Inf),
+ magnituderange   = c(0, Inf),
+ label  = 'legend',
+ output_table = TRUE,
+ assay_name = 'tpm_norm'
+)
+
+## Using the plot_test object created above
+## Default
+plot <- plot_circle_frequency(n = 8,
+                     circle = plot_test,
+                     single = TRUE,
+                     legend = TRUE,
+                     numb_columns = 1,
+                     filter_class = NULL,
+                     point_size = 2)
+
+plot[[1]]
+
+## Facetting by factor is possible, adjusting the number of columns
+plot <- plot_circle_frequency(n = 8,
+                     circle = plot_test,
+                     single = FALSE,
+                     legend = TRUE,
+                     numb_columns = 3,
+                     filter_class = NULL,
+                     point_size = 2)
+
+plot[[1]]
+
+## Subsetting by a specific class present in Factor
+plot_circle_frequency(n = 8,
+                     circle = plot_test,
+                     single = FALSE,
+                     legend = TRUE,
+                     numb_columns = 1,
+                     filter_class = c('protein_coding', 'snoRNA', 'miRNA'),
+                     point_size = 2)
+
+plot[[1]]
+
 }
 \seealso{
-[entropy()], [Qentropy()], [plot_circle()]
+\code{\link{plot_circle}}
 }
