@@ -366,7 +366,7 @@ plot_circle <- function(x,
                         straight_points = TRUE,
                         line_col = 'gray90',
                         out_line = 'black',
-                        label  = c("legend", "curve"),
+                        label  = "legend",
                         text_label_curve_size = 3,
                         assay_name       = NULL,
                         output_table     = TRUE)
@@ -381,7 +381,7 @@ plot_circle <- function(x,
 
     if(!is.null(column_variable_factor)){
       mat <- cbind(mat, rowData(x)[which(colnames(rowData(se)) == column_variable_factor)])
-      colnames(mat)[ncol(mat)] = 'Factor'
+      colnames(mat)[ncol(mat)] <- 'Factor'
 
     }
   } else {
