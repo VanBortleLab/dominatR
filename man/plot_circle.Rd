@@ -22,7 +22,7 @@ plot_circle(
   straight_points = TRUE,
   line_col = "gray90",
   out_line = "black",
-  label = c("legend", "curve"),
+  label = "legend",
   text_label_curve_size = 3,
   assay_name = NULL,
   output_table = TRUE
