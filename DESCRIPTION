@@ -12,10 +12,13 @@ Encoding: UTF-8
 LazyData: false
 Depends: 
     R (>= 4.4.0)
-Imports: dplyr, forcats,  lubridate,  purrr,  readr,  stringr,  tibble,  tidyr,  geomtextpath,  ggforce,  ggplot2,  scales,  ggnewscale, SummarizedExperiment, airway, tidyverse
+Imports: dplyr, forcats,  lubridate,  purrr,  readr,  stringr,  tibble,  tidyr,  geomtextpath,  ggforce,  ggplot2,  scales,  ggnewscale, SummarizedExperiment, airway, tidyverse, BiocStyle
 RoxygenNote: 7.3.2
 biocViews: Visualization, Normalization, Classification, GeneExpression
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 BugReports: https://github.com/VanBortleLab/dominatR/issues
+VignetteBuilder: knitr
