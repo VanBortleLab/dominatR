@@ -4,15 +4,27 @@ Version: 0.1.0
 Author: Simon Lizarazo [aut, cre], Rajendra KC [ctb], Kevin Van Bortle [aut, cre, cph]
 Maintainer: Simon Lizarazo <silizarazoch@gmail.com>,
             Kevin Van Bortle <kvbortle@illinois.edu>
-Description: 
-  dominatR is an R package for quantifying and visualizing feature dominance in datasets. dominatR makes use    of Shannon's entropy to identify features that are dominated within a particular category or condition.
+Description: dominatR is an R package for quantifying and visualizing feature dominance in datasets.
+    dominatR makes use of entropy-based triangular projections and compositional comparison metrics.
 License: MIT + file LICENSE
 URL: https://github.com/VanBortleLab/dominatR
 Encoding: UTF-8
 LazyData: false
 Depends: 
     R (>= 4.4.0)
-Imports: dplyr, forcats,  lubridate,  purrr,  readr,  stringr,  tibble,  tidyr,  geomtextpath,  ggforce,  ggplot2,  scales,  ggnewscale, SummarizedExperiment, airway, tidyverse, BiocStyle
+Imports:
+    SummarizedExperiment,
+    dplyr,
+    forcats,
+    lubridate,
+    purrr,
+    readr,
+    stringr,
+    tibble,
+    tidyr,
+    ggforce,
+    geomtextpath,
+    ggplot2
 RoxygenNote: 7.3.2
 biocViews: Visualization, Normalization, Classification, GeneExpression
 Suggests: 

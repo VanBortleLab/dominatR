@@ -20,10 +20,10 @@
 #'       \code{gene_length} argument.}
 #'   }
 #' @param gene_length A numeric vector of gene lengths (one per row), used
-#'   only if \code{x} is a data.frame or matrix. Must match the number of rows in
-#'   \code{x}. Ignored if \code{x} is a SummarizedExperiment.
-#' @param log_trans Logical. If \code{TRUE}, apply \code{log2(... + 1)} transform
-#'   to the TPM-normalized values.
+#'   only if \code{x} is a data.frame or matrix. Must match the number of rows
+#'   in \code{x}. Ignored if \code{x} is a SummarizedExperiment.
+#' @param log_trans Logical. If \code{TRUE}, apply \code{log2(... + 1)}
+#'   transform to the TPM-normalized values.
 #' @param assay_name If \code{x} is a SummarizedExperiment, name of the assay to
 #'   normalize. Defaults to the first assay if not specified.
 #' @param new_assay_name If \code{x} is a SummarizedExperiment, name of a new
@@ -43,7 +43,8 @@
 #'se = airway
 #'
 #'### Adding a column in rowData regarding the gene_length
-#'rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+#'rowData(se)$gene_length = rowData(se)$gene_seq_end
+#'- rowData(se)$gene_seq_start
 #'
 #'# -------------------------------
 #'# 1) Using a data.frame
@@ -89,7 +90,8 @@
 #'## Creating a new assay called new counts
 #'assay(se, 'new_counts') = new_matrix
 #'
-#'se2 = tpm_normalization(se, new_assay_name = 'tpm_counts_new', assay_name = 'new_counts')
+#'se2 = tpm_normalization(se, new_assay_name = 'tpm_counts_new',
+#'assay_name = 'new_counts')
 #'
 #'se2
 #'
@@ -97,40 +99,42 @@
 #' @export
 
 tpm_normalization <- function(x,
-                               gene_length     = NULL,
-                               log_trans       = FALSE,
-                               assay_name      = NULL,
-                               new_assay_name  = NULL) {
+                            gene_length     = NULL,
+                            log_trans       = FALSE,
+                            assay_name      = NULL,
+                            new_assay_name  = NULL) {
 
-  #---------------------------
-  # SummarizedExperiment path
-  #---------------------------
-  if (inherits(x, "SummarizedExperiment")) {
-    if (is.null(assay_name)) {
-      all_assays <- SummarizedExperiment::assayNames(x)
-      if (length(all_assays) < 1) {
-        stop("No assays found in the SummarizedExperiment.")
-      }
-      assay_name <- all_assays[[1]]
-    }
-    mat <- SummarizedExperiment::assay(x, assay_name)
-    if (is.null(mat)) {
-      stop("No assay named '", assay_name, "' found in the SummarizedExperiment.")
-    }
-    if (!is.numeric(mat)) {
-      stop("Selected assay is not numeric. Please provide numeric data for TPM normalization.")
-    }
+    #---------------------------
+    # SummarizedExperiment path
+    #---------------------------
+    if (inherits(x, "SummarizedExperiment")) {
+        if (is.null(assay_name)) {
+            all_assays <- SummarizedExperiment::assayNames(x)
+            if (length(all_assays) < 1) {
+                stop("No assays found in the SummarizedExperiment.")
+            }
+            assay_name <- all_assays[[1]]
+        }
+        mat <- SummarizedExperiment::assay(x, assay_name)
+        if (is.null(mat)) {
+            stop("No assay named '", assay_name,
+                "' found in the SummarizedExperiment.")
+        }
+        if (!is.numeric(mat)) {
+            stop("Selected assay is not numeric.
+                Please provide numeric data for TPM normalization.")
+        }
 
-    # Retrieve gene lengths from rowData
-    rd <- rowData(x)
-    if (!("gene_length" %in% colnames(rd))) {
-      stop("No 'gene_length' column found in rowData(x). ",
-           "Please add rowData(x)$gene_length or use data.frame/matrix mode.")
-    }
-    gene_len_vec <- rd[["gene_length"]]
-    if (!is.numeric(gene_len_vec)) {
-      stop("'gene_length' in rowData(x) must be numeric.")
-    }
+        # Retrieve gene lengths from rowData
+        rd <- rowData(x)
+        if (!("gene_length" %in% colnames(rd))) {
+            stop("No 'gene_length' column found in rowData(x). ",
+            "Please add rowData(x)$gene_length or use data.frame/matrix mode.")
+        }
+        gene_len_vec <- rd[["gene_length"]]
+        if (!is.numeric(gene_len_vec)) {
+            stop("'gene_length' in rowData(x) must be numeric.")
+        }
 
     ## Calculations
     # 1) RPK
@@ -148,14 +152,14 @@ tpm_normalization <- function(x,
 
     # 4) Optional log2(... +1)
     if (log_trans) {
-      tpm_mat <- log2(tpm_mat + 1)
+        tpm_mat <- log2(tpm_mat + 1)
     }
 
     # 5) Store result in new or existing assay
     if (is.null(new_assay_name)) {
-      assay(x, assay_name) <- tpm_mat
+        assay(x, assay_name) <- tpm_mat
     } else {
-      assay(x, new_assay_name) <- tpm_mat
+        assay(x, new_assay_name) <- tpm_mat
     }
 
     return(x)
@@ -163,25 +167,25 @@ tpm_normalization <- function(x,
     #------------------------#
     # data.frame / matrix path
     #------------------------#
-  } else if (is.data.frame(x) || is.matrix(x)) {
-    # Convert data.frame to matrix if needed
-    if (is.data.frame(x)) {
-      x <- as.matrix(x)
-    }
-    if (!is.numeric(x)) {
-      stop("Input 'x' must contain numeric data for TPM normalization.")
-    }
-    # Check user-provided gene_length
-    if (is.null(gene_length)) {
-      stop("You must provide 'gene_length' for data.frame/matrix input.")
-    }
-    if (!is.numeric(gene_length)) {
-      stop("Argument 'gene_length' must be numeric.")
-    }
-    if (length(gene_length) != nrow(x)) {
-      stop("Length of 'gene_length' (", length(gene_length),
-           ") must match the number of rows (", nrow(x), ") in 'x'.")
-    }
+    } else if (is.data.frame(x) || is.matrix(x)) {
+        # Convert data.frame to matrix if needed
+        if (is.data.frame(x)) {
+            x <- as.matrix(x)
+        }
+        if (!is.numeric(x)) {
+            stop("Input 'x' must contain numeric data for TPM normalization.")
+        }
+        # Check user-provided gene_length
+        if (is.null(gene_length)) {
+            stop("You must provide 'gene_length' for data.frame/matrix input.")
+        }
+        if (!is.numeric(gene_length)) {
+            stop("Argument 'gene_length' must be numeric.")
+        }
+        if (length(gene_length) != nrow(x)) {
+            stop("Length of 'gene_length' (", length(gene_length),
+            ") must match the number of rows (", nrow(x), ") in 'x'.")
+        }
 
 
     ## Calculations
@@ -200,13 +204,13 @@ tpm_normalization <- function(x,
 
     # 4) Optional log2(... +1)
     if (log_trans) {
-      tpm_mat <- log2(tpm_mat + 1)
+        tpm_mat <- log2(tpm_mat + 1)
     }
 
     # Return the TPM (or log2-TPM) matrix
     return(tpm_mat)
 
-  } else {
-    stop("Input must be a matrix/data.frame or a SummarizedExperiment.")
-  }
+    } else {
+        stop("Input must be a matrix/data.frame or a SummarizedExperiment.")
+    }
 }
