@@ -21,7 +21,7 @@
 #' @return
 #'  \itemize{
 #'   \item If \code{x} is a data.frame: returns the same data.frame with numeric
-#'     columns replaced by \eqn{Q_{ij}} values and \code{Entropy} column removed.
+#'    columns replaced by \eqn{Q_{ij}} values and \code{Entropy} column removed.
 #'   \item If \code{x} is a SummarizedExperiment: returns the same object with
 #'     the specified assay replaced by \eqn{Q_{ij}} values (or a new assay
 #'     if \code{new_assay_name} is set) and \code{rowData(x)$Entropy} removed.
@@ -57,8 +57,10 @@
 #'se2 = entropy(se, new_assay_name = 'Entropy')
 #'
 #'## Transform entropy into Qentropy. new_assay_name specify a new assay
-#'## where data is going to be stored. Assay_name must have Entropy transformed values
-#'## By default function will look for an assay_name `Entropy` and assign a new assay to `Qentropy`
+#'## where data is going to be stored. Assay_name must have Entropy transformed
+#' values
+#'## By default function will look for an assay_name `Entropy` and assign a
+#'new assay to `Qentropy`
 #'se2 = Qentropy(se2, new_assay_name = 'Qentropy', assay_name = 'Entropy')
 #'
 #'se2
@@ -68,26 +70,27 @@
 
 
 Qentropy <- function(x,
-                      assay_name = 'Entropy',
-                      new_assay_name = 'Qentropy') {
-  if (inherits(x, "SummarizedExperiment")) {
+                        assay_name = 'Entropy',
+                        new_assay_name = 'Qentropy') {
+    if (inherits(x, "SummarizedExperiment")) {
     #----------------------#
     # SummarizedExperiment
     #----------------------#
     if (is.null(assay_name)) {
-      assay_name <- assayNames(x)[1]
-      if (is.na(assay_name)) {
-        stop("No assay found in SummarizedExperiment.")
-      }
+        assay_name <- assayNames(x)[1]
+        if (is.na(assay_name)) {
+            stop("No assay found in SummarizedExperiment.")
+        }
     }
     mat <- assay(x, assay_name)
     if (is.null(mat)) {
-      stop("No assay named '", assay_name, "' found in the SummarizedExperiment.")
+        stop("No assay named '", assay_name,
+            "' found in the SummarizedExperiment.")
     }
 
     # Must have rowData(x)$Entropy
     if (!("Entropy" %in% colnames(rowData(x)))) {
-      stop("rowData(x)$Entropy not found. Please run `entropy()` first.")
+        stop("rowData(x)$Entropy not found. Please run `entropy()` first.")
     }
     e_vals <- rowData(x)$Entropy
 
@@ -110,21 +113,22 @@ Qentropy <- function(x,
 
     # Overwrite or store in a new assay
     if (is.null(new_assay_name)) {
-      # Overwrite the same assay
-      assay(x, assay_name) <- q_mat
+        # Overwrite the same assay
+        assay(x, assay_name) <- q_mat
     } else {
-      assay(x, new_assay_name) <- q_mat
+        assay(x, new_assay_name) <- q_mat
     }
 
     return(x)
 
-  } else if (is.data.frame(x)) {
+    } else if (is.data.frame(x)) {
     #--------------#
     # data.frame
     #--------------#
     # Must have 'Entropy'
     if (!("Entropy" %in% colnames(x))) {
-      stop("'Entropy' column not found in data.frame. Did you run `entropy()` first?")
+        stop("'Entropy' column not found in data.frame.
+            Did you run `entropy()` first?")
     }
 
     # Numeric columns (excluding 'Entropy')
@@ -132,9 +136,9 @@ Qentropy <- function(x,
     numeric_cols["Entropy"] <- FALSE
 
     if (!any(numeric_cols)) {
-      # If we have no numeric cols other than Entropy, just drop Entropy
-      x[["Entropy"]] <- NULL
-      return(x)
+        # If we have no numeric cols other than Entropy, just drop Entropy
+        x[["Entropy"]] <- NULL
+        return(x)
     }
 
     # The data in these numeric columns should be the row-normalized values
@@ -156,7 +160,7 @@ Qentropy <- function(x,
     x[["Entropy"]] <- NULL
 
     return(x)
-  } else {
-    stop("Input must be a data.frame or SummarizedExperiment.")
-  }
+    } else {
+        stop("Input must be a data.frame or SummarizedExperiment.")
+    }
 }

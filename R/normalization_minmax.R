@@ -95,63 +95,64 @@ minmax_normalization <- function(x,
                                 assay_name = NULL,
                                 new_assay_name = NULL)
 {
-  if (inherits(x, "SummarizedExperiment")) {
+    if (inherits(x, "SummarizedExperiment")) {
     #-----------------------------#
     # SummarizedExperiment branch
     #-----------------------------#
-    if (is.null(assay_name)) {
-      # Default: use the first assay
-      all_assays <- assayNames(x)
-      if (length(all_assays) < 1) {
-        stop("No assays found in the SummarizedExperiment.")
-      }
-      assay_name <- all_assays[[1]]
+        if (is.null(assay_name)) {
+        # Default: use the first assay
+            all_assays <- assayNames(x)
+        if (length(all_assays) < 1) {
+            stop("No assays found in the SummarizedExperiment.")
+        }
+        assay_name <- all_assays[[1]]
     }
 
     mat <- assay(x, assay_name)
     if (is.null(mat)) {
-      stop("No assay named '", assay_name, "' found in the SummarizedExperiment.")
+        stop("No assay named '", assay_name,
+            "' found in the SummarizedExperiment.")
     }
 
     if (!is.numeric(mat)) {
-      stop("Selected assay is not numeric.")
+        stop("Selected assay is not numeric.")
     }
 
 
-  mins <- apply(mat, 2, min, na.rm = TRUE)
-  maxs <- apply(mat, 2, max, na.rm = TRUE)
+    mins <- apply(mat, 2, min, na.rm = TRUE)
+    maxs <- apply(mat, 2, max, na.rm = TRUE)
 
-  mins <- matrix(mins, nrow = nrow(mat), ncol = ncol(mat), byrow = TRUE)
-  maxs <- matrix(maxs, nrow = nrow(mat), ncol = ncol(mat), byrow = TRUE)
+    mins <- matrix(mins, nrow = nrow(mat), ncol = ncol(mat), byrow = TRUE)
+    maxs <- matrix(maxs, nrow = nrow(mat), ncol = ncol(mat), byrow = TRUE)
 
-  diffs <- maxs - mins
+    diffs <- maxs - mins
 
-  new_rang <- new_max - new_min
+    new_rang <- new_max - new_min
 
-  mat <- (mat - mins) * new_rang / diffs + new_min
+    mat <- (mat - mins) * new_rang / diffs + new_min
 
 
-  if (is.null(new_assay_name)) {
-    # Overwrite existing assay
-    assay(x, assay_name) <- mat
-  } else {
-    # Create a new assay
-    assay(x, new_assay_name) <- mat
-  }
+    if (is.null(new_assay_name)) {
+        # Overwrite existing assay
+        assay(x, assay_name) <- mat
+    } else {
+        # Create a new assay
+        assay(x, new_assay_name) <- mat
+    }
 
-  return(x)
-  } else if (is.data.frame(x) || is.matrix(x)) {
-  #-------------------#
-  # data.frame/matrix
-  #-------------------#
-  # Convert data.frame to matrix if needed
-  if (is.data.frame(x)) {
-    x <- as.matrix(x)
-  }
-  # Ensure numeric
-  if (!is.numeric(x)) {
-    stop("Input data is not numeric.")
-  }
+    return(x)
+    } else if (is.data.frame(x) || is.matrix(x)) {
+    #-------------------#
+    # data.frame/matrix
+    #-------------------#
+    # Convert data.frame to matrix if needed
+    if (is.data.frame(x)) {
+        x <- as.matrix(x)
+    }
+    # Ensure numeric
+    if (!is.numeric(x)) {
+        stop("Input data is not numeric.")
+    }
 
     mat <- x
 
@@ -169,7 +170,7 @@ minmax_normalization <- function(x,
 
     return(mat)
 
-  } else {
-    stop("Input must be a matrix/data.frame or a SummarizedExperiment.")
-  }
+    } else {
+        stop("Input must be a matrix/data.frame or a SummarizedExperiment.")
+    }
 }

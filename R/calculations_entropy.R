@@ -32,20 +32,23 @@
 #' df = assay(se) |> as.data.frame()
 #' df = entropy(df)
 #'
-#' ## The function adds a new column called Entropy and transform all the counts accordingly
+#' ## The function adds a new column called Entropy and transform all
+#' the counts accordingly
 #' head(df)
 #'
 #' # -------------------------------
 #' # 2) Using a SummarizedExperiment
 #' # -------------------------------
 #'
-#' ## The function adds a new assay called 'Entropy' with the transformed counts.
+#' ## The function adds a new assay called 'Entropy' with the transformed
+#' counts.
 #' ## This name can be modified with the `new_assay_name` parameter
 #' ## In the rowData dataframe a new column called Entropy is added.
 #' se2 = entropy(se, new_assay_name = 'Entropy')
 #' se2
 #'
-#' ## In case the experiment has multiple assays, the function allows you to choose which assay to use.
+#' ## In case the experiment has multiple assays, the function allows you to
+#' choose which assay to use.
 #' new_matrix =  matrix(data = sample(x = seq(1, 100000),
 #'                                    size = nrow(se) * ncol(se),
 #'                                    replace = TRUE),
@@ -58,7 +61,8 @@
 #' assay(se, 'new_counts') = new_matrix
 #'
 #'
-#' ## Saving the entropy values as Entropy_newmatrix using the assay 'new counts'
+#' ## Saving the entropy values as Entropy_newmatrix using the assay 'new
+#' counts'
 #' se2 = entropy(se,
 #'               new_assay_name = 'Entropy_newmatrix',
 #'               assay_name = 'new_counts')
@@ -70,19 +74,20 @@
 entropy <- function(x,
                     assay_name = NULL,
                     new_assay_name = 'Entropy') {
-  if (inherits(x, "SummarizedExperiment")) {
+    if (inherits(x, "SummarizedExperiment")) {
     #----------------------#
     # SummarizedExperiment
     #----------------------#
     if (is.null(assay_name)) {
-      assay_name <- assayNames(x)[1]
-      if (is.na(assay_name)) {
-        stop("No assay found in SummarizedExperiment.")
-      }
+        assay_name <- assayNames(x)[1]
+        if (is.na(assay_name)) {
+            stop("No assay found in SummarizedExperiment.")
+        }
     }
     mat <- assay(x, assay_name)
     if (is.null(mat)) {
-      stop("No assay named '", assay_name, "' found in the SummarizedExperiment.")
+        stop("No assay named '", assay_name,
+            "' found in the SummarizedExperiment.")
     }
 
     # 1. Compute row sums (use 1 if sum <= 0)
@@ -109,7 +114,7 @@ entropy <- function(x,
 
     return(x)
 
-  } else if (is.data.frame(x)) {
+    } else if (is.data.frame(x)) {
     #--------------#
     # data.frame
     #--------------#
@@ -117,8 +122,8 @@ entropy <- function(x,
     numeric_cols <- vapply(x, is.numeric, logical(1))
     # If no numeric columns, nothing to do
     if (!any(numeric_cols)) {
-      warning("No numeric columns found; returning data unchanged.")
-      return(x)
+        warning("No numeric columns found; returning data unchanged.")
+        return(x)
     }
 
     # 2. Row sums
@@ -142,7 +147,7 @@ entropy <- function(x,
     x[["Entropy"]] <- ent_vals
 
     return(x)
-  } else {
-    stop("Input must be a data.frame or SummarizedExperiment.")
-  }
+    } else {
+        stop("Input must be a data.frame or SummarizedExperiment.")
+    }
 }

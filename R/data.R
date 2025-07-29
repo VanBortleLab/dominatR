@@ -25,7 +25,8 @@
 
 #' RNA Polymerase score dataframe
 #'
-#' A subset of data obtained from CHIP-Seq Data for RNA Polymerase I, II and III. Values are represented as the -log10(p-value)
+#' A subset of data obtained from CHIP-Seq Data for RNA Polymerase I, II and
+#' III. Values are represented as the -log10(p-value)
 #'
 #' @docType data
 #' @format A dataframe with 1061 rows and 7 variables:
@@ -50,7 +51,8 @@
 
 #' ATAC-Seq rawcounts for POL3 Genes Dataframe
 #'
-#' A list of tissues and the corresponding counts for RNA POL3 genes for each of them.
+#' A list of tissues and the corresponding counts for RNA POL3 genes for
+#' each of them.
 #'
 #' @docType data
 #' @format A dataframe with 9817 rows and 26 variables:
@@ -60,9 +62,11 @@
 #' \item{Start}{Gene start coordinate}
 #' \item{End}{Gene end coordinate}
 #' \item{Gene}{Gene name}
-#' \item{Index}{Unique RNA Sequence identifier - Can be retrieved from RNA Central}
+#' \item{Index}{Unique RNA Sequence identifier - Can be retrieved from RNA
+#' Central}
 #' \item{Type}{Type of RNA POL3 Transcript}
-#' \item{Tissue}{Remaining columns contain the name of different assessed tissues}}
+#' \item{Tissue}{Remaining columns contain the name of different assessed
+#' tissues}}
 #'
 #'
 #' @source  {Created by The VanBortle lab at UIUC to serve as an example}
@@ -74,7 +78,8 @@
 
 #' ATAC-Seq Score for POL3 Genes Dataframe
 #'
-#' A list of tissues and the corresponding counts for RNA POL3 genes for each of them. Values are represented as the -log10(p-value)
+#' A list of tissues and the corresponding counts for RNA POL3 genes for
+#' each of them. Values are represented as the -log10(p-value)
 #'
 #' @docType data
 #' @format A dataframe with 9817 rows and 23 variables:
@@ -84,9 +89,11 @@
 #' \item{Start}{Gene start coordinate}
 #' \item{End}{Gene end coordinate}
 #' \item{Gene}{Gene name}
-#' \item{Index}{Unique RNA Sequence identifier - Can be retrieved from RNA Central}
+#' \item{Index}{Unique RNA Sequence identifier - Can be retrieved from
+#' RNA Central}
 #' \item{Type}{Type of RNA POL3 Transcript}
-#' \item{Tissue}{Remaining columns contain the name of different assessed tissues}}
+#' \item{Tissue}{Remaining columns contain the name of different assessed
+#' tissues}}
 #'
 #'
 #' @source  {Created by The VanBortle lab at UIUC to serve as an example}

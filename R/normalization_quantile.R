@@ -3,9 +3,12 @@
 #' @description
 #' Normalizes read counts by the quantile normalization method:
 #'   \enumerate{
-#'     \item Each sample (column) is sorted, and values at each rank are averaged across columns
-#'     \item Each sample's values are replaced with the average of their respective rank
-#'     \item If \code{log_trans = TRUE}, applies \code{log2(QN + 1)} transformation
+#'     \item Each sample (column) is sorted, and values at each rank are
+#'     averaged across columns
+#'     \item Each sample's values are replaced with the average of their
+#'     respective rank
+#'     \item If \code{log_trans = TRUE}, applies \code{log2(QN + 1)}
+#'     transformation
 #'   }
 #'
 #' @details
@@ -17,17 +20,18 @@
 #' @param x A numeric \code{matrix} or \code{data.frame} of gene counts,
 #'   or a \code{SummarizedExperiment} containing such counts.
 #'   \describe{
-#'     \item{If a \code{SummarizedExperiment},}{the function applies normalization
-#'       to the specified assay (via \code{assay_name}).}
-#'     \item{If a \code{data.frame}/\code{matrix},}{the normalization is applied directly.}
+#'     \item{If a \code{SummarizedExperiment},}{the function applies
+#'       normalization to the specified assay (via \code{assay_name}).}
+#'     \item{If a \code{data.frame}/\code{matrix},}{the normalization is
+#'     applied directly.}
 #'   }
-#' @param log_trans Logical. If \code{TRUE}, apply \code{log2(... + 1)} transform
-#'   to the quantile-normalized values.
-#' @param assay_name If \code{x} is a SummarizedExperiment, name of the assay to
-#'   normalize. Defaults to the first assay if not specified.
+#' @param log_trans Logical. If \code{TRUE}, apply \code{log2(... + 1)}
+#'   transform to the quantile-normalized values.
+#' @param assay_name If \code{x} is a SummarizedExperiment, name of the assay
+#'   to normalize. Defaults to the first assay if not specified.
 #' @param new_assay_name If \code{x} is a SummarizedExperiment, name of a new
-#'   assay in which to store the quantile-normalized (or log2-transformed) values.
-#'   If \code{NULL}, overwrites the original assay.
+#'   assay in which to store the quantile-normalized (or log2-transformed)
+#'   values. If \code{NULL}, overwrites the original assay.
 #'
 #' @return A numeric \strong{matrix} of quantile-normalized (or log2-normalized)
 #'   values if \code{x} is a data.frame or matrix. If \code{x} is a
@@ -68,7 +72,8 @@
 #'
 #' ## Use specific input assay (simulate new one)
 #' new_matrix <- matrix(
-#'   data = sample(x = seq(1, 100000), size = nrow(se) * ncol(se), replace = TRUE),
+#'   data = sample(x = seq(1, 100000), size = nrow(se) * ncol(se),
+#'   replace = TRUE),
 #'   nrow = nrow(se),
 #'   ncol = ncol(se)
 #' )
@@ -79,36 +84,39 @@
 #' assay(se, "new_counts") <- new_matrix
 #'
 #' ## Normalize the new assay and store it under a new name
-#' se4 <- quantile_normalization(se, assay_name = "new_counts", new_assay_name = "quant_new")
+#' se4 <- quantile_normalization(se, assay_name = "new_counts",
+#' new_assay_name = "quant_new")
 #' assay(se4, "quant_new")[1:5, 1:5]
 #' @export
 #'
 quantile_normalization <- function(x,
-                                   log_trans       = FALSE,
-                                   assay_name      = NULL,
-                                   new_assay_name  = NULL) {
+                                    log_trans       = FALSE,
+                                    assay_name      = NULL,
+                                    new_assay_name  = NULL) {
 
-  #---------------------------#
-  # SummarizedExperiment path
-  #---------------------------#
-  if (inherits(x, "SummarizedExperiment")) {
+    #---------------------------#
+    # SummarizedExperiment path
+    #---------------------------#
+    if (inherits(x, "SummarizedExperiment")) {
 
-    if (is.null(assay_name)) {
-      all_assays <- assayNames(x)
-      if (length(all_assays) < 1) {
-        stop("No assays found in the SummarizedExperiment.")
-      }
-      assay_name <- all_assays[[1]]
-    }
+        if (is.null(assay_name)) {
+            all_assays <- assayNames(x)
+            if (length(all_assays) < 1) {
+                stop("No assays found in the SummarizedExperiment.")
+            }
+            assay_name <- all_assays[[1]]
+        }
 
-    mat <- assay(x, assay_name)
-    if (is.null(mat)) {
-      stop("No assay named '", assay_name, "' found in the SummarizedExperiment.")
-    }
+        mat <- assay(x, assay_name)
+        if (is.null(mat)) {
+            stop("No assay named '", assay_name,
+                "' found in the SummarizedExperiment.")
+        }
 
-    if (!is.numeric(mat)) {
-      stop("Selected assay is not numeric. Please provide numeric data for quantile normalization.")
-    }
+        if (!is.numeric(mat)) {
+            stop("Selected assay is not numeric.
+                Please provide numeric data for quantile normalization.")
+        }
 
     ## Calculations
     # 1) Rank matrix
@@ -129,14 +137,14 @@ quantile_normalization <- function(x,
 
     # 6) Optional log2
     if (log_trans) {
-      norm <- log2(norm + 1)
+        norm <- log2(norm + 1)
     }
 
     # 7) Store result in new or existing assay
     if (is.null(new_assay_name)) {
-      assay(x, assay_name) <- norm
+        assay(x, assay_name) <- norm
     } else {
-      assay(x, new_assay_name) <- norm
+        assay(x, new_assay_name) <- norm
     }
 
     return(x)
@@ -144,14 +152,14 @@ quantile_normalization <- function(x,
     #---------------------------#
     # data.frame / matrix path
     #---------------------------#
-  } else if (is.data.frame(x) || is.matrix(x)) {
+    } else if (is.data.frame(x) || is.matrix(x)) {
 
-    if (is.data.frame(x)) {
-      x <- as.matrix(x)
-    }
+        if (is.data.frame(x)) {
+            x <- as.matrix(x)
+        }
 
     if (!is.numeric(x)) {
-      stop("Input must be numeric.")
+        stop("Input must be numeric.")
     }
 
     ## Calculations
@@ -173,12 +181,12 @@ quantile_normalization <- function(x,
 
     # 6) Optional log2
     if (log_trans) {
-      norm <- log2(norm + 1)
+        norm <- log2(norm + 1)
     }
 
     return(norm)
 
-  } else {
-    stop("Input must be a matrix/data.frame or a SummarizedExperiment.")
-  }
+    } else {
+        stop("Input must be a matrix/data.frame or a SummarizedExperiment.")
+    }
 }

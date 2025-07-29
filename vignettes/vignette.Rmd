@@ -1,0 +1,1446 @@
+---
+title: "dominatR: Tissue Dominance and Entropy Visualization"
+author: "Simon & Ethan"
+output: BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{dominatR: Tissue Dominance and Entropy Visualization}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(collapse = TRUE, comment = "#>")
+library(dominatR)
+library(airway)
+library(SummarizedExperiment)
+library(ggplot2)
+data("airway")
+airway_se <- airway  
+```
+
+
+# dominatR: A Package for Normalization of RNA-seq and Gene Expression Data
+
+Introduction
+
+The `dominatR` package provides a flexible suite of normalization methods for 
+transcriptomics data, including CPM, TPM, RPKM, min-max scaling, and quantile 
+normalization. It is compatible with common data structures such as `matrix`, 
+`data.frame`, and `SummarizedExperiment`, and is designed to streamline 
+preprocessing in bioinformatics workflows.
+
+# Installation
+You can install the development version of 'dominatR' from GitHub:
+
+```{r, eval=FALSE}
+# From GitHub (development version)
+if (!requireNamespace("remotes", quietly = TRUE))
+    install.packages("remotes")
+remotes::install_github("EthanCHEN6/dominatR_testing", force = TRUE)
+```
+
+
+# Data: Airway Gene Expression
+This dataset contains RNA-Seq counts for airway smooth muscle cells, commonly 
+used for gene expression analysis.
+
+## Load Data
+```{r load-packages, message=FALSE, warning=FALSE}
+# Load required packages
+library(dominatR)
+library(SummarizedExperiment)
+
+# Load airway dataset
+library(airway)
+data(airway)
+airway_se <- airway
+```
+
+## Data Description
+The `airway` dataset is structured as a `SummarizedExperiment` object:
+
+- **Rows** represent genes.
+- **Columns** represent samples.
+- **Assay** contains raw count data.
+
+Inspect the dataset:
+```{r}
+airway_se
+assayNames(airway_se)
+dim(assay(airway_se))
+head(assay(airway_se))
+```
+It contains raw read counts for 63,677 genes across 8 samples.
+
+
+# Normalization Methods
+Normalization is critical for correcting technical biases and enabling 
+meaningful biological comparisons.
+
+\section{Package Features}
+
+The package contains different normalization methods:
+
+- `cpm_normalization`
+- `minmax_normalization`
+- `quantile_normalization`
+- `rpkm_normalization`
+- `tpm_normalization`
+
+Let's explore the usage of each normalization method on the count data set 
+previously described.
+
+
+## Min-Max Normalization
+Min-Max normalization is a linear transformation technique that rescales each 
+gene’s expression values to a specified range (typically [0, 1]). This 
+normalization method is useful when you want to bring the data onto the same 
+scale.
+
+Function Purpose:
+
+· Rescales each column to fit within a range [new_min, new_max].
+
+· Preserves the relative structure of values within each column.
+
+· Useful when different assays or samples have varying scales.
+
+### Example 1: Normalize a matrix
+```{r}
+# Prepare input matrix
+count_mat <- assay(airway)
+
+# Apply min-max normalization
+airway_minmax <- minmax_normalization(count_mat, new_min = 0, new_max = 1)
+
+# Inspect structure
+dim(airway_minmax)
+summary(as.vector(airway_minmax))
+head(airway_minmax[, 1:5])
+```
+Why Use Custom Ranges?
+You can set new_min = 10 and new_max = 20 if your downstream application 
+prefers values in a different scale:
+```{r}
+df_scaled <- minmax_normalization(count_mat, new_min = 10, new_max = 20)
+head(df_scaled)  # All columns now range from 10 to 20
+```
+
+### Example 2: Normalize a SummarizedExperiment
+```{r}
+se <- airway
+
+# Option A: Overwrite the default assay
+se1 <- minmax_normalization(se)
+head(assay(se1))
+
+# Option B: Write to a new assay slot
+se2 <- minmax_normalization(se, new_assay_name = "minmax_counts")
+```
+
+Example Output:
+For example, suppose column SRR1039508 originally contains gene expression 
+values between 233 and 12890. After min-max normalization with new_min = 0, 
+new_max = 1:
+
+233 → mapped to 0.0
+
+12890 → mapped to 1.0
+
+For a gene in `SRR1039508`:
+- The original expression value is `679`.
+- After Min-Max normalization, the expression level is rescaled to `0.0022` on 
+a scale of [0, 1]. This implies that `679` is very close to the lower end of 
+the range of expression values for this gene, meaning it's likely among the 
+least expressed in the dataset for this sample.
+
+
+## Quantile Normalization
+Quantile normalization makes the distribution of values across all samples 
+identical. This technique adjusts the data so that the rank distributions of 
+the data across samples are equal.
+```{r}
+## Apply quantile normalization
+airway_quantile <- quantile_normalization(airway_se)
+
+## Check result
+dim(assay(airway_quantile))
+summary(as.vector(assay(airway_quantile)))
+head(assay(airway_quantile)[1:5, 1:5])
+```
+Gene expression levels were converted to counts per million reads and log2 
+transformed.
+
+Example Output:
+For the first gene in `SRR1039508`, the normalized value is `690.875`, which 
+places it at a higher rank relative to other samples. This suggests that after
+normalization, this gene shows a higher expression across all samples.
+
+
+## CPM Normalization
+This vignette demonstrates how to apply Counts Per Million (CPM) normalization 
+using the cpm_normalization() function in the dominatR package. It supports 
+matrix, data.frame, and SummarizedExperiment formats.
+
+Function Purpose:
+
+The cpm_normalization() function rescales raw count data such that each column 
+sums to one million, optionally followed by a log2 transformation. This makes 
+count data comparable across samples of different sequencing depths.
+
+### Example 1: Normalize a data.frame
+```{r}
+df <- assay(airway)
+# Normalize without log2-transform
+df_cpm <- cpm_normalization(df, log_trans = FALSE)
+head(df_cpm[, 1:5])
+
+# Normalize with log2-transform
+df_cpm_log <- cpm_normalization(df, log_trans = TRUE)
+head(df_cpm_log[, 1:5])
+```
+
+### Example 2: Normalize a SummarizedExperiment
+```{r}
+library(SummarizedExperiment)
+
+# Apply in-place normalization (overwrite assay)
+se1 <- cpm_normalization(airway, log_trans = FALSE)
+head(assay(se1))
+
+# Save to a new assay slot
+se2 <- cpm_normalization(airway, log_trans = TRUE, new_assay_name = 
+                            "cpm_logged")
+head(assay(se2, "cpm_logged"))
+
+```
+
+### Example 3: Normalize a custom assay
+```{r}
+new_counts <- matrix(sample(1:100000, nrow(airway) * ncol(airway), TRUE),
+                    nrow = nrow(airway))
+rownames(new_counts) <- rownames(airway)
+colnames(new_counts) <- colnames(airway)
+
+assay(airway, "new_raw") <- new_counts
+
+se3 <- cpm_normalization(airway, assay_name = "new_raw", new_assay_name = 
+                            "cpm_new_raw")
+head(assay(se3, "cpm_new_raw"))
+```
+
+The output of cpm_normalization() depends on the input type:
+
+· If you input a matrix or data.frame, it returns a numeric matrix where:
+
+· Each column sums to 1,000,000 (unless you apply log transform).
+
+· Row and column names are preserved.
+
+· If you input a SummarizedExperiment, it returns the same SE object with:
+
+· Either the original assay overwritten, or A new assay added (if 
+    new_assay_name is specified).
+
+
+
+Example Output:
+For example, if a gene in SRR1039508 has an original expression value of 679, 
+after CPM normalization, it might be scaled to 5.083236. This scaling reflects 
+that, after adjusting for sequencing depth, the gene's relative expression is 
+lower when considering the total number of reads across the sample. This 
+normalization ensures that the gene expression values are comparable across 
+samples with different sequencing depths.
+
+
+## RPKM Normalization
+Reads per kilobase per million (RPKM) normalization adjusts for both gene length
+and sequencing depth, making it particularly useful for RNA-Seq data. RPKM helps
+compare gene expression levels across genes of different lengths.
+```{r}
+## Calculate gene length
+rowData(airway_se)$gene_length <- rowData(airway_se)$gene_seq_end - 
+    rowData(airway_se)$gene_seq_start
+
+## Apply RPKM normalization
+airway_se_rpkm <- rpkm_normalization(airway_se, gene_length, log_trans = TRUE)
+
+## Check the result
+dim(assay(airway_se_rpkm))  # Check the dimensions
+summary(as.vector(assay(airway_se_rpkm)))  # Summary statistics for all values
+head(assay(airway_se_rpkm)[1:5, 1:5])
+```
+
+Example Output:
+For example, if a gene in SRR1039508 has an original expression value of 679, 
+after RPKM normalization, it might be scaled to 1.96574725. This scaling 
+reflects that, after adjusting for both gene length and sequencing depth, the 
+gene's relative expression is normalized, making it comparable across genes of 
+different lengths.
+
+
+## TPM Normalization
+Transcripts per million normalization.
+```{r}
+## Calculate gene_length if not provided
+rowData(airway_se)$gene_length <- rowData(airway_se)$gene_seq_end - 
+    rowData(airway_se)$gene_seq_start
+
+## Apply TPM normalization
+airway_tpm <- tpm_normalization(airway_se, log_trans = TRUE)
+
+## Check result
+dim(assay(airway_tpm))
+summary(as.vector(assay(airway_tpm)))
+head(assay(airway_tpm)[1:5, 1:5])
+```
+
+Example Output:x
+For example, in `SRR1039508`, if the gene expression for a particular gene is 
+normalized to `4.43 TPM`, this indicates that the gene's expression represents 
+`4.43` transcripts per million, accounting for both gene length and 
+sequencing depth.
+
+
+# Visualization Functions
+
+Visual representation is essential for interpreting the structure, 
+dominance, and variability of biological features across samples or conditions.
+
+Our package offers a collection of entropy-based visualization functions 
+designed for different analytical perspectives:
+
+- `plot_circle()`  
+    Displays each sample's entropy and average magnitude in a polar 
+    coordinate layout.
+
+- `plot_circle_frequency()`  
+    Summarizes the density of entropy-magnitude bins using circular heat 
+    segments.
+
+- `plot_abacus()`  
+    Groups features into quantile-based dominance categories and displays 
+    them in an abacus-style panel plot.
+
+- `plot_rope()`  
+    Compares two numeric vectors using a central “rope” layout to visualize 
+    dominance asymmetry and entropy filtering.
+
+- `plot_triangle()`  
+    Visualizes three variables in a ternary layout, highlighting balance or 
+    dominance among triplets.
+
+Let’s now explore each visualization function with real data examples.
+
+
+## plot_circle: Entropy-Magnitude Circle Plot
+
+This function visualizes high-dimensional input (e.g., gene expression matrix)
+
+Using a polar coordinate system where:
+- Radial position represents Shannon entropy (distribution uniformity)
+
+- Angular position represents the dominant variable (feature with maximum value)
+
+- Point color represents either the dominant variable or an optional factor
+
+### Description:
+This function is ideal for:
+
+-  Visualizing multidimensional datasets (samples × features) in an 
+interpretable 2D circular space.
+
+-  Detecting samples/features with high entropy (irregularity) or high
+average expression.
+
+-  Identifying mixed-behavior regions such as dense clusters or 
+entropy-magnitude outliers.
+
+-  Facilitating compact visualization across thousands of rows or columns.
+
+### Using a SummarizedExperiment input
+
+Visualize genes from the `airway` dataset with specific filtering criteria. 
+Each point represents a gene, colored by the sample in which it has the highest 
+expression (dominant sample). We'll highlight a specific gene of interest.
+
+```{r}
+rowData(se)$gene_length <- rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = "tpm_norm")
+se <- se[1:1000, ]
+#' Rename columns for consistency
+colnames(se) <- paste('Column_', 1:8, sep ='')
+```
+
+
+
+#### Example 1: Default parameters with SE
+
+```{r}
+plot_circle(
+    x = se,
+    n = 8,
+    entropyrange     = c(0, 3),
+    magnituderange   = c(0, Inf),
+    label  = 'legend',
+    output_table = FALSE,
+    assay_name = 'tpm_norm'
+)
+```
+
+
+#### Example 2: Low-entropy filtering (0-1.5)
+
+```{r}
+plot_circle(
+    x = se,
+    n = 8,
+    entropyrange     = c(0, 1.5),
+    magnituderange   = c(0, Inf),
+    label  = 'legend',
+    output_table = FALSE,
+    assay_name = 'tpm_norm'
+)
+```
+
+
+#### Example 3: High-entropy filtering (2-3)
+
+```{r}
+plot_circle(
+    x = se,
+    n = 8,
+    entropyrange     = c(2, 3),
+    magnituderange   = c(0, Inf),
+    label  = 'legend',
+    output_table = FALSE,
+    assay_name = 'tpm_norm'
+)
+```
+
+
+#### Example 4: Grouping by gene biotype
+
+```{r}
+plot_circle(
+    x = se,
+    n = 8,
+    column_variable_factor = 'gene_biotype',
+    entropyrange     = c(2,3),
+    magnituderange   = c(0, Inf),
+    label  = 'legend',
+    output_table = FALSE,
+    assay_name = 'tpm_norm'
+)
+```
+
+
+#### Example 5: Custom point size and filtering
+
+```{r}
+plot_circle(
+    x = se,
+    n = 8,
+    column_variable_factor = 'gene_biotype',
+    point_size = 3,
+    entropyrange     = c(0,1.5),
+    magnituderange   = c(0, Inf),
+    label  = 'legend',
+    output_table = FALSE,
+    assay_name = 'tpm_norm',
+)
+```
+
+
+#### Example 6: Highlighting specific biotypes
+
+```{r}
+# Emphasize miRNA genes in orange
+plot_circle(
+    x = se,
+    n = 8,
+    column_variable_factor = 'gene_biotype',
+    point_size = 3,
+    entropyrange     = c(0,1.5),
+    magnituderange   = c(0, Inf),
+    label  = 'legend',
+    output_table = FALSE,
+    assay_name = 'tpm_norm',
+    point_fill_colors = c('protein_coding' = 'orange'),
+    point_line_colors = c('protein_coding' = 'orange')
+)
+```
+
+
+
+#### Example 7: Retrieving plot data from SE
+
+```{r}
+
+se_result <- plot_circle(
+    x = se,
+    n = 8,
+    column_variable_factor = 'gene_biotype',
+    point_size = 3,
+    entropyrange     = c(0,1.5),
+    magnituderange   = c(0, Inf),
+    label  = 'legend',
+    output_table = TRUE,
+    assay_name = 'tpm_norm',
+    point_fill_colors = c('protein_coding' = 'orange'),
+    point_line_colors = c('protein_coding' = 'orange')
+)
+```
+
+
+The result is a list of two objects:
+
+- `se_result[[1]]`: a `ggplot2` object for visualization
+- `se_result[[2]]`: a `data.frame` with entropy, magnitude, etc.
+```{r}
+se_result[[1]]
+head(se_result[[2]])
+```
+
+
+
+### Using a matrix or data.frame input
+
+You can also use a raw matrix or data frame, such as one extracted from 
+the assay slot of a SummarizedExperiment object:
+
+```{r}
+#' First we extract the normalized data as a data.frame:
+
+df <- assay(se, 'tpm_norm') |> as.data.frame()
+colnames(df) <- paste('Column_', 1:8, sep ='')
+```
+
+
+#### Example 1: Default parameters
+
+```{r}
+plot_circle(
+    x = df,
+    n = 8,
+    entropyrange     = c(0, 3),
+    magnituderange   = c(0, Inf),
+    label  = 'legend', 
+    output_table = FALSE
+)
+```
+
+
+#### Example 2: Filtering high-entropy genes
+
+```{r}
+# Genes with entropy between 2-3 (more balanced expression)
+plot_circle(
+    x = df,
+    n = 8,
+    entropyrange     = c(2, 3),
+    magnituderange   = c(0, Inf),
+    label  = 'legend', 
+    output_table = FALSE
+)
+
+
+```
+
+
+#### Example 3: Filtering low-entropy genes
+
+```{r}
+#' Genes with entropy between 0-2 (more specialized expression)
+plot_circle(
+    x = df,
+    n = 8,
+    entropyrange     = c(0, 2),
+    magnituderange   = c(0, Inf),
+    label  = 'legend', 
+    output_table = FALSE
+)
+```
+
+
+#### Example 4: Curved label aesthetics
+
+```{r}
+plot_circle(
+    x = df,
+    n = 8,
+    entropyrange     = c(0, 2),
+    magnituderange   = c(0, Inf),
+    label  = 'curve',
+    output_table = FALSE
+)
+```
+
+
+#### Example 5: Highlighting specific samples
+
+```{r}
+#' Emphasize expression dominance in Columns 1, 3, and 5
+plot_circle(
+    x = df,
+    n = 8,
+    entropyrange     = c(0, 2),
+    magnituderange   = c(0, Inf),
+    label  = 'legend',
+    output_table = FALSE,
+    background_alpha_polygon = 0.2,
+    background_na_polygon = 'transparent',
+    background_polygon = c('Column_1'  = 'indianred',
+                        'Column_3' = 'lightblue',
+                        'Column_5' = 'lightgreen'),
+    point_fill_colors = c('Column_1'  = 'darkred',
+                        'Column_3' = 'darkblue',
+                        'Column_5' = 'darkgreen'),
+    point_line_colors = c('Column_1'  = 'black',
+                        'Column_3' = 'black',
+                        'Column_5' = 'black')
+)
+
+# 1.2 Using factor variables
+
+#' Add a factor column for grouping
+set.seed(123)  # For reproducibility
+df$factor <- sample(c('A', 'B', 'C', 'D'), size = nrow(df), replace = TRUE)
+```
+
+
+#### Example 6: Visualizing by factor groups
+
+```{r}
+plot_circle(
+    x = df,
+    n = 8,
+    column_variable_factor = 'factor',
+    entropyrange     = c(0, 2),
+    magnituderange   = c(0, Inf),
+    label  = 'legend',
+    output_table = FALSE,
+    background_alpha_polygon = 0.2,
+    background_na_polygon = 'transparent',
+    background_polygon = c('Column_1'  = 'indianred',
+                        'Column_3' = 'lightblue',
+                        'Column_5' = 'lightgreen')
+)
+```
+
+
+#### Example 7: Custom factor colors
+
+```{r}
+plot_circle(
+    x = df,
+    n = 8,
+    column_variable_factor = 'factor',
+    entropyrange     = c(0, 2),
+    magnituderange   = c(0, Inf),
+    label  = 'curve',
+    output_table = FALSE,
+    background_alpha_polygon = 0.02,
+    background_na_polygon = 'transparent',
+    point_fill_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange'),
+    point_line_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange')
+)
+```
+
+
+#### Example 8: Retrieving plot data
+
+```{r}
+#' When `output_table = TRUE`, returns a list containing:
+#' 1. ggplot object
+#' 2. Data frame with entropy, magnitude, and dominance information
+plot_result <- plot_circle(
+    x = df,
+    n = 8,
+    point_size =  2,
+    column_variable_factor = 'factor',
+    entropyrange     = c(0, 2),
+    magnituderange   = c(0, Inf),
+    label  = 'curve',
+    output_table = TRUE,
+    background_alpha_polygon = 0.02,
+    background_na_polygon = 'transparent',
+    point_fill_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange'),
+    point_line_colors = c('A' = 'black',
+                        'B' = 'gray',
+                        'C' = 'white',
+                        'D' = 'orange')
+)
+
+# View plot
+plot_result[[1]]
+
+# View data
+head(plot_result[[2]])
+```
+
+
+
+### Output interpretation
+
+The returned data frame (`res[[2]]`) contains the following columns:
+
+- **Entropy**: the entropy score computed across rows (for each 
+sample or feature).  
+- **col**: the sample identifier (i.e. the original column name).  
+- **rad**: the magnitude (mean expression) encoded as the radial distance 
+in the plot.  
+- **deg**: the plotting angle (in radians) for each sample’s axis.  
+- **x**, **y**: the Cartesian coordinates corresponding to `(rad, deg)`, 
+used internally by `geom_point()`.  
+- **labels**: the text labels (e.g. sample names) when `label = "legend"` 
+or `variables_highlight` is set.  
+- **rand_deg**: the random rotation offset (fixed if you call `set.seed()` 
+beforehand).  
+- **alpha**: the point transparency (`1` for highlighted points, otherwise
+equal to your `background_alpha_polygon` setting).
+
+
+### Biological Interpretation:
+
+Dominant Sample:
+Shows which sample has the highest expression for each gene
+Useful for identifying sample-specific expression patterns
+
+Radial Position:
+Genes near edge: Highly specific to one sample (low entropy)
+Genes near center: Similar expression across samples (high entropy)
+
+Sector Position:
+Each wedge represents a sample
+Genes in a sample's wedge have their highest expression in that sample
+
+
+
+
+
+## plot_circle_frequency(): Frequency-Stratified Entropy-Magnitude Visualization
+
+This function builds upon plot_circle() by stratifying samples into frequency 
+bins and visualizing entropy-magnitude patterns for each bin separately.
+Useful when your dataset contains variables/features with different levels 
+of occurrence or sparsity (e.g., expressed vs. non-expressed genes).
+
+### Description
+
+This function is ideal for:
+
+- Identifying highly prevalent genes/features across a cohort.
+
+- Screening for outlier or inactive variables.
+
+- Visually comparing distributions in a compact format.
+
+
+### Using a SummarizedExperiment object
+
+
+```{r}
+# Data preprocessing
+rowData(se)$gene_length <- rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
+se <- se[1:1000, ]
+
+
+# Creating the circle plot data
+
+# First we create the circle plot with output_table = TRUE to get 
+# the data needed for the frequency plot. We'll use gene biotype as our 
+# factor variable.
+
+circle_data <- plot_circle(
+    x = se,
+    n = 8,
+    column_variable_factor = 'gene_biotype',
+    entropyrange = c(0, Inf),
+    magnituderange = c(0, Inf),
+    label = 'legend',
+    output_table = TRUE,
+    assay_name = 'tpm_norm'
+)
+
+```
+
+
+#### Example 1: Default parameters (combined panel)
+
+```{r}
+freq_plot_default <- plot_circle_frequency(
+    n = 8,
+    circle = circle_data,
+    single = TRUE,
+    legend = TRUE,
+    numb_columns = 1,
+    filter_class = NULL,
+    point_size = 2
+)
+
+# Display the plot
+freq_plot_default[[1]]
+
+# View aggregated data
+head(freq_plot_default[[2]])
+```
+
+
+#### Example 2: Faceted by factor
+
+```{r}
+# Visualize each factor level in separate panels
+
+plot_circle_frequency(
+    n = 8,
+    circle = circle_data,
+    single = FALSE,
+    legend = TRUE,
+    numb_columns = 3,  # Arrange in 3 columns
+    filter_class = NULL,
+    point_size = 2
+)
+```
+
+
+#### Example 3: Filtering specific classes 
+
+```{r}
+# Focus on specific gene biotypes
+
+plot_circle_frequency(
+    n = 8,
+    circle = circle_data,
+    single = FALSE,
+    legend = TRUE,
+    numb_columns = 1,  # Single column layout
+    filter_class = c('protein_coding', 'snoRNA', 'miRNA'),
+    point_size = 3  # Larger points for emphasis
+)
+```
+
+
+#### Example 4: Combined plot with custom filtering
+
+```{r}
+# Create a combined plot showing only selected classes
+
+plot_circle_frequency(
+    n = 8,
+    circle = circle_data,
+    single = TRUE,
+    legend = TRUE,
+    numb_columns = 1,
+    filter_class = c('protein_coding', 'miRNA', 'lincRNA'),
+    point_size = 3
+)
+```
+
+
+### Using a matrix or data.frame input
+
+```{r}
+# Create data.frame version
+df <- assay(se, 'tpm_norm') |> as.data.frame()
+colnames(df) <- paste('Sample', 1:8, sep = '_')
+df$gene_biotype <- rowData(se)$gene_biotype
+
+# Create circle plot data
+circle_df <- plot_circle(
+    x = df,
+    n = 8,
+    column_variable_factor = 'gene_biotype',
+    entropyrange = c(0, Inf),
+    magnituderange = c(0, Inf),
+    label = 'legend',
+    output_table = TRUE
+)
+```
+
+
+#### Example 5: Data.frame input with faceting
+
+```{r}
+plot_circle_frequency(
+    n = 8,
+    circle = circle_df,
+    single = FALSE,
+    legend = TRUE,
+    numb_columns = 2,
+    filter_class = NULL,
+    point_size = 1.5
+)
+```
+
+
+
+
+### Output interpretation
+
+Each arc segment represents:
+
+- A variable (e.g., gene), sorted by frequency.
+
+- Arc height indicates proportion of samples above threshold.
+
+- Useful for ranking and filtering in QC pipelines.
+
+The returned table includes:
+
+- Variable: variable name (e.g., gene ID)
+
+- Proportion: % of samples with value above threshold
+
+- Threshold: cutoff used
+
+- Rank: position in sorted list
+
+
+## plot_abacus(): Abacus Plot of Sample/Feature Entropy Profiles
+
+This function creates an abacus plot that classifies observations 
+into dominance groups using entropy-based methods. It visualizes which 
+features (e.g., genes) are dominant in which samples across different 
+expression dominance categories.
+
+
+### Description
+
+This function is ideal for:
+
+- Classifying features into expression dominance categories (e.g., 
+low, medium, high)
+
+- Identifying features that consistently dominate across multiple samples
+
+- Highlighting features of interest in the context of their 
+dominance classification
+
+- Visualizing the distribution of dominance classes across samples in 
+a compact format
+
+
+```{r abacus-df-setup, message=FALSE, warning=FALSE}
+
+se <- airway[1:1000, ]  
+rowData(se)$gene_length <- rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
+
+# Prepare data frame
+df_abacus <- as.data.frame(assay(se, "tpm_norm"))
+df_abacus$gene_id <- rownames(df_abacus)
+df_abacus <- df_abacus[, c("gene_id", setdiff(colnames(df_abacus), "gene_id"))]
+head(df_abacus[, 1:5])
+```
+
+
+### Using a matrix or data.frame input
+
+```{r}
+# Generate plot with minimal parameters
+abacus_res <- plot_abacus(
+    data              = df_abacus,               
+    n                 = ncol(df_abacus) - 1,     
+    x_variable        = "gene_id",               
+    y_variables       = colnames(df_abacus)[-1], 
+    percentiles       = 4,                       
+    title             = "Gene Expression Dominance", 
+    point_size        = 2,                      
+    single            = TRUE                  
+)
+
+abacus_res[[1]]
+
+```
+
+### Output interpretation
+
+The call to `plot_abacus(...)` returns a **list** of two elements:
+
+- **`res[[1]]`**  
+A `ggplot2` object: the abacus‐style dominance plot itself.
+
+- **`res[[2]]`**  
+A `data.frame` with one row per point drawn on the plot, containing:
+
+- **X_axis**   
+The identifier you passed as `x_variable` (e.g. gene ID).                   
+
+- **Variable** 
+The name of the variable (column) each point belongs to (one of 
+your `y_variables`). 
+
+- **Qentropy** 
+The computed categorical entropy (`Qentropy`) for that feature–variable 
+combination.             
+
+- **bin**      
+A factor giving the percentile bin (e.g. “0.25”, “0.50”, etc.) into 
+which that `Qentropy` falls.
+
+
+
+
+
+
+## plot_rope(): Rope Plot for Binary Feature Dominance
+
+This function compares two numeric vectors (e.g., expression in Condition 
+A vs. B) using a "rope-like" 1D dominance visualization. Each sample is 
+classified by its relative dominance, optionally filtered by entropy or 
+magnitude thresholds.
+
+### Description
+This function is ideal for:
+
+- Comparing two groups of measurements across matched samples or features.
+
+- Detecting dominance shifts (e.g., gene up/down regulation between two 
+conditions).
+
+- Filtering samples based on entropy or effect size before plotting.
+
+```{r}
+## Data preparation
+se <- airway[1:1000, ]  # Subset for faster computation
+rowData(se)$gene_length <- rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
+df <- as.data.frame(assay(se, 'tpm_norm'))
+sample1 <- "SRR1039508"
+sample2 <- "SRR1039516"
+```
+
+
+### Using a SummarizedExperiment object
+
+
+#### Example 1: Low entropy + Medium expression
+```{r}
+res_rope = plot_rope(
+    x = se,
+    column_name = c(sample1, sample2),
+    col = c('lightgreen', 'indianred'),
+    entropyrange = c(0, 0.1),
+    maxvaluerange = c(4, 8),
+    title = "SE Input: Low Entropy + Medium Expression"
+)
+
+```
+
+
+#### Example 2: Medium entropy + Medium expression
+```{r}
+res_rope = plot_rope(
+    x = se,
+    column_name = c(sample1, sample2),
+    col = c('lightgreen', 'indianred'),
+    entropyrange = c(0.1, 0.8),
+    maxvaluerange = c(4, 8),
+    title = "SE Input: Medium Entropy + Medium Expression"
+)
+
+```
+
+
+#### Example 3: High entropy + Medium expression
+```{r}
+res_rope = plot_rope(
+    x = se,
+    column_name = c(sample1, sample2),
+    col = c('lightgreen', 'indianred'),
+    entropyrange = c(0.8, 1),
+    maxvaluerange = c(4, 8),
+    title = "SE Input: High Entropy + Medium Expression"
+)
+
+```
+
+#### Example 4: Retrieve output data
+```{r}
+res_rope = plot_rope(
+    x = se,
+    column_name = c(sample1, sample2),
+    output_table = TRUE,
+    col = c('lightgreen', 'indianred'),
+    entropyrange = c(0.8, 1),
+    maxvaluerange = c(4, 8)
+)
+
+str(res_rope)
+head(res_rope)
+
+```
+
+
+
+
+### Using a matrix or data.frame input
+
+#### Example 1: Default behavior
+```{r}
+res_rope = plot_rope(
+    x = df,
+    column_name = c(sample1, sample2),
+    title = "Default Rope Plot"
+)
+
+
+```
+
+
+#### Example 2. Custom colors
+```{r}
+res_rope = plot_rope(
+    x = df,
+    column_name = c(sample1, sample2),
+    col = c('darkgreen', 'darkred'),
+    title = "Custom Colors"
+)
+
+```
+
+
+```{r}
+head(res_rope)
+```
+
+
+#### Example 3. Low entropy filtering (0-0.1)
+```{r}
+res_rope = plot_rope(
+    x = df,
+    column_name = c(sample1, sample2),
+    col = c('darkgreen', 'darkred'),
+    entropyrange = c(0, 0.1),
+    title = "Low Entropy Genes (0-0.1)"
+)
+
+```
+
+#### Example 4. Low entropy + High expression
+```{r}
+res_rope = plot_rope(
+    x = df,
+    column_name = c(sample1, sample2),
+    col = c('darkgreen', 'darkred'),
+    entropyrange = c(0, 0.1),
+    maxvaluerange = c(2, Inf),
+    title = "Low Entropy + High Expression"
+)
+
+```
+
+
+
+
+#### Example 5. Low Entropy + Medium Expression
+```{r}
+res_rope = plot_rope(
+    x = df,
+    column_name = c(sample1, sample2),
+    col = c('darkgreen', 'darkred'),
+    entropyrange = c(0, 0.1),
+    maxvaluerange = c(4, 8),
+    title = "Low Entropy + Medium Expression"
+)
+head(res_rope[[2]])
+```
+
+
+#### Example 6. Medium Entropy + Medium Expression
+```{r}
+res_rope = plot_rope(
+    x = df,
+    column_name = c(sample1, sample2),
+    col = c('darkgreen', 'darkred'),
+    entropyrange = c(0.1, 0.8),
+    maxvaluerange = c(4, 8),
+    title = "Medium Entropy + Medium Expression"
+)
+
+```
+
+
+
+#### Example 7. High Entropy + Medium Expression
+```{r}
+res_rope = plot_rope(
+    x = df,
+    column_name = c(sample1, sample2),
+    col = c('darkgreen', 'darkred'),
+    entropyrange = c(0.8, 1),
+    maxvaluerange = c(4, 8),
+    title = "High Entropy + Medium Expression"
+)
+```
+
+
+### Output interpretation
+
+The call to `plot_rope(...)` returns a list of two elements:
+
+- **`res[[1]]`**: a `ggplot2` object for the rope‐style dominance plot.  
+- **`res[[2]]`**: a `data.frame` with one row per point drawn, containing:
+
+- **`a`, `b`**  
+    The original values from each of the two input columns you passed (e.g. 
+    the two TPM values).
+
+- **`comx`, `comy`**  
+    The computed Cartesian coordinates for each point on the “rope”.
+
+- **`color`**  
+    The fill color (as a string) actually used for that point.
+
+- **`entropy`**  
+    The Shannon entropy score for that feature across all columns.
+
+- **`maxvalue`**  
+    The mean (or maximum) expression value used to scale point size (or filter).
+
+
+
+
+
+## plot_triangle(): Ternary Plot for Three-Way Feature Relationships
+
+This function visualizes three-part compositions (e.g., condition A/B/C 
+contributions) on a ternary plot. Useful when analyzing data with three 
+mutually exclusive categories or proportions summing to one.
+
+### Description
+This function is ideal for:
+
+- Displaying relationships between three mutually exclusive components.
+
+- Exploring feature allocation among three sources or pathways (e.g., 
+tissue A/B/C).
+
+- Identifying samples/features located at edge or center of triangular 
+composition space.
+
+
+```{r}
+## Minimal data preparation
+se <- airway[1:1000, ]  # Subset for faster computation
+rowData(se)$gene_length <- rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
+df <- as.data.frame(assay(se, 'tpm_norm'))
+samples <- c("SRR1039508", "SRR1039512", "SRR1039516")
+```
+
+
+
+### Using a matrix or data.frame input
+
+#### Example 1: Default behavior
+```{r}
+res_rope = plot_triangle(
+    x = df,
+    column_name = samples
+)
+
+```
+
+
+
+#### Example 2. Custom Colors
+```{r}
+res_rope = plot_triangle(
+    x = df,
+    column_name = samples,
+    col = c('indianred', 'lightgreen', 'lightblue')
+)
+```
+
+
+
+#### Example 3. Low Entropy Genes (0-0.4)
+```{r}
+res_rope = plot_triangle(
+    x = df,
+    column_name = samples,
+    col = c('indianred', 'lightgreen', 'lightblue'),
+    entropyrange = c(0, 0.4)
+)
+```
+
+
+
+
+#### Example 4. Medium Entropy Genes (0.4-1.3)
+```{r}
+res_rope = plot_triangle(
+    x = df,
+    column_name = samples,
+    col = c('indianred', 'lightgreen', 'lightblue'),
+    entropyrange = c(0.4, 1.3)
+)
+
+```
+
+
+
+#### Example 5. High Entropy Genes (1.3-Inf)
+```{r}
+res_rope = plot_triangle(
+    x = df,
+    column_name = samples,
+    col = c('indianred', 'lightgreen', 'lightblue'),
+    entropyrange = c(1.3, Inf)
+)
+```
+
+
+
+#### Example 6. High Entropy + Expression range (2-Inf)
+```{r}
+res_rope = plot_triangle(
+    x = df,
+    column_name = samples,
+    col = c('indianred', 'lightgreen', 'lightblue'),
+    entropyrange = c(1.2, Inf),
+    maxvaluerange = c(2, Inf)
+)
+```
+
+
+#### Example 7. High Entropy + Higher expression (5-Inf)
+```{r}
+res_rope = plot_triangle(
+    x = df,
+    column_name = samples,
+    col = c('indianred', 'lightgreen', 'lightblue'),
+    entropyrange = c(1.2, Inf),
+    maxvaluerange = c(5, Inf)
+)
+```
+
+
+
+#### Example 8. High Entropy + Higher expression (10-Inf)
+```{r}
+res_rope = plot_triangle(
+    x = df,
+    column_name = samples,
+    col = c('indianred', 'lightgreen', 'lightblue'),
+    entropyrange = c(1.2, Inf),
+    maxvaluerange = c(10, Inf)
+)
+```
+
+
+
+#### Example 9. Remove Background Points
+```{r}
+res_rope = plot_triangle(
+    x = df,
+    column_name = samples,
+    col = c('indianred', 'lightgreen', 'lightblue'),
+    entropyrange = c(1.2, Inf),
+    maxvaluerange = c(2, Inf),
+    plotAll = FALSE
+)
+```
+
+
+### Using a SummarizedExperiment object
+
+#### Example 1. Low entropy (0-0.4)
+```{r}
+res_rope = plot_triangle(
+    x = se,
+    column_name = samples,
+    col = c('darkred', 'darkgreen', 'darkblue'),
+    entropyrange = c(0, 0.4),
+    maxvaluerange = c(0.1, Inf),
+    assay_name = 'tpm_norm'
+)
+```
+
+
+
+#### Example 2. Medium entropy (0.4-1.3)
+```{r}
+res_rope = plot_triangle(
+    x = se,
+    column_name = samples,
+    col = c('darkred', 'darkgreen', 'darkblue'),
+    entropyrange = c(0.4, 1.3),
+    maxvaluerange = c(0.1, Inf),
+    assay_name = 'tpm_norm'
+)
+```
+
+
+
+#### Example 3. High entropy (1.3-Inf)
+```{r}
+res_rope = plot_triangle(
+    x = se,
+    column_name = samples,
+    col = c('darkred', 'darkgreen', 'darkblue'),
+    entropyrange = c(1.3, Inf),
+    maxvaluerange = c(0.1, Inf),
+    assay_name = 'tpm_norm'
+)
+```
+
+
+
+
+#### Example 4. Output Data Retrieval
+```{r}
+triangle_data <- plot_triangle(
+    x = se,
+    column_name = samples,
+    output_table = TRUE,
+    entropyrange = c(1.3, Inf),
+    maxvaluerange = c(0.1, Inf),
+    assay_name = 'tpm_norm'
+)
+```
+
+
+```{r}
+# View first 6 rows of the output data
+head(triangle_data)
+```
+
+
+
+### Output interpretation
+
+- **max_counts** 
+The maximum normalized expression value (across your selected samples) for 
+that feature.   
+
+- **comx**    **comy**  
+The x– and y–coordinates used to place that point inside the triangle.   
+
+- **color**     
+Which of your provided colors was applied (one per sample), or `whitesmoke` 
+for filtered points. |
+
+
+
+```{r session-info, echo=FALSE}
+sessionInfo()
+```
+
+
+
+

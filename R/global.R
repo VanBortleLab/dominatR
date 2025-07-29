@@ -1,5 +1,5 @@
 utils::globalVariables(
-  c(
+    c(
     "Entropy",
     'se',
     'm',
@@ -56,5 +56,5 @@ utils::globalVariables(
     'comx',
     'comy',
     'max_counts'
-  )
+    )
 )
