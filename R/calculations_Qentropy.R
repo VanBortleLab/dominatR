@@ -10,13 +10,13 @@
 #' \eqn{\mathrm{Entropy}_i - \log_2\bigl(x_{ij}\bigr)} if \eqn{x_{ij}} is
 #' positive, or \code{Inf} otherwise.
 #'
-#' @param x A data.frame (already processed by `entropy()`)
-#'   or a SummarizedExperiment (already processed by `entropy()`).
+#' @param x A data.frame (already processed by 'entropy()')
+#'   or a SummarizedExperiment (already processed by 'entropy()').
 #' @param assay_name (SummarizedExperiment only) The name of the assay
 #'   whose row-normalized data will be replaced by Q-values. If NULL,
 #'   uses the first assay.
 #' @param new_assay_name If you prefer to store Q-values in a
-#'   *new* assay, provide a name. By default `Qentropy`
+#'   *new* assay, provide a name. By default 'Qentropy'
 #'
 #' @return
 #'  \itemize{
@@ -36,6 +36,12 @@
 #'data('airway')
 #'
 #'se = airway
+#'
+#' # Only use a random subset of 1000 rows
+#' set.seed(123)
+#' idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+#' se <- se[idx, ]
+#'
 #' # -------------------------------
 #' # 1) Using a data.frame
 #' # -------------------------------
@@ -59,8 +65,8 @@
 #'## Transform entropy into Qentropy. new_assay_name specify a new assay
 #'## where data is going to be stored. Assay_name must have Entropy transformed
 #' values
-#'## By default function will look for an assay_name `Entropy` and assign a
-#'new assay to `Qentropy`
+#' ## By default, the function will look for an assay_name 'Entropy' and assign
+#' ## a new assay to 'Qentropy'
 #'se2 = Qentropy(se2, new_assay_name = 'Qentropy', assay_name = 'Entropy')
 #'
 #'se2

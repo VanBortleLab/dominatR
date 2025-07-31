@@ -5,7 +5,7 @@
 #' @param assay_name (SummarizedExperiment only) The name of the assay
 #'   to transform and compute Entropy on. If NULL, uses the first assay.
 #' @param new_assay_name If you prefer to store Q-values in a
-#'   *new* assay, provide a name. By default `Entropy`
+#'   *new* assay, provide a name. By default 'Entropy'
 #'
 #' @import SummarizedExperiment airway
 #'
@@ -26,6 +26,12 @@
 #' data('airway')
 #'
 #' se = airway
+#'
+#' # Only use a random subset of 1000 rows
+#' set.seed(123)
+#' idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+#' se <- se[idx, ]
+#'
 #' # -------------------------------
 #' # 1) Using a data.frame
 #' # -------------------------------
@@ -33,7 +39,7 @@
 #' df = entropy(df)
 #'
 #' ## The function adds a new column called Entropy and transform all
-#' the counts accordingly
+#' ## the counts accordingly
 #' head(df)
 #'
 #' # -------------------------------
@@ -41,14 +47,14 @@
 #' # -------------------------------
 #'
 #' ## The function adds a new assay called 'Entropy' with the transformed
-#' counts.
-#' ## This name can be modified with the `new_assay_name` parameter
+#' ## counts.
+#' ## This name can be modified with the 'new_assay_name' parameter
 #' ## In the rowData dataframe a new column called Entropy is added.
-#' se2 = entropy(se, new_assay_name = 'Entropy')
+#' se2 <- entropy(se, new_assay_name = 'Entropy')
 #' se2
 #'
 #' ## In case the experiment has multiple assays, the function allows you to
-#' choose which assay to use.
+#' ## choose which assay to use.
 #' new_matrix =  matrix(data = sample(x = seq(1, 100000),
 #'                                    size = nrow(se) * ncol(se),
 #'                                    replace = TRUE),
@@ -62,7 +68,7 @@
 #'
 #'
 #' ## Saving the entropy values as Entropy_newmatrix using the assay 'new
-#' counts'
+#' ## counts'
 #' se2 = entropy(se,
 #'               new_assay_name = 'Entropy_newmatrix',
 #'               assay_name = 'new_counts')

@@ -7,20 +7,20 @@
 Qentropy(x, assay_name = "Entropy", new_assay_name = "Qentropy")
 }
 \arguments{
-\item{x}{A data.frame (already processed by `entropy()`)
-or a SummarizedExperiment (already processed by `entropy()`).}
+\item{x}{A data.frame (already processed by 'entropy()')
+or a SummarizedExperiment (already processed by 'entropy()').}
 
 \item{assay_name}{(SummarizedExperiment only) The name of the assay
 whose row-normalized data will be replaced by Q-values. If NULL,
 uses the first assay.}
 
 \item{new_assay_name}{If you prefer to store Q-values in a
-*new* assay, provide a name. By default `Qentropy`}
+*new* assay, provide a name. By default 'Qentropy'}
 }
 \value{
 \itemize{
   \item If \code{x} is a data.frame: returns the same data.frame with numeric
-    columns replaced by \eqn{Q_{ij}} values and \code{Entropy} column removed.
+   columns replaced by \eqn{Q_{ij}} values and \code{Entropy} column removed.
   \item If \code{x} is a SummarizedExperiment: returns the same object with
     the specified assay replaced by \eqn{Q_{ij}} values (or a new assay
     if \code{new_assay_name} is set) and \code{rowData(x)$Entropy} removed.
@@ -43,6 +43,12 @@ library(airway)
 data('airway')
 
 se = airway
+
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 # -------------------------------
 # 1) Using a data.frame
 # -------------------------------
@@ -64,8 +70,10 @@ head(df)
 se2 = entropy(se, new_assay_name = 'Entropy')
 
 ## Transform entropy into Qentropy. new_assay_name specify a new assay
-## where data is going to be stored. Assay_name must have Entropy transformed values
-## By default function will look for an assay_name `Entropy` and assign a new assay to `Qentropy`
+## where data is going to be stored. Assay_name must have Entropy transformed
+values
+## By default, the function will look for an assay_name 'Entropy' and assign
+## a new assay to 'Qentropy'
 se2 = Qentropy(se2, new_assay_name = 'Qentropy', assay_name = 'Entropy')
 
 se2

@@ -32,6 +32,11 @@
 #'data('airway')
 #'se = airway
 #'
+#' # Only use a random subset of 1000 rows
+#' set.seed(123)
+#' idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+#' se <- se[idx, ]
+#'
 #'## Normalize the data first using tpm_normalization
 #'rowData(se)$gene_length = rowData(se)$gene_seq_end
 #'- rowData(se)$gene_seq_start

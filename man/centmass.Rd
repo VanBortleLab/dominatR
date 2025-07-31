@@ -32,9 +32,9 @@ assay to use. Defaults to the first assay if not specified.}
 }
 }
 \description{
-For each row of the numeric data, \code{centmass()} computes a 2D center of mass
-with coordinates (\code{comx}, \code{comy}). The \code{x_coord} and \code{y_coord}
-vectors specify the location for each column's "mass."
+For each row of the numeric data, \code{centmass()} computes a 2D center of
+mass with coordinates (\code{comx}, \code{comy}). The \code{x_coord} and
+\code{y_coord} vectors specify the location for each column's "mass."
 
 The original usage assumes a ternary coordinate system by default, but this
 can be generalized to any scenario where columns represent discrete "masses"
@@ -50,6 +50,12 @@ library(airway)
 data('airway')
 
 se = airway
+
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 # Let's subset for the first 3 columns for this example
 se = se[,1:3]
 # -------------------------------
