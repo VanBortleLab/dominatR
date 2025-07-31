@@ -22,7 +22,8 @@ A dataframe with 1061 rows and 7 variables:
 data(rnapol_score)
 }
 \description{
-A subset of data obtained from CHIP-Seq Data for RNA Polymerase I, II and III. Values are represented as the -log10(p-value)
+A subset of data obtained from CHIP-Seq Data for RNA Polymerase I, II and
+III. Values are represented as the -log10(p-value)
 }
 \examples{
 data('rnapol_score')

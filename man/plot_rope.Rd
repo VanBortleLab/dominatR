@@ -29,46 +29,58 @@ plot_rope(
 \item{x}{A \code{data.frame} or \code{matrix} with numeric columns, or
 a \code{SummarizedExperiment} containing such data in one of its assays.}
 
-\item{column_name}{Character. The name of the two variables that will be used for the analysis. By default it is \code{NULL}.}
+\item{column_name}{Character. The name of the two variables that will be
+used for the analysis. By default it is \code{NULL}.}
 
-\item{push_text}{Numeric. Expands or contracts text label positions along the x-axis.}
+\item{push_text}{Numeric. Expands or contracts text label positions along
+the x-axis.}
 
 \item{rope_width}{Numeric. Thickness of the "rope" drawn in the center.}
 
 \item{rope_color}{Character. Color for the rope's fill.}
 
-\item{rope_border}{Logical or a color. Whether or how to draw the rope border.}
+\item{rope_border}{Logical or a color. Whether or how to draw the rope
+border.}
 
-\item{col}{Character vector of length 2. Colors assigned when \code{a > b} or \code{b > a}, respectively.}
+\item{col}{Character vector of length 2. Colors assigned when \code{a > b}
+or \code{b > a}, respectively.}
 
-\item{col_bg}{Background color (used when a row is filtered out by entropy or max value).}
+\item{col_bg}{Background color (used when a row is filtered out by entropy
+or max value).}
 
-\item{pch}{Integer or vector specifying point types for the main two categories.}
+\item{pch}{Integer or vector specifying point types for the main two
+categories.}
 
-\item{pch_bg}{Integer specifying the point type for the "gray" points (if \code{plotAll=TRUE}).}
+\item{pch_bg}{Integer specifying the point type for the "gray" points
+(if \code{plotAll=TRUE}).}
 
 \item{cex}{Numeric. Expansion factor for point size.}
 
-\item{entropyrange}{Numeric vector of length 2. Rows with \code{entropy} outside this range become background color.}
+\item{entropyrange}{Numeric vector of length 2. Rows with \code{entropy}
+outside this range become background color.}
 
-\item{maxvaluerange}{Numeric vector of length 2. Rows with \code{max(a,b)} outside this range become background color.}
+\item{maxvaluerange}{Numeric vector of length 2. Rows with \code{max(a,b)}
+outside this range become background color.}
 
-\item{plotAll}{Logical. If \code{TRUE}, also draw "filtered" points in \code{col_bg} color. If \code{FALSE}, only highlight active points.}
+\item{plotAll}{Logical. If \code{TRUE}, also draw "filtered" points in
+\code{col_bg} color. If \code{FALSE}, only highlight active points.}
 
-\item{label}{Logical. If \code{TRUE}, label the two columns near the rope ends.}
+\item{label}{Logical. If \code{TRUE}, label the two columns near the rope
+ends.}
 
 \item{title}{Character. Plot title.}
 
-\item{output_table}{Logical. If \code{TRUE}, return the processed data frame with added columns.}
+\item{output_table}{Logical. If \code{TRUE}, return the processed data
+frame with added columns.}
 
 \item{assay_name}{(SummarizedExperiment only) Name of the assay containing
 the 2-column data. If not specified, the first assay is used.}
 }
 \value{
 \itemize{
-    \item If \code{output_table=TRUE}, returns a data frame with extra columns
-      (\code{comx}, \code{comy}, \code{color}, \code{maxvalue}, \code{entropy})
-      used in the plot.
+    \item If \code{output_table=TRUE}, returns a data frame with extra
+      columns (\code{comx}, \code{comy}, \code{color}, \code{maxvalue},
+      \code{entropy}) used in the plot.
     \item If \code{output_table=FALSE}, invisibly returns \code{NULL}.
   }
 }
@@ -81,12 +93,17 @@ The plot is useful for visualising “winner-takes-all” behaviour in two-way
 comparisons, e.g. gene expression in *A* and *B* conditions.
 }
 \details{
-The function expects two numeric columns. If the experiment has more than two columns, the name of the columns of interest can be specificed by using the parameter \code{column_name}. If \code{x} is
-a \code{SummarizedExperiment}, it extracts the indicated assay and extracts the columns of interest
+The function expects two numeric columns. If the experiment has more than
+two columns, the name of the columns of interest can be specificed by using
+the parameter \code{column_name}. If \code{x} is a
+\code{SummarizedExperiment}, it extracts the indicated assay and extracts
+the columns of interest
 
 It also uses:
   - \code{centmass()} for computing \code{comx}.
-  - \code{entropy()} for computing Shannon entropy, stored in the \code{entropy} column.  Between two variables, entropy rangeS between 0 and 1.
+  - \code{entropy()} for computing Shannon entropy, stored in the
+  \code{entropy} column.  Between two variables, entropy rangeS between 0
+  and 1.
 
 The rope is drawn in the middle of the plot (the x-axis from -1 to 1, y = 0),
 with thickness \code{rope_width}. Points are scattered in \code{comy}
@@ -98,8 +115,15 @@ library(airway)
 data('airway')
 se <- airway
 
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 ## Normalize the data first using tpm_normalization
-rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+
+rowData(se)$gene_length = rowData(se)$gene_seq_end
+- rowData(se)$gene_seq_start
 
 se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
 
@@ -110,7 +134,8 @@ se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
 df <- assay(se, 'tpm_norm')
 df <- as.data.frame(df)
 
-# Choose two columns of interest, in this case 'SRR1039508' and #' SRR1039516'
+# Choose two columns of interest, in this case 'SRR1039508'
+# and SRR1039516'
 
 # Default Behaviour
 plot_rope(df,
@@ -123,7 +148,8 @@ plot_rope(df,
           output_table = FALSE,
           col = c('darkgreen', 'darkred'))
 
-# Emphasis can be applied to highly dominant variables by controling #' entropy parameter,
+# Emphasis can be applied to highly dominant variables by controling
+# entropy parameter,
 # values outside of that range will be colored smokewhite.
 plot_rope(df,
           column_name = c("SRR1039508", "SRR1039516"),
@@ -131,7 +157,7 @@ plot_rope(df,
           col = c('darkgreen', 'darkred'),
           entropyrange = c(0,0.1))
 
-# Points in the center are a reflection of genes with expression levels = #' 0.
+# Points in the center are a reflection of genes with expression levels = 0.
 # This can be modified by adjusting the maxvalue range
 
 plot_rope(df,
@@ -144,7 +170,8 @@ plot_rope(df,
 # By controling entropy range, you can observe different types of genes.
 # Values closer to 0 represent dominance and closer to 1 shareness.
 
-# Exploring genes with high normalized expression values across different #' entropy ranges
+# Exploring genes with high normalized expression values across different
+#' entropy ranges
 
 
 

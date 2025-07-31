@@ -23,11 +23,11 @@ or a \code{SummarizedExperiment} containing such counts.
 }}
 
 \item{gene_length}{A numeric vector of gene lengths (one per row), used
-only if \code{x} is a data.frame or matrix. Must match the number of rows in
-\code{x}. Ignored if \code{x} is a SummarizedExperiment.}
+only if \code{x} is a data.frame or matrix. Must match the number of rows
+in \code{x}. Ignored if \code{x} is a SummarizedExperiment.}
 
-\item{log_trans}{Logical. If \code{TRUE}, apply \code{log2(... + 1)} transform
-to the TPM-normalized values.}
+\item{log_trans}{Logical. If \code{TRUE}, apply \code{log2(... + 1)}
+transform to the TPM-normalized values.}
 
 \item{assay_name}{If \code{x} is a SummarizedExperiment, name of the assay to
 normalize. Defaults to the first assay if not specified.}
@@ -60,8 +60,14 @@ data('airway')
 
 se = airway
 
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 ### Adding a column in rowData regarding the gene_length
-rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+rowData(se)$gene_length = rowData(se)$gene_seq_end
+- rowData(se)$gene_seq_start
 
 # -------------------------------
 # 1) Using a data.frame
@@ -107,7 +113,8 @@ colnames(new_matrix) = colnames(se)
 ## Creating a new assay called new counts
 assay(se, 'new_counts') = new_matrix
 
-se2 = tpm_normalization(se, new_assay_name = 'tpm_counts_new', assay_name = 'new_counts')
+se2 = tpm_normalization(se, new_assay_name = 'tpm_counts_new',
+assay_name = 'new_counts')
 
 se2
 

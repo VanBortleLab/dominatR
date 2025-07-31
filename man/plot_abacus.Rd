@@ -21,19 +21,23 @@ plot_abacus(
 )
 }
 \arguments{
-\item{data}{A numerical dataframe. Each column represent the variable used to calculate the entropy and build the plot}
+\item{data}{A numerical dataframe. Each column represent the variable used
+to calculate the entropy and build the plot}
 
 \item{n}{Total number of variables to account for entropy calculation.}
 
-\item{x_variable}{A reference column, this is the variable that will be classified. A column with unique gene names or unique index for genes.}
+\item{x_variable}{A reference column, this is the variable that will be
+classified. A column with unique gene names or unique index for genes.}
 
 \item{y_variables}{Columns of interest for visualization purposes.}
 
 \item{title}{Title for the plot}
 
-\item{percentiles}{Number of groups intended for classification. If 4 is selected you will obtain the percentiles 0.25, 0.5, 0.75 and 1.00.}
+\item{percentiles}{Number of groups intended for classification. If 4 is
+selected you will obtain the percentiles 0.25, 0.5, 0.75 and 1.00.}
 
-\item{entropy_threshold}{A numerical value that determines the entropy threshold for visualization.}
+\item{entropy_threshold}{A numerical value that determines the entropy
+threshold for visualization.}
 
 \item{point_fill_colors}{Filling colors for the points}
 
@@ -43,13 +47,18 @@ plot_abacus(
 
 \item{single}{A logical parameter. If TRUE a single plot will be produced.}
 
-\item{numb_columns}{A numerical value. Number of columns for plotting when single is FALSE}
+\item{numb_columns}{A numerical value. Number of columns for plotting when
+single is FALSE}
 
-\item{features_of_interest}{A vector with the names of genes or index of genes of interest that should be plotted. This names should be present in the x_variable column and have the same format.}
+\item{features_of_interest}{A vector with the names of genes or index of
+genes of interest that should be plotted. This names should be present in
+the x_variable column and have the same format.}
 }
 \value{
-Returns a list of objects, an abacus classification plot and the respective dataframe
+Returns a list of objects, an abacus classification plot and the respective
+dataframe
 }
 \description{
-Creates an abacus plot that aims to classify different observations in determined number of groups across variables using an entropy-based method
+Creates an abacus plot that aims to classify different observations in
+determined number of groups across variables using an entropy-based method
 }

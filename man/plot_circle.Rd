@@ -61,7 +61,8 @@ sets the colour for missing values.}
 \item{point_fill_colors, point_line_colors}{Optional colour vectors for
 point fill / outline.}
 
-\item{straight_points}{Logical. If TRUE points are plotted in a straight line.}
+\item{straight_points}{Logical. If TRUE points are plotted in a straight
+line.}
 
 \item{line_col}{Colour for the inner grid / slice borders.}
 
@@ -115,8 +116,14 @@ library(tidyverse)
 data('airway')
 se = airway
 
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 ## Normalize the data first using tpm_normalization
-rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+rowData(se)$gene_length = rowData(se)$gene_seq_end
+- rowData(se)$gene_seq_start
 
 se = tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
 
@@ -249,7 +256,8 @@ plot_circle(
                         'D' = 'orange')
 )
 
-# Retrieving a dataframe with the results used for plotting, set output_table = TRUE
+# Retrieving a dataframe with the results used for plotting,
+# set output_table <- TRUE
 plot <- plot_circle(
   x = df,
   n = 8,
@@ -365,7 +373,8 @@ plot_circle(
 )
 
 
-# Retrieving a dataframe with the results used for plotting, set output_table = TRUE
+# Retrieving a dataframe with the results used for plotting,
+# set output_table <- TRUE
 
 plot <- plot_circle(
   x = se,

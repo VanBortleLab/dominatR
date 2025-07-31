@@ -27,7 +27,8 @@ otherwise facet by \code{Factor}.}
 
 \item{numb_columns}{Faceting columns when \code{single = FALSE}.}
 
-\item{filter_class}{Character vector of levels to keep; \code{NULL} keeps all.}
+\item{filter_class}{Character vector of levels to keep; \code{NULL} keeps
+all.}
 
 \item{point_size}{Numeric.  Size of jitter points.}
 }
@@ -40,8 +41,8 @@ A list with
 }
 \description{
 Visualises how often each categorical level ( `Factor` ) is dominant at a
-given entropy score.  The function expects the \strong{second} element of the
-list returned by \code{\link{plot_circle}()}.
+given entropy score.  The function expects the \strong{second} element of
+the list returned by \code{\link{plot_circle}()}.
 }
 \examples{
 library(SummarizedExperiment)
@@ -49,8 +50,14 @@ library(airway)
 data('airway')
 se = airway
 
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 ## Normalize the data first using tpm_normalization
-rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+rowData(se)$gene_length = rowData(se)$gene_seq_end
+- rowData(se)$gene_seq_start
 
 se = tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
 
