@@ -108,11 +108,7 @@ df <- assay(se, 'tpm_norm') |> as.data.frame()
 
 
 # Choose three columns of interest, in this case 'SRR1039508', 'SRR1039516'
-<<<<<<< HEAD
-and 'SRR1039512'
-=======
 # and 'SRR1039512'
->>>>>>> origin/ethan_spring
 
 # Default Behaviour
 plot_triangle(x = df,
@@ -126,11 +122,7 @@ plot_triangle(x = df,
               col = c('indianred', 'lightgreen', 'lightblue'))
 
 # Emphasis can be applied to highly dominant variables by controling
-<<<<<<< HEAD
-entropy parameter,
-=======
 # entropy parameter,
->>>>>>> origin/ethan_spring
 # values outside of that range will be colored smokewhite.
 plot_triangle(x = df,
               column_name = c("SRR1039508", "SRR1039516", 'SRR1039512'),
@@ -173,11 +165,7 @@ plot_triangle(x = df,
               maxvaluerange = c(0.1, Inf))
 
 # Same analysis can be performed by filtering out genes with low expression
-<<<<<<< HEAD
-values
-=======
 # values
->>>>>>> origin/ethan_spring
 
 plot_triangle(x = df,
               column_name = c("SRR1039508", "SRR1039516", 'SRR1039512'),

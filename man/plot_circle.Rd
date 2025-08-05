@@ -257,11 +257,7 @@ plot_circle(
 )
 
 # Retrieving a dataframe with the results used for plotting,
-<<<<<<< HEAD
-set output_table = TRUE
-=======
 # set output_table <- TRUE
->>>>>>> origin/ethan_spring
 plot <- plot_circle(
   x = df,
   n = 8,
@@ -378,11 +374,7 @@ plot_circle(
 
 
 # Retrieving a dataframe with the results used for plotting,
-<<<<<<< HEAD
-set output_table = TRUE
-=======
 # set output_table <- TRUE
->>>>>>> origin/ethan_spring
 
 plot <- plot_circle(
   x = se,

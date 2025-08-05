@@ -72,13 +72,8 @@ se2 = entropy(se, new_assay_name = 'Entropy')
 ## Transform entropy into Qentropy. new_assay_name specify a new assay
 ## where data is going to be stored. Assay_name must have Entropy transformed
 values
-<<<<<<< HEAD
-## By default function will look for an assay_name `Entropy` and assign a
-new assay to `Qentropy`
-=======
 ## By default, the function will look for an assay_name 'Entropy' and assign
 ## a new assay to 'Qentropy'
->>>>>>> origin/ethan_spring
 se2 = Qentropy(se2, new_assay_name = 'Qentropy', assay_name = 'Entropy')
 
 se2

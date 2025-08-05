@@ -29,8 +29,6 @@ to transform and compute Entropy on. If NULL, uses the first assay.}
 \description{
 Compute Shannon Entropy on row-normalized data
 }
-<<<<<<< HEAD
-=======
 \examples{
 library(SummarizedExperiment)
 library(airway)
@@ -87,4 +85,3 @@ se2 = entropy(se,
 se2
 
 }
->>>>>>> origin/ethan_spring
