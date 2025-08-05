@@ -1,18 +1,27 @@
 Package: dominatR
-Title: Feature Dominance-based R Package for genomic data
+Title: Feature Dominance-based R Package for Genomic Data
 Version: 0.1.0
-Author: Simon Lizarazo [aut, cre], Rajendra KC [ctb], Kevin Van Bortle [aut, cre, cph]
-Maintainer: Simon Lizarazo <silizarazoch@gmail.com>,
-            Kevin Van Bortle <kvbortle@illinois.edu>
+Authors@R: c(
+    person(given = "Simon", family = "Lizarazo", role = c("aut", "cre"), email = "silizarazoch@gmail.com"),
+    person(given = "Ethan", family = "Chen", role = c("ctb"), email = "yitian7@illinois.edu"),
+    person(given = "Rajendra", family = "KC", role = c("ctb")),
+    person(given = "Kevin", family = "Van Bortle", 
+           role = c("aut", "cph"), email = "kvbortle@illinois.edu")
+           )
 Description: dominatR is an R package for quantifying and visualizing feature dominance in datasets.
     dominatR makes use of entropy-based triangular projections and compositional comparison metrics.
 License: MIT + file LICENSE
 URL: https://github.com/VanBortleLab/dominatR
+BugReports: https://github.com/VanBortleLab/dominatR/issues
 Encoding: UTF-8
 LazyData: false
 Depends: 
     R (>= 4.4.0)
 Imports:
+    scales,
+    airway,
+    ggnewscale,
+    tidyverse,
     SummarizedExperiment,
     dplyr,
     forcats,
@@ -25,12 +34,12 @@ Imports:
     ggforce,
     geomtextpath,
     ggplot2
-RoxygenNote: 7.3.2
-biocViews: Visualization, Normalization, Classification, GeneExpression
-Suggests: 
+Suggests:
+    BiocStyle,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
-Config/testthat/edition: 3
-BugReports: https://github.com/VanBortleLab/dominatR/issues
 VignetteBuilder: knitr
+biocViews: Visualization, Normalization, Classification, GeneExpression
+Config/testthat/edition: 3
+RoxygenNote: 7.3.2

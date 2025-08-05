@@ -7,15 +7,15 @@
 Qentropy(x, assay_name = "Entropy", new_assay_name = "Qentropy")
 }
 \arguments{
-\item{x}{A data.frame (already processed by `entropy()`)
-or a SummarizedExperiment (already processed by `entropy()`).}
+\item{x}{A data.frame (already processed by 'entropy()')
+or a SummarizedExperiment (already processed by 'entropy()').}
 
 \item{assay_name}{(SummarizedExperiment only) The name of the assay
 whose row-normalized data will be replaced by Q-values. If NULL,
 uses the first assay.}
 
 \item{new_assay_name}{If you prefer to store Q-values in a
-*new* assay, provide a name. By default `Qentropy`}
+*new* assay, provide a name. By default 'Qentropy'}
 }
 \value{
 \itemize{
@@ -43,6 +43,12 @@ library(airway)
 data('airway')
 
 se = airway
+
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 # -------------------------------
 # 1) Using a data.frame
 # -------------------------------
@@ -66,8 +72,13 @@ se2 = entropy(se, new_assay_name = 'Entropy')
 ## Transform entropy into Qentropy. new_assay_name specify a new assay
 ## where data is going to be stored. Assay_name must have Entropy transformed
 values
+<<<<<<< HEAD
 ## By default function will look for an assay_name `Entropy` and assign a
 new assay to `Qentropy`
+=======
+## By default, the function will look for an assay_name 'Entropy' and assign
+## a new assay to 'Qentropy'
+>>>>>>> origin/ethan_spring
 se2 = Qentropy(se2, new_assay_name = 'Qentropy', assay_name = 'Entropy')
 
 se2

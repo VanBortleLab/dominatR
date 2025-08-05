@@ -50,6 +50,12 @@ library(airway)
 data('airway')
 
 se = airway
+
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 # Let's subset for the first 3 columns for this example
 se = se[,1:3]
 # -------------------------------

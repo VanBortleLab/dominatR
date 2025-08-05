@@ -89,6 +89,11 @@ library(airway)
 data('airway')
 se <- airway
 
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 ## Normalize the data first using tpm_normalization
 rowData(se)$gene_length <- rowData(se)$gene_seq_end -
                            rowData(se)$gene_seq_start
@@ -103,7 +108,11 @@ df <- assay(se, 'tpm_norm') |> as.data.frame()
 
 
 # Choose three columns of interest, in this case 'SRR1039508', 'SRR1039516'
+<<<<<<< HEAD
 and 'SRR1039512'
+=======
+# and 'SRR1039512'
+>>>>>>> origin/ethan_spring
 
 # Default Behaviour
 plot_triangle(x = df,
@@ -117,7 +126,11 @@ plot_triangle(x = df,
               col = c('indianred', 'lightgreen', 'lightblue'))
 
 # Emphasis can be applied to highly dominant variables by controling
+<<<<<<< HEAD
 entropy parameter,
+=======
+# entropy parameter,
+>>>>>>> origin/ethan_spring
 # values outside of that range will be colored smokewhite.
 plot_triangle(x = df,
               column_name = c("SRR1039508", "SRR1039516", 'SRR1039512'),
@@ -160,7 +173,11 @@ plot_triangle(x = df,
               maxvaluerange = c(0.1, Inf))
 
 # Same analysis can be performed by filtering out genes with low expression
+<<<<<<< HEAD
 values
+=======
+# values
+>>>>>>> origin/ethan_spring
 
 plot_triangle(x = df,
               column_name = c("SRR1039508", "SRR1039516", 'SRR1039512'),

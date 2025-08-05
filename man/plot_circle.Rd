@@ -116,6 +116,11 @@ library(tidyverse)
 data('airway')
 se = airway
 
+# Only use a random subset of 1000 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+se <- se[idx, ]
+
 ## Normalize the data first using tpm_normalization
 rowData(se)$gene_length = rowData(se)$gene_seq_end
 - rowData(se)$gene_seq_start
@@ -252,7 +257,11 @@ plot_circle(
 )
 
 # Retrieving a dataframe with the results used for plotting,
+<<<<<<< HEAD
 set output_table = TRUE
+=======
+# set output_table <- TRUE
+>>>>>>> origin/ethan_spring
 plot <- plot_circle(
   x = df,
   n = 8,
@@ -369,7 +378,11 @@ plot_circle(
 
 
 # Retrieving a dataframe with the results used for plotting,
+<<<<<<< HEAD
 set output_table = TRUE
+=======
+# set output_table <- TRUE
+>>>>>>> origin/ethan_spring
 
 plot <- plot_circle(
   x = se,

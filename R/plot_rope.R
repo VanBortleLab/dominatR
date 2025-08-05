@@ -75,7 +75,13 @@
 #' data('airway')
 #' se <- airway
 #'
+#' # Only use a random subset of 1000 rows
+#' set.seed(123)
+#' idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+#' se <- se[idx, ]
+#'
 #' ## Normalize the data first using tpm_normalization
+#'
 #' rowData(se)$gene_length = rowData(se)$gene_seq_end
 #' - rowData(se)$gene_seq_start
 #'
@@ -89,7 +95,7 @@
 #' df <- as.data.frame(df)
 #'
 #' # Choose two columns of interest, in this case 'SRR1039508'
-#' and #' SRR1039516'
+#' # and SRR1039516'
 #'
 #' # Default Behaviour
 #' plot_rope(df,
@@ -103,7 +109,7 @@
 #'           col = c('darkgreen', 'darkred'))
 #'
 #' # Emphasis can be applied to highly dominant variables by controling
-#' #' entropy parameter,
+#' # entropy parameter,
 #' # values outside of that range will be colored smokewhite.
 #' plot_rope(df,
 #'           column_name = c("SRR1039508", "SRR1039516"),
@@ -111,8 +117,7 @@
 #'           col = c('darkgreen', 'darkred'),
 #'           entropyrange = c(0,0.1))
 #'
-#' # Points in the center are a reflection of genes with expression levels
-#' = #' 0.
+#' # Points in the center are a reflection of genes with expression levels = 0.
 #' # This can be modified by adjusting the maxvalue range
 #'
 #' plot_rope(df,
