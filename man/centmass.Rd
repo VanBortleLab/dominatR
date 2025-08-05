@@ -32,9 +32,9 @@ assay to use. Defaults to the first assay if not specified.}
 }
 }
 \description{
-For each row of the numeric data, \code{centmass()} computes a 2D center of mass
-with coordinates (\code{comx}, \code{comy}). The \code{x_coord} and \code{y_coord}
-vectors specify the location for each column's "mass."
+For each row of the numeric data, \code{centmass()} computes a 2D center of
+mass with coordinates (\code{comx}, \code{comy}). The \code{x_coord} and
+\code{y_coord} vectors specify the location for each column's "mass."
 
 The original usage assumes a ternary coordinate system by default, but this
 can be generalized to any scenario where columns represent discrete "masses"

@@ -12,32 +12,35 @@ cpm_normalization(
 )
 }
 \arguments{
-\item{x}{A \code{matrix}, \code{data.frame}, or a \code{SummarizedExperiment} object.}
+\item{x}{A \code{matrix}, \code{data.frame}, or a \code{SummarizedExperiment}
+object.}
 
-\item{log_trans}{Logical. If \code{TRUE}, apply \code{log2(... + 1)} transform
-to the CPM-normalized values.}
+\item{log_trans}{Logical. If \code{TRUE}, apply \code{log2(... + 1)}
+transform to the CPM-normalized values.}
 
-\item{assay_name}{If \code{x} is a \code{SummarizedExperiment}, name of the assay
-to normalize (defaults to the first assay). Ignored otherwise.}
+\item{assay_name}{If \code{x} is a \code{SummarizedExperiment}, name of the
+assay to normalize (defaults to the first assay). Ignored otherwise.}
 
-\item{new_assay_name}{If \code{x} is a \code{SummarizedExperiment}, name of a new
-assay where results should be stored (defaults to \code{NULL}, meaning the existing
-assay is overwritten).}
+\item{new_assay_name}{If \code{x} is a \code{SummarizedExperiment}, name of
+a new assay where results should be stored (defaults to \code{NULL},
+meaning the existing assay is overwritten).}
 }
 \value{
 \itemize{
-    \item If \code{x} is a \code{matrix} or \code{data.frame}, returns a \strong{matrix}
-      of CPM-normalized (and optionally \code{log2}-transformed) counts.
-    \item If \code{x} is a \code{SummarizedExperiment}, returns the same \code{SummarizedExperiment}
-      object with the specified assay replaced or a new assay created containing
-      the CPM-normalized data.
+    \item If \code{x} is a \code{matrix} or \code{data.frame}, returns a
+      \strong{matrix} of CPM-normalized (and optionally
+      \code{log2}-transformed) counts.
+    \item If \code{x} is a \code{SummarizedExperiment}, returns the same
+      \code{SummarizedExperiment} object with the specified assay replaced
+      or a new assay created containing the CPM-normalized data.
   }
 }
 \description{
 Normalizes a count matrix (or a SummarizedExperiment assay) by the
 counts-per-million (CPM) method. Specifically:
   \enumerate{
-    \item If \code{log_trans = TRUE}, a \code{log2(x + 1)} transform is applied afterward.
+    \item If \code{log_trans = TRUE}, a \code{log2(x + 1)} transform is
+    applied afterward.
   }
 }
 \examples{
@@ -92,7 +95,8 @@ colnames(new_matrix) = colnames(se)
 ## Creating a new assay called new counts
 assay(se, 'new_counts') = new_matrix
 
-se2 = cpm_normalization(se, new_assay_name = 'cpm_counts_new', assay_name = 'new_counts')
+se2 = cpm_normalization(se, new_assay_name = 'cpm_counts_new', assay_name =
+'new_counts')
 
 se2
 head(assay(se2, 'cpm_counts_new'))

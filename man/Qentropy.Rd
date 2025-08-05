@@ -20,7 +20,7 @@ uses the first assay.}
 \value{
 \itemize{
   \item If \code{x} is a data.frame: returns the same data.frame with numeric
-    columns replaced by \eqn{Q_{ij}} values and \code{Entropy} column removed.
+   columns replaced by \eqn{Q_{ij}} values and \code{Entropy} column removed.
   \item If \code{x} is a SummarizedExperiment: returns the same object with
     the specified assay replaced by \eqn{Q_{ij}} values (or a new assay
     if \code{new_assay_name} is set) and \code{rowData(x)$Entropy} removed.
@@ -64,8 +64,10 @@ head(df)
 se2 = entropy(se, new_assay_name = 'Entropy')
 
 ## Transform entropy into Qentropy. new_assay_name specify a new assay
-## where data is going to be stored. Assay_name must have Entropy transformed values
-## By default function will look for an assay_name `Entropy` and assign a new assay to `Qentropy`
+## where data is going to be stored. Assay_name must have Entropy transformed
+values
+## By default function will look for an assay_name `Entropy` and assign a
+new assay to `Qentropy`
 se2 = Qentropy(se2, new_assay_name = 'Qentropy', assay_name = 'Entropy')
 
 se2

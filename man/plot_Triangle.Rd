@@ -33,7 +33,8 @@ this interval. Default is \code{c(0,Inf)}}
 
 \item{col}{Character. Colors for each variable.}
 
-\item{background_col}{Character. Color for the observations outside \code{entropyrange} and \code{maxvaluerange}}
+\item{background_col}{Character. Color for the observations outside
+\code{entropyrange} and \code{maxvaluerange}}
 
 \item{output_table}{Logical. If \code{TRUE} returns the processed data frame.}
 
@@ -58,18 +59,24 @@ columns plus:
 \description{
 Creates a triangular (ternary) scatter plot for **three** numeric variables
 Each point is coloured by the variable with the largest value and can be
-filtered by (i) Entropy score ranging from (0 to 1.585) and (ii) overall score
+filtered by (i) Entropy score ranging from (0 to 1.585) and
+(ii) overall score
 
 The plot is useful for visualising “winner-takes-all” behaviour in three-way
 comparisons, e.g. gene expression in *A*, *B*, *C* conditions.
 }
 \details{
-The function expects three numeric columns. If the experiment has more than three columns, the name of the columns of interest can be specified by using the parameter \code{column_name}. If \code{x} is
-a \code{SummarizedExperiment}, it extracts the indicated assay and extracts the columns of interest
+The function expects three numeric columns. If the experiment has more than
+three columns, the name of the columns of interest can be specified by using
+ the parameter \code{column_name}. If \code{x} is
+ a \code{SummarizedExperiment}, it extracts the indicated assay and extracts
+  the columns of interest
 
 It also uses:
   - \code{centmass()} for computing \code{comx} and \code{comy}.
-  - \code{entropy()} for computing Shannon entropy, stored in the \code{entropy} column.  Between three variables, entropy rangeS between 0 and 1.585.
+  - \code{entropy()} for computing Shannon entropy, stored in the
+    \code{entropy} column.  Between three variables, entropy rangeS between
+    0 and 1.585.
 
 The ternary vertices are fixed at
 \eqn{( \sin(0),  \cos(0) )},
@@ -83,7 +90,8 @@ data('airway')
 se <- airway
 
 ## Normalize the data first using tpm_normalization
-rowData(se)$gene_length <- rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+rowData(se)$gene_length <- rowData(se)$gene_seq_end -
+                           rowData(se)$gene_seq_start
 
 se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
 
@@ -94,7 +102,8 @@ se <- tpm_normalization(se, log_trans = TRUE, new_assay_name = 'tpm_norm')
 df <- assay(se, 'tpm_norm') |> as.data.frame()
 
 
-# Choose three columns of interest, in this case 'SRR1039508', 'SRR1039516' and 'SRR1039512'
+# Choose three columns of interest, in this case 'SRR1039508', 'SRR1039516'
+and 'SRR1039512'
 
 # Default Behaviour
 plot_triangle(x = df,
@@ -107,7 +116,8 @@ plot_triangle(x = df,
               output_table = FALSE,
               col = c('indianred', 'lightgreen', 'lightblue'))
 
-# Emphasis can be applied to highly dominant variables by controling entropy parameter,
+# Emphasis can be applied to highly dominant variables by controling
+entropy parameter,
 # values outside of that range will be colored smokewhite.
 plot_triangle(x = df,
               column_name = c("SRR1039508", "SRR1039516", 'SRR1039512'),
@@ -149,7 +159,8 @@ plot_triangle(x = df,
               entropyrange = c(1.3, Inf),
               maxvaluerange = c(0.1, Inf))
 
-# Same analysis can be performed by filtering out genes with low expression values
+# Same analysis can be performed by filtering out genes with low expression
+values
 
 plot_triangle(x = df,
               column_name = c("SRR1039508", "SRR1039516", 'SRR1039512'),
@@ -213,7 +224,8 @@ plot_triangle(x = se,
 ### Obtaining the DF output for the analysis
 
 object = plot_triangle(x = se,
-                       column_name = c("SRR1039508", "SRR1039516", 'SRR1039512'),
+                       column_name = c("SRR1039508", "SRR1039516",
+                       'SRR1039512'),
                        output_table = TRUE,
                        col = c('darkred', 'darkgreen', 'darkblue'),
                        entropyrange = c(1.3, Inf),

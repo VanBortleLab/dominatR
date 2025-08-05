@@ -23,11 +23,11 @@ or a \code{SummarizedExperiment} containing such counts.
 }}
 
 \item{gene_length}{A numeric vector of gene lengths (one per row), used
-only if \code{x} is a data.frame or matrix. Must match the number of rows in
-\code{x}. Ignored if \code{x} is a SummarizedExperiment.}
+only if \code{x} is a data.frame or matrix. Must match the number of rows
+in \code{x}. Ignored if \code{x} is a SummarizedExperiment.}
 
-\item{log_trans}{Logical. If \code{TRUE}, apply \code{log2(... + 1)} transform
-to the RPKM-normalized values.}
+\item{log_trans}{Logical. If \code{TRUE}, apply \code{log2(... + 1)}
+transform to the RPKM-normalized values.}
 
 \item{assay_name}{If \code{x} is a SummarizedExperiment, name of the assay to
 normalize. Defaults to the first assay if not specified.}
@@ -43,7 +43,8 @@ A numeric \strong{matrix} of RPKM or log2(RPKM + 1) values if
   existing or new assay.
 }
 \description{
-Normalizes read counts by the RPKM (Reads Per Kilobase per Million mapped reads) method:
+Normalizes read counts by the RPKM (Reads Per Kilobase per Million
+mapped reads) method:
 \enumerate{
   \item Normalize counts by library size (column sums), scaled to millions.
   \item Divide each gene's value by its length in kilobases.
@@ -63,7 +64,8 @@ data('airway')
 se = airway
 
 ### Adding a column in rowData regarding the gene_length
-rowData(se)$gene_length = rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+rowData(se)$gene_length = rowData(se)$gene_seq_end -
+rowData(se)$gene_seq_start
 
 # -------------------------------
 # 1) Using a data.frame
@@ -89,7 +91,8 @@ se2 = rpkm_normalization(se, log_trans = FALSE)
 head(assay(se2))
 
 # If new_assay_name is given, normalization stored in a new assay
-se2 = rpkm_normalization(se, log_trans = FALSE, new_assay_name = 'rpkm_counts')
+se2 = rpkm_normalization(se, log_trans = FALSE, new_assay_name =
+'rpkm_counts')
 head(assay(se2, 'rpkm_counts'))
 
 # Creating a new assay to test specific input
@@ -102,7 +105,8 @@ rownames(new_matrix) = rownames(se)
 colnames(new_matrix) = colnames(se)
 
 assay(se, 'new_counts') = new_matrix
-se2 = rpkm_normalization(se, new_assay_name = 'rpkm_counts_new', assay_name = 'new_counts')
+se2 = rpkm_normalization(se, new_assay_name = 'rpkm_counts_new',
+assay_name = 'new_counts')
 head(assay(se2, 'rpkm_counts_new'))
 
 }
