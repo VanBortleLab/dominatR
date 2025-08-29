@@ -18,8 +18,14 @@ opts_chunk$set(
   dpi = 72,
   fig.retina = 1
 )
-library(dominatR)
 
+```
+
+```{r setup}
+library(dominatR)
+```
+
+```{r setup}
 library(SummarizedExperiment)
 library(ggplot2)
 ```
@@ -1103,21 +1109,25 @@ plot_circle(
 
 If a dataframe is used and the user wants to color by a category, there should be a column in the data.frame with the information of that category
 
-```{r}
-df$category = sample(LETTERS[1:5], size = nrow(df), replace = TRUE)
+-   <div>
 
-plot_circle(
-    x = df,
-    n = 6,
-    column_variable_factor = 'category',
-    entropyrange     = c(0,Inf),
-    magnituderange   = c(0, Inf),
-    straight_points = FALSE, 
-    point_size = 2,
-    label  = 'legend',
-    output_table = FALSE,
-)
-```
+    ```{r}
+    df$category = sample(LETTERS[1:5], size = nrow(df), replace = TRUE)
+
+    plot_circle(
+        x = df,
+        n = 6,
+        column_variable_factor = 'category',
+        entropyrange     = c(0,Inf),
+        magnituderange   = c(0, Inf),
+        straight_points = FALSE, 
+        point_size = 2,
+        label  = 'legend',
+        output_table = FALSE,
+    )
+    ```
+
+    </div>
 
 #### Example 7: Retrieving plot data from SE
 
