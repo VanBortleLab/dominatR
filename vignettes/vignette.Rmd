@@ -1,9 +1,9 @@
 ---
-title: "dominatR: Tissue Dominance and Entropy Visualization"
-author: "Simon Lizarazo  & Ethan Chen"
+title: "Introduction to dominatR"
+author: "Simon Lizarazo, Ethan Chen, Rajendra KC, Kevin Van Bortle"
 output: BiocStyle::html_document
 vignette: >
-  %\VignetteIndexEntry{dominatR: Tissue Dominance and Entropy Visualization}
+  %\VignetteIndexEntry{Introduction to dominatR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,22 +12,12 @@ vignette: >
 library(knitr)
 opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.width = 6,
-  fig.height = 4,
-  dpi = 72,
-  fig.retina = 1
+  comment = "#>", 
+  fig.align = 'center', 
+  
 )
 
-```
-
-```{r setup}
 library(dominatR)
-```
-
-```{r setup}
-library(SummarizedExperiment)
-library(ggplot2)
 ```
 
 # dominatR: A Package for Normalization of RNA-seq and Gene Expression Data
@@ -58,6 +48,7 @@ The data used in this vignette is artificially generated. A count matrix of a to
 library(dominatR)
 set.seed(42)
 library(SummarizedExperiment)
+library(ggplot2)
 
 ## ---- parameters ----------------------------------------------------------
 n_genes   <- 1000
