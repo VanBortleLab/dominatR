@@ -13,7 +13,7 @@ library(knitr)
 opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  fig.align = 'center', 
+  fig.align = 'center'
   
 )
 
@@ -98,6 +98,7 @@ make_counts_from_states <- function(states_vec) {
 }
 
 make_gene_block_generic <- function(n_block, k, type, sample_names, prob_high=NULL, prob_low=NULL) {
+  
   # Generic: weighted sampling without replacement for k specials
   probs <- if (type == "High") prob_high else prob_low
   if (is.null(probs)) probs <- rep(1, length(sample_names))
