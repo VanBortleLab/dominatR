@@ -4,8 +4,11 @@ author: "Simon Lizarazo, Ethan Chen, Rajendra KC, Kevin Van Bortle"
 output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{Introduction to dominatR}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -15,29 +18,32 @@ opts_chunk$set(
         comment = "#>", 
         fig.align = 'center',
         warning = FALSE, 
-        message = FALSE,
-        fig.width  = 7,    
-        fig.height = 5
+        message = FALSE
 )
 
 library(dominatR)
 library(dominatRData)
 library(airway)
 library(ggplot2)
+
 ```
 
 # Overview
 
+<img src="../man/figures/dominatR_logo.png" align="left" width="163"/>
+
 The `dominatR` package provides a flexible suite for feature dominance
 visualization, it uses Shanon's entropy as method for assigning feature
-dominance. Moreover the package offers tools for normalization and it is
-compatible with common data structures like `matrix`, `data.frame`, and
+dominance.
+
+Moreover the package offers tools for normalization and it is compatible
+with common data structures like `matrix`, `data.frame`, and
 `SummarizedExperiment`.
 
 The functions present in the package can be grouped as:
 
--   **Normalization Functions:** Contains basic normalization methods, 
-such as:
+-   **Normalization Functions:** Contains basic normalization methods,
+    such as:
 
     -   `cpm_normalization`
 
@@ -49,7 +55,8 @@ such as:
 
     -   `tpm_normalization`
 
--   **Calculation Functions:** Contains feature calculation methods, such as:
+-   **Calculation Functions:** Contains feature calculation methods,
+    such as:
 
     -   `centmass`
 
@@ -57,8 +64,8 @@ such as:
 
     -   `Qentropy`
 
--   **Visualization Functions:** Contains three different visualization tools,
-ideal for assessing dominance in 2, 3 and N Dimension:
+-   **Visualization Functions:** Contains three different visualization
+    tools, ideal for assessing dominance in 2, 3 and N Dimension:
 
     -   `plot_rope`
 
@@ -77,7 +84,7 @@ available in `dominatRData` are usefull along with the `airway` dataset.
 
 ## - Normalization - Quantile Normalization
 
-#### A SummarizedExperiment
+### A SummarizedExperiment
 
 ```{r se_norm, eval = TRUE, echo = TRUE, message = FALSE}
 data("airway")
@@ -88,7 +95,7 @@ head(se)
 head(assay(se, 'quantile_norma'))
 ```
 
-#### A dataframe
+### A dataframe
 
 ```{r df_norm, eval = TRUE, echo = TRUE, message = FALSE}
 data("atac_tissue_counts")
@@ -128,20 +135,20 @@ head(norm1[,10:20])
 ## - Visualizations
 
 All the functions present in the package are able to handle
-`SummarizedExperiment` and `data.frame` objects. This quick introduction will
-show examples using `data.frame` objects. All the functions produce graphic
-and a data.frame with the dominance results, by setting the atribute
-`output_table = FALSE` the dataframe is not displayed. For a more detailed
-usage and aesthetics manipulation refer to the articles in the visualization
-section.
+`SummarizedExperiment` and `data.frame` objects. This quick introduction
+will show examples using `data.frame` objects. All the functions produce
+graphic and a data.frame with the dominance results, by setting the
+atribute `output_table = FALSE` the dataframe is not displayed. For a
+more detailed usage and aesthetics manipulation refer to the articles in
+the visualization section.
 
 ### Two Dimensions
 
-`plot_rope` is useful to visualize feature dominance between two variables. In
-this example the function is comparing dominance over gene occupancy for RNA
-Polymerase II and RNA Polymerase III. By default the function plots all the
-points, but the user can adjust `entropy_range` values for subsetting specific
-type of observations.
+`plot_rope` is useful to visualize feature dominance between two
+variables. In this example the function is comparing dominance over gene
+occupancy for RNA Polymerase II and RNA Polymerase III. By default the
+function plots all the points, but the user can adjust `entropy_range`
+values for subsetting specific type of observations.
 
 ```{r rope_pol3, eval = TRUE, echo = TRUE, message = FALSE}
 data("rnapol_score")
@@ -149,29 +156,31 @@ data("rnapol_score")
 data1 <- rnapol_score[,6:7]
 
 plot_rope(
-        data1,
-        push_text = 2,
+        data1, 
+        pch = c(19, 19), 
+        push_text = 1,
+        col = c('#F8766d', '#C77CFF'),
         output_table = FALSE,
-        title = 'Gene Occupancy
-                    \n RNA Pol II vs RNA Pol III' ,
-        rope_width = 0.5
+        title = 'Gene Occupancy RNA Pol II vs RNA Pol III' ,
+        rope_width = 1
 )
 ```
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Let's filter genes with low entropy and high scores (significant), these genes
-are occupied for either Pol-II and Pol-III
+Let's filter genes with low entropy and high scores (significant), these
+genes are occupied for either Pol-II and Pol-III
 
 ```{r rope_pol3_filt, eval = TRUE, echo = TRUE, message = FALSE}
 
 plot_rope(
-        data1,
-        push_text = 2,
+        data1, 
+        pch = c(19, 19), 
+        col = c('#F8766d', '#C77CFF'),
+        push_text = 1,
         output_table = FALSE,
-        title = 'Gene Occupancy
-                \n RNA Pol II vs RNA Pol III - Specific' ,
-        rope_width = 0.5,
+        title = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Specific' ,
+        rope_width = 1,
         entropyrange = c(0, 0.5),
         maxvaluerange = c(1.3, Inf)
 )
@@ -179,18 +188,19 @@ plot_rope(
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Let's filter genes with high entropy and high scores (significant), these
-genes are occupied for both Pol-II and Pol-III
+Let's filter genes with high entropy and high scores (significant),
+these genes are occupied for both Pol-II and Pol-III
 
 ```{r rope_pol3_filt1, eval = TRUE, echo = TRUE, message = FALSE}
 
 plot_rope(
         data1,
-        push_text = 2,
+        pch = c(19, 19), 
+        push_text = 1,
+        col = c('#F8766d', '#C77CFF'),
         output_table = FALSE,
-        title = 'Gene Occupancy RNA Pol II vs
-                RNA Pol III - Shared' ,
-        rope_width = 0.5,
+        title = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Shared' ,
+        rope_width = 1,
         entropyrange = c(0.8, 1),
         maxvaluerange = c(1.3, Inf)
 )
@@ -200,83 +210,92 @@ plot_rope(
 ### Three Dimensions
 
 `plot_triange` is useful to visualize feature dominance between three
-variables. In this example, the function is comparing dominance over gene
-occupancy for RNA Polymerase I, RNA Polymerase II and RNA Polymerase III. By
-default the function plots all the points, but the user can adjust
-`entropy_range` values for subsetting specific type of observations.
-
+variables. In this example, the function is comparing dominance over
+gene occupancy for RNA Polymerase I, RNA Polymerase II and RNA
+Polymerase III. By default the function plots all the points, but the
+user can adjust `entropy_range` values for subsetting specific type of
+observations.
 
 ```{r trin_pol3, eval = TRUE, echo = TRUE, message = FALSE}
 data1 <- rnapol_score[,5:7]
 
 plot_triangle(data1,
                 output_table = FALSE,
+                col = c('#F8766d', '#C77CFF', '#00BFC4'),
                 label = TRUE,
                 push_text = 1.3)
 
-title(main = 'Gene Occupancy \n RNA Pol I vs RNA Pol II vs RNA Pol III' )
+title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III',
+        font.main = 1, 
+        cex = 0.8)
 ```
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Let's filter genes with low entropy and high scores (significant), these genes
-are occupied for either Pol-I, Pol-II and Pol-III
+Let's filter genes with low entropy and high scores (significant), these
+genes are occupied for either Pol-I, Pol-II and Pol-III
 
 ```{r trin_pol3_filt, eval = TRUE, echo = TRUE, message = FALSE}
 data1 <- rnapol_score[,5:7]
 
 plot_triangle(data1, 
                 output_table = FALSE, 
+                col = c('#F8766d', '#C77CFF', '#00BFC4'),
                 entropyrange = c(0,0.5),
                 label = TRUE,
                 push_text = 1.3)
 
-title(main = 'Gene Occupancy \n 
-        RNA Pol I vs RNA Pol II vs RNA Pol III - Specific' )
+title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III - Specific',
+        font.main = 1, 
+        cex = 0.8)
+
 ```
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Let's filter genes with high entropy and high scores (significant), these
-genes are occupied for the three polymerases, or for a pair of them (p.e, Pol
-I and Pol II or Pol II and Pol III).
+Let's filter genes with high entropy and high scores (significant),
+these genes are occupied for the three polymerases, or for a pair of
+them (p.e, Pol I and Pol II or Pol II and Pol III).
 
 ```{r trin_pol3_filt1, eval = TRUE, echo = TRUE, message = FALSE}
 data1 <- rnapol_score[,5:7]
 
 plot_triangle(data1, 
                 output_table = FALSE, 
+                col = c('#F8766d', '#C77CFF', '#00BFC4'),
                 entropyrange = c(1, Inf),
                 label = TRUE,
                 push_text = 1.3)
 
-title(main = 'Gene Occupancy \n 
-        RNA Pol I vs RNA Pol II vs RNA Pol III - Shared'  )
+title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III - Shared',
+        font.main = 1, 
+        cex = 0.8)
 
 ```
 
-Therefore as observations start getting closer to the center of the triangle
-and moving away from the vertices, those observations display shared features
+Therefore as observations start getting closer to the center of the
+triangle and moving away from the vertices, those observations display
+shared features
 
 ### N-Dimensions
 
-`plot_circle` is useful to visualize feature dominance between N-Numbers of
-variables. In this example, the function is comparing RNA-Pol III transcribed
-genes accessibility across tissues. By default the function plots all the
-points, but the user can adjust `entropy_range` values for subsetting specific
-type of observations.
+`plot_circle` is useful to visualize feature dominance between N-Numbers
+of variables. In this example, the function is comparing RNA-Pol III
+transcribed genes accessibility across tissues. By default the function
+plots all the points, but the user can adjust `entropy_range` values for
+subsetting specific type of observations.
 
-Briefly A total of P-1 (P = Number of Variables) circles are plotted and they
-represent degrees of dominance.
+Briefly A total of P-1 (P = Number of Variables) circles are plotted and
+they represent degrees of dominance.
 
--   The outtermost circle represents observations that are dominated only by
-one variable.
+-   The outtermost circle represents observations that are dominated
+    only by one variable.
 
--   The second outtermost circle represents observations that are dominated by
-two variables.
+-   The second outtermost circle represents observations that are
+    dominated by two variables.
 
--   The innermost circle represents observations that are uniform across all
-variables.
+-   The innermost circle represents observations that are uniform across
+    all variables.
 
 ```{r circ_tiss, eval = TRUE, echo = TRUE, message = FALSE}
 data("atac_tissue_score")
@@ -290,8 +309,7 @@ plot_circle(data1,
             n = 19, 
             output_table = FALSE, 
             point_size = 2) + 
-                ggtitle('Pol III transcribed genes  \n accessibility 
-                across tissues')
+ggtitle('Pol III transcribed genes \n accessibility across tissues')
 
 ```
 
@@ -306,8 +324,7 @@ plot_circle(data1,
             n = 19, 
             output_table = FALSE, 
             point_size = 2) + 
-                ggtitle('Pol III transcribed genes \n accessibility 
-                across tissues - Unique')
+ggtitle('Pol III transcribed genes \n accessibility across tissues - Unique')
 ```
 
 ```{r circ_tiss_filt2, eval = TRUE, echo = TRUE, message = FALSE}
@@ -319,11 +336,8 @@ plot_circle(data1,
             n = 19, 
             output_table = FALSE,
             point_size = 2) + 
-                ggtitle('Pol III transcribed genes \n  accessibility 
-                across tissues - Shared')
+ggtitle('Pol III transcribed genes \n accessibility across tissues - Shared')
 ```
-
-
 
 ## Session Info
 

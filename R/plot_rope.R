@@ -310,26 +310,28 @@ plot_rope <- function(x,
     #-------------------------#
     # set up an empty plot
     plot(
-        x     = 0,
-        y     = 0,
-        xlim  = px * push_text * 1.5,  # e.g. from -1.5..1.5 if push_text=1
-        pch   = 16,
-        xlab  = "",
-        ylab  = "",
-        frame.plot = FALSE,
-        ann   = TRUE,
-        axes  = FALSE,
-        col   = "transparent",
-        main  = title
+      x     = 0,
+      y     = 0,
+      xlim  = px * push_text,  # e.g. from -1.5..1.5 if push_text=1
+      pch   = 16,
+      xlab  = "",
+      ylab  = "",
+      frame.plot = FALSE,
+      ann   = TRUE,
+      axes  = FALSE,
+      col   = "transparent",
+      main  = title,
+      font.main = 1
     )
 
     # draw rope polygon
     polygon(
-        x = c(-1, -1, 1, 1),
-        y = rope_width * c(-1, 1, 1, -1),
-        col    = rope_color,
-        border = rope_border
+      x = c(-1, -1, 1, 1),
+      y = rope_width * c(-1, 1, 1, -1),
+      col    = rope_color,
+      border = 'transparent'
     )
+
 
     # 4a) Possibly plot background points
     if (plotAll) {
@@ -368,6 +370,14 @@ plot_rope <- function(x,
         cex = cex,
         col = if (pch[2] %in% 21:25) "black" else type2$color,
         bg  = if (pch[2] %in% 21:25) type2$color else "black"
+    )
+
+    # draw rope polygon
+    polygon(
+      x = c(-1, -1, 1, 1),
+      y = rope_width * c(-1, 1, 1, -1),
+      col    = 'transparent',
+      border = rope_border
     )
 
     #-------------------------#
