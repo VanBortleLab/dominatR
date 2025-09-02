@@ -15,7 +15,9 @@ plot_triangle(
   plotAll = TRUE,
   cex = 1,
   pch = 16,
-  assay_name = NULL
+  assay_name = NULL,
+  label = TRUE,
+  push_text = 1
 )
 }
 \arguments{
@@ -45,6 +47,10 @@ this interval. Default is \code{c(0,Inf)}}
 
 \item{assay_name}{(SummarizedExperiment only) Which assay to use. Default:
 the first assay.}
+
+\item{label}{Logical. If \code{TRUE}, label the vertices of the triangle}
+
+\item{push_text}{Numeric. Expands or contracts text label positions.}
 }
 \value{
 If \code{output_table = TRUE}, a \code{data.frame} with the original three

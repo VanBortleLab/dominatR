@@ -13,6 +13,7 @@
 #'   a \code{SummarizedExperiment}.
 #' @param column_name  Character. Names (or indices) of the three columns to
 #'   visualise. If \code{NULL}, the first three numeric columns are used.
+#' @param push_text Numeric. Expands or contracts text label positions.
 #' @param entropyrange Numeric. Keep points whose entropy lies inside
 #'   this interval. Default is \code{c(0,Inf)}
 #' @param maxvaluerange Numeric. Keep points whose values lies inside
@@ -24,6 +25,7 @@
 #' @param plotAll      Logical. If \code{TRUE}, filtered points are shown in
 #'   \code{background_col}; if \code{FALSE}, they are omitted.
 #' @param cex,pch      Base-graphics point size / symbol.
+#' @param label Logical. If \code{TRUE}, label the vertices of the triangle
 #' @param assay_name   (SummarizedExperiment only) Which assay to use. Default:
 #'   the first assay.
 #'
@@ -226,7 +228,9 @@ plot_triangle <- function(x,
                     plotAll         = TRUE,
                     cex             = 1,
                     pch             = 16,
-                    assay_name      = NULL)
+                    assay_name      = NULL,
+                    label = TRUE,
+                    push_text     = 1)
 {
     #-------------------------#
     # 1) Acquire / check data
@@ -328,8 +332,8 @@ plot_triangle <- function(x,
     #-------------------------#
     par(pty = "s")
     plot(
-        c(1, -1),
-        c(1, -1),
+        c(1.5, -1.5),
+        c(1.5, -1.5),
         type = "n",
         axes = FALSE,
         xlab = "",
@@ -338,6 +342,15 @@ plot_triangle <- function(x,
         ann = FALSE
     )
 
+    #-------------------------#
+    # 5) Optional Labels
+    #-------------------------#
+    if (label) {
+      # Label the original column names near the left & right of the rope
+      text(original_colnames,
+           x = verts$x * push_text,  # e.g. -1.2.. +1.2
+           y = verts$y * push_text)
+    }
 
 
     if (plotAll) {
