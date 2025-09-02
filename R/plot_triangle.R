@@ -346,10 +346,10 @@ plot_triangle <- function(x,
     # 5) Optional Labels
     #-------------------------#
     if (label) {
-      # Label the original column names near the left & right of the rope
-      text(original_colnames,
-           x = verts$x * push_text,  # e.g. -1.2.. +1.2
-           y = verts$y * push_text)
+        # Label the original column names near the left & right of the rope
+        text(original_colnames,
+                x = verts$x * push_text,
+                y = verts$y * push_text)
     }
 
 

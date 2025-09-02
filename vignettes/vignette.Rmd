@@ -11,14 +11,13 @@ vignette: >
 ```{r setup, include=FALSE}
 library(knitr)
 opts_chunk$set(
-      collapse = TRUE,
-      comment = "#>", 
-      fig.align = 'center',
-      warning = FALSE, 
-      message = FALSE,
-      fig.width  = 7,    
-      fig.height = 5
-  
+        collapse = TRUE,
+        comment = "#>", 
+        fig.align = 'center',
+        warning = FALSE, 
+        message = FALSE,
+        fig.width  = 7,    
+        fig.height = 5
 )
 
 library(dominatR)
@@ -149,11 +148,14 @@ data("rnapol_score")
 
 data1 <- rnapol_score[,6:7]
 
-plot_rope(data1,push_text = 2, 
-          output_table = FALSE, 
-          title = 'Gene Occupancy 
-          \n RNA Pol II vs RNA Pol III' , 
-          rope_width = 0.5)
+plot_rope(
+        data1,
+        push_text = 2,
+        output_table = FALSE,
+        title = 'Gene Occupancy
+                    \n RNA Pol II vs RNA Pol III' ,
+        rope_width = 0.5
+)
 ```
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -163,13 +165,16 @@ are occupied for either Pol-II and Pol-III
 
 ```{r rope_pol3_filt, eval = TRUE, echo = TRUE, message = FALSE}
 
-plot_rope(data1,push_text = 2, 
-          output_table = FALSE, 
-          title = 'Gene Occupancy 
-          \n RNA Pol II vs RNA Pol III - Specific' , 
-          rope_width = 0.5, 
-          entropyrange = c(0,0.5), 
-          maxvaluerange = c(1.3, Inf))
+plot_rope(
+        data1,
+        push_text = 2,
+        output_table = FALSE,
+        title = 'Gene Occupancy
+                \n RNA Pol II vs RNA Pol III - Specific' ,
+        rope_width = 0.5,
+        entropyrange = c(0, 0.5),
+        maxvaluerange = c(1.3, Inf)
+)
 ```
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -179,12 +184,16 @@ genes are occupied for both Pol-II and Pol-III
 
 ```{r rope_pol3_filt1, eval = TRUE, echo = TRUE, message = FALSE}
 
-plot_rope(data1,push_text = 2, 
-          output_table = FALSE, 
-          title = 'Gene Occupancy RNA Pol II vs RNA Pol III - Shared' , 
-          rope_width = 0.5, 
-          entropyrange = c(0.8,1), 
-          maxvaluerange = c(1.3, Inf))
+plot_rope(
+        data1,
+        push_text = 2,
+        output_table = FALSE,
+        title = 'Gene Occupancy RNA Pol II vs
+                RNA Pol III - Shared' ,
+        rope_width = 0.5,
+        entropyrange = c(0.8, 1),
+        maxvaluerange = c(1.3, Inf)
+)
 
 ```
 
@@ -200,10 +209,10 @@ default the function plots all the points, but the user can adjust
 ```{r trin_pol3, eval = TRUE, echo = TRUE, message = FALSE}
 data1 <- rnapol_score[,5:7]
 
-plot_triangle(data1, 
-              output_table = FALSE, 
-              label = TRUE,
-              push_text = 1.3)
+plot_triangle(data1,
+                output_table = FALSE,
+                label = TRUE,
+                push_text = 1.3)
 
 title(main = 'Gene Occupancy \n RNA Pol I vs RNA Pol II vs RNA Pol III' )
 ```
@@ -217,13 +226,13 @@ are occupied for either Pol-I, Pol-II and Pol-III
 data1 <- rnapol_score[,5:7]
 
 plot_triangle(data1, 
-              output_table = FALSE, 
-              entropyrange = c(0,0.5),
-              label = TRUE,
-              push_text = 1.3)
+                output_table = FALSE, 
+                entropyrange = c(0,0.5),
+                label = TRUE,
+                push_text = 1.3)
 
 title(main = 'Gene Occupancy \n 
-      RNA Pol I vs RNA Pol II vs RNA Pol III - Specific' )
+        RNA Pol I vs RNA Pol II vs RNA Pol III - Specific' )
 ```
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -236,13 +245,13 @@ I and Pol II or Pol II and Pol III).
 data1 <- rnapol_score[,5:7]
 
 plot_triangle(data1, 
-              output_table = FALSE, 
-              entropyrange = c(1, Inf),
-              label = TRUE,
-              push_text = 1.3)
+                output_table = FALSE, 
+                entropyrange = c(1, Inf),
+                label = TRUE,
+                push_text = 1.3)
 
 title(main = 'Gene Occupancy \n 
-      RNA Pol I vs RNA Pol II vs RNA Pol III - Shared'  )
+        RNA Pol I vs RNA Pol II vs RNA Pol III - Shared'  )
 
 ```
 
@@ -281,7 +290,8 @@ plot_circle(data1,
             n = 19, 
             output_table = FALSE, 
             point_size = 2) + 
-  ggtitle('Pol III transcribed genes  \n accessibility across tissues')
+                ggtitle('Pol III transcribed genes  \n accessibility 
+                across tissues')
 
 ```
 
@@ -296,7 +306,8 @@ plot_circle(data1,
             n = 19, 
             output_table = FALSE, 
             point_size = 2) + 
-  ggtitle('Pol III transcribed genes \n accessibility across tissues - Unique')
+                ggtitle('Pol III transcribed genes \n accessibility 
+                across tissues - Unique')
 ```
 
 ```{r circ_tiss_filt2, eval = TRUE, echo = TRUE, message = FALSE}
@@ -308,7 +319,8 @@ plot_circle(data1,
             n = 19, 
             output_table = FALSE,
             point_size = 2) + 
-  ggtitle('Pol III transcribed genes \n  accessibility across tissues - Shared')
+                ggtitle('Pol III transcribed genes \n  accessibility 
+                across tissues - Shared')
 ```
 
 
