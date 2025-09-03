@@ -20,7 +20,6 @@ plot_rope(
   maxvaluerange = c(0, Inf),
   plotAll = TRUE,
   label = TRUE,
-  title = "title",
   output_table = TRUE,
   assay_name = NULL
 )
@@ -67,8 +66,6 @@ outside this range become background color.}
 
 \item{label}{Logical. If \code{TRUE}, label the two columns near the rope
 ends.}
-
-\item{title}{Character. Plot title.}
 
 \item{output_table}{Logical. If \code{TRUE}, return the processed data
 frame with added columns.}

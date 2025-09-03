@@ -308,24 +308,24 @@ plot_rope <- function(x,
     #-------------------------#
     # set up an empty plot
     plot(
-      x     = 0,
-      y     = 0,
-      xlim  = px * push_text,  # e.g. from -1.5..1.5 if push_text=1
-      pch   = 16,
-      xlab  = "",
-      ylab  = "",
-      frame.plot = FALSE,
-      ann   = TRUE,
-      axes  = FALSE,
-      col   = "transparent"
+        x     = 0,
+        y     = 0,
+        xlim  = px * push_text,  # e.g. from -1.5..1.5 if push_text=1
+        pch   = 16,
+        xlab  = "",
+        ylab  = "",
+        frame.plot = FALSE,
+        ann   = TRUE,
+        axes  = FALSE,
+        col   = "transparent"
     )
 
     # draw rope polygon
     polygon(
-      x = c(-1, -1, 1, 1),
-      y = rope_width * c(-1, 1, 1, -1),
-      col    = rope_color,
-      border = 'transparent'
+        x = c(-1, -1, 1, 1),
+        y = rope_width * c(-1, 1, 1, -1),
+        col    = rope_color,
+        border = 'transparent'
     )
 
 
@@ -370,10 +370,10 @@ plot_rope <- function(x,
 
     # draw rope polygon
     polygon(
-      x = c(-1, -1, 1, 1),
-      y = rope_width * c(-1, 1, 1, -1),
-      col    = 'transparent',
-      border = rope_border
+        x = c(-1, -1, 1, 1),
+        y = rope_width * c(-1, 1, 1, -1),
+        col    = 'transparent',
+        border = rope_border
     )
 
     #-------------------------#

@@ -9,7 +9,6 @@ test_that("plot_rope returns an augmented data frame for ordinary data", {
   res <- plot_rope(tbl,
                    push_text     = 1,
                    rope_width    = 1,
-                   title         = "test-plot",
                    output_table  = TRUE)
 
   ##  --- structural checks ---------------------------------
@@ -41,7 +40,6 @@ test_that("plot_rope handles efficiently data according to an entropy range", {
   res <- plot_rope(tbl,
                    push_text     = 1,
                    rope_width    = 1,
-                   title         = "test-plot",
                    entropyrange = c(0,0.2),
                    output_table  = TRUE)
 
@@ -69,7 +67,6 @@ test_that("plot_rope handles efficiently data according to an entropy range and 
   res <- plot_rope(tbl,
                    push_text     = 1,
                    rope_width    = 1,
-                   title         = "test-plot",
                    entropyrange = c(0,0.2),
                    maxvaluerange = c(0,50),
                    output_table  = TRUE)

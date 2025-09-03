@@ -78,7 +78,7 @@
 #'
 #' # Only use a random subset of 1000 rows
 #' set.seed(123)
-#' idx <- sample(seq_len(nrow(se)), size = min(1000, nrow(se)))
+#' idx <- sample(seq_len(nrow(se)), size = min(500, nrow(se)))
 #' se <- se[idx, ]
 #'
 #' ## Normalize the data first using tpm_normalization
