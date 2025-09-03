@@ -35,7 +35,6 @@
 #' \code{col_bg} color. If \code{FALSE}, only highlight active points.
 #' @param label Logical. If \code{TRUE}, label the two columns near the rope
 #' ends.
-#' @param title Character. Plot title.
 #' @param output_table Logical. If \code{TRUE}, return the processed data
 #' frame with added columns.
 #' @param assay_name (SummarizedExperiment only) Name of the assay containing
@@ -214,7 +213,6 @@ plot_rope <- function(x,
                     maxvaluerange = c(0, Inf),
                     plotAll       = TRUE,
                     label         = TRUE,
-                    title         = "title",
                     output_table  = TRUE,
                     assay_name    = NULL)
 {
@@ -319,9 +317,7 @@ plot_rope <- function(x,
       frame.plot = FALSE,
       ann   = TRUE,
       axes  = FALSE,
-      col   = "transparent",
-      main  = title,
-      font.main = 1
+      col   = "transparent"
     )
 
     # draw rope polygon
@@ -386,7 +382,7 @@ plot_rope <- function(x,
     if (label) {
         # Label the original column names near the left & right of the rope
         text(original_colnames,
-            x = px * push_text * 1.2,  # e.g. -1.2.. +1.2
+            x = px * push_text,  # e.g. -1.2.. +1.2
             y = py)
     }
 

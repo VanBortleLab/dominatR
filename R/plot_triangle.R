@@ -358,15 +358,20 @@ plot_triangle <- function(x,
         graphics::points(data$comx[idx],
                         data$comy[idx],
                         col = "whitesmoke",
+                        bg = "whitesmoke",
                         pch = pch,
                         cex = cex)
     }
     idx <- data$color != "whitesmoke"
     graphics::points(data$comx[idx],
                     data$comy[idx],
-                    col = data$color[idx],
+                    col = if(pch %in% 21:25) 'black' else
+                    data$color[idx],
+                    bg = if(pch %in% 21:25) data$color[idx] else
+                    'black',
                     pch = pch,
                     cex = cex)
+
 
     graphics::polygon(verts$x,
                     verts$y,

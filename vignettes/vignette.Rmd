@@ -30,11 +30,12 @@ library(ggplot2)
 
 # Overview
 
-<img src="../man/figures/dominatR_logo.png" align="left" width="163"/>
+<img src="../man/figures/dominatR_logo.png" align="left" width="132"/>
 
 The `dominatR` package provides a flexible suite for feature dominance
 visualization, it uses Shanon's entropy as method for assigning feature
-dominance.
+dominance. The broad idea of dominance visualization relies on the
+spatial localization of observations at the extremes.
 
 Moreover the package offers tools for normalization and it is compatible
 with common data structures like `matrix`, `data.frame`, and
@@ -157,13 +158,17 @@ data1 <- rnapol_score[,6:7]
 
 plot_rope(
         data1, 
-        pch = c(19, 19), 
-        push_text = 1,
+        rope_color = 'white',
+        pch = c(21, 21), 
+        push_text = 1.2,
         col = c('#F8766d', '#C77CFF'),
         output_table = FALSE,
-        title = 'Gene Occupancy RNA Pol II vs RNA Pol III' ,
         rope_width = 1
 )
+
+title(main = 'Gene Occupancy RNA Pol II vs RNA Pol III',
+        font.main = 1, 
+        cex = 0.5)
 ```
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -175,15 +180,20 @@ genes are occupied for either Pol-II and Pol-III
 
 plot_rope(
         data1, 
-        pch = c(19, 19), 
+        rope_color = 'white',
+        pch = c(21, 21), 
         col = c('#F8766d', '#C77CFF'),
-        push_text = 1,
+        push_text = 1.2,
         output_table = FALSE,
-        title = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Specific' ,
         rope_width = 1,
         entropyrange = c(0, 0.5),
         maxvaluerange = c(1.3, Inf)
 )
+
+
+title(main = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Specific',
+        font.main = 1, 
+        cex = 0.5)
 ```
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -195,15 +205,19 @@ these genes are occupied for both Pol-II and Pol-III
 
 plot_rope(
         data1,
-        pch = c(19, 19), 
-        push_text = 1,
+        pch = c(21,21), 
+        push_text = 1.2,
+        rope_color = 'white',
         col = c('#F8766d', '#C77CFF'),
         output_table = FALSE,
-        title = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Shared' ,
         rope_width = 1,
         entropyrange = c(0.8, 1),
         maxvaluerange = c(1.3, Inf)
 )
+
+title(main = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Shared',
+        font.main = 1, 
+        cex = 0.5)
 
 ```
 
@@ -222,12 +236,12 @@ data1 <- rnapol_score[,5:7]
 plot_triangle(data1,
                 output_table = FALSE,
                 col = c('#F8766d', '#C77CFF', '#00BFC4'),
-                label = TRUE,
+                label = TRUE, pch = 21, 
                 push_text = 1.3)
 
 title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III',
         font.main = 1, 
-        cex = 0.8)
+        cex = 0.5)
 ```
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -242,12 +256,12 @@ plot_triangle(data1,
                 output_table = FALSE, 
                 col = c('#F8766d', '#C77CFF', '#00BFC4'),
                 entropyrange = c(0,0.5),
-                label = TRUE,
+                label = TRUE, pch = 21,
                 push_text = 1.3)
 
 title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III - Specific',
         font.main = 1, 
-        cex = 0.8)
+        cex = 0.5)
 
 ```
 
@@ -263,13 +277,13 @@ data1 <- rnapol_score[,5:7]
 plot_triangle(data1, 
                 output_table = FALSE, 
                 col = c('#F8766d', '#C77CFF', '#00BFC4'),
-                entropyrange = c(1, Inf),
-                label = TRUE,
+                entropyrange = c(1.5, Inf),
+                label = TRUE, pch = 21,
                 push_text = 1.3)
 
 title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III - Shared',
         font.main = 1, 
-        cex = 0.8)
+        cex = 0.5)
 
 ```
 
@@ -305,10 +319,11 @@ data1 = atac_tissue_score[,8:26]
 
 
 plot_circle(data1, 
+            point_line_colors = rep('black', 19),
             magnituderange = c(1, Inf),
             n = 19, 
             output_table = FALSE, 
-            point_size = 2) + 
+            point_size = 3) + 
 ggtitle('Pol III transcribed genes \n accessibility across tissues')
 
 ```
@@ -318,12 +333,13 @@ data("atac_tissue_score")
 
 
 plot_circle(data1, 
+            point_line_colors = rep('black', 19),
             entropyrange = c(0,1), 
             magnituderange = c(1, Inf),
             straight_points = FALSE, 
             n = 19, 
             output_table = FALSE, 
-            point_size = 2) + 
+            point_size = 3) + 
 ggtitle('Pol III transcribed genes \n accessibility across tissues - Unique')
 ```
 
@@ -331,11 +347,12 @@ ggtitle('Pol III transcribed genes \n accessibility across tissues - Unique')
 data("atac_tissue_score")
 
 plot_circle(data1, 
+            point_line_colors = rep('black', 19),
             entropyrange = c(4, Inf),
             magnituderange = c(1, Inf),
             n = 19, 
             output_table = FALSE,
-            point_size = 2) + 
+            point_size = 3) + 
 ggtitle('Pol III transcribed genes \n accessibility across tissues - Shared')
 ```
 
