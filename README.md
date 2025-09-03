@@ -1,10 +1,10 @@
 <img src="man/figures/dominatR_header.png" width="1200px"/>
 
-## Overview
+# Overview
 
 **dominatR** is an R package for quantifying and visualizing feature dominance in datasets, it is able to integrate dataframes, matrices and SummarizedExperiment objects. dominatR makes use of Shannon's entropy to identify features that are dominated within a particular category or condition.
 
-### Features
+## Features
 
 -   **Built-in normalization methods:** If desired, feature counts can be normalized across conditions using built-in functions for quantile normalization, min-max normalization, counts per million (cpm), reads per kb per million (rpkm), transcript per million (tpm), and others.
 
@@ -12,7 +12,7 @@
 
 -   **Feature dominance plots:** Generate informative and customizable plots that highlight feature dominance, aiding data interpretation and communication. From 2 dimensions to N dimensions
 
-## Installation
+# Installation
 
 dominatR can be installed from GitHub using the `devtools` package:
 
@@ -24,7 +24,7 @@ if (!require(devtools)) install.packages("devtools")
 devtools::install_github("VanBortleLab/dominatR")
 ```
 
-## Usage
+# Usage
 
 ```{r}
 #load libraries
@@ -34,7 +34,7 @@ library('SummarizedExperiment')
 library('airway')
 ```
 
-### **Normalization**
+## **Normalization**
 
 ```{r}
 data(airway)
@@ -46,13 +46,13 @@ se = airway
 count_mat <- assay(se)
 ```
 
-#### *A dataframe/matrix*
+### *A dataframe/matrix*
 
 ```{r}
 count_min <- quantile_normalization(count_mat, new_min = 0, new_max = 1)
 ```
 
-#### *A summarized experiment*
+### *A summarized experiment*
 
 ```{r}
 
@@ -63,11 +63,11 @@ se1 <- quantile_normalization(se)
 se2 <- quantile_normalization(se, new_assay_name = "minmax_counts")
 ```
 
-### **Feature dominance plots**
+## **Feature dominance plots**
 
 The principle for feature dominance plots follows the idea that **observations dominated** by a variable will be **located in close proximity to the edge of the respective shape.** The plots provide many aesthetic attributes to filter genes based on their entropy scores and magnitude values along with coloring and dataframe retrieval containing the information related to the analysis.
 
-#### *Two dimensions - `plot_rope`*
+### *Two dimensions - `plot_rope`*
 
 Observations that lie at the center of the line are shared across the two variables.
 
@@ -101,7 +101,7 @@ title(main = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Specific',
 
 ![](man/figures/2d.png)
 
-#### *Three dimensions - `plot_triangle`*
+### *Three dimensions - `plot_triangle`*
 
 Observations that lie at the center of the triangle are shared across the three variables.
 
@@ -128,7 +128,7 @@ title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III - Specific',
 
 ![](man/figures/3d.png)
 
-#### *N-dimensions -* `plot_circle`
+### *N-dimensions -* `plot_circle`
 
 Observations that lie at the center of the circle are shared across the N variables.
 
@@ -152,6 +152,6 @@ ggtitle('Pol III transcribed genes \n accessibility across tissues')
 
 ![](man/figures/nd.png)
 
-### Note
+## Note
 
-`dominatR` does not compute any significance/p-values for any observation. It serves as a tool for effective data visualization where dominance patterns serve of interest.
+`dominatR` does not compute any significance/p-values. It serves as a tool for effective data visualization where dominance patterns serve of interest.
