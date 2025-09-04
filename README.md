@@ -21,7 +21,7 @@ dominatR can be installed from GitHub using the `devtools` package:
 if (!require(devtools)) install.packages("devtools")
 
 # Install dominatR from GitHub
-devtools::install_github("VanBortleLab/dominatR")
+devtools::install_github("VanBortleLab/dominatR", build_vignettes = TRUE)
 ```
 
 # Usage
@@ -46,10 +46,13 @@ se = airway
 count_mat <- assay(se)
 ```
 
+For normalization, the package is able to integrate dataframes and summarized experiment objects. If using a `dataframe` we recommend having a numerical one. For a `summarizedexperiment` object you can provide the name of the assay you want to normalize and a new assay name to store the normalized data by using the `assay_nname` and `new_assay_name` attributes respectively. If this is not provided, the first assay in the object will be replaced. 
+
 ### A dataframe/matrix
 
+
 ``` r
-count_min <- quantile_normalization(count_mat, new_min = 0, new_max = 1)
+count_min <- quantile_normalization(count_mat)
 ```
 
 ### A summarized experiment
@@ -60,7 +63,7 @@ count_min <- quantile_normalization(count_mat, new_min = 0, new_max = 1)
 se1 <- quantile_normalization(se)
 
 # Option B: Write to a new assay slot
-se2 <- quantile_normalization(se, new_assay_name = "minmax_counts")
+se2 <- quantile_normalization(se, new_assay_name = "quantile_counts")
 ```
 
 ## **Feature dominance plots**
