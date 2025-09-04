@@ -26,7 +26,7 @@ devtools::install_github("VanBortleLab/dominatR")
 
 # Usage
 
-```{r}
+``` r
 #load libraries
 library('dominatR')
 library('dominatRData')
@@ -36,7 +36,7 @@ library('airway')
 
 ## **Normalization**
 
-```{r}
+``` r
 data(airway)
 
 ##Saving the summarizedexperiment as se
@@ -48,13 +48,13 @@ count_mat <- assay(se)
 
 ### A dataframe/matrix
 
-```{r}
+``` r
 count_min <- quantile_normalization(count_mat, new_min = 0, new_max = 1)
 ```
 
 ### A summarized experiment
 
-```{r}
+``` r
 
 # Option A: Overwrite the default assay
 se1 <- quantile_normalization(se)
@@ -73,7 +73,7 @@ Observations that lie at the center of the line are shared across the two variab
 
 Observations that lie at the extreme of the line are dominated by the respective variable
 
-```{r}
+``` r
 data("rnapol_score")
 
 # Subsetting the two columns of interest, can also be specified in the function by 
@@ -107,7 +107,7 @@ Observations that lie at the center of the triangle are shared across the three 
 
 Observations that lie at the vertices are dominated by the respective variable
 
-```{r}
+``` r
 data("rnapol_score")
 
 # Subsetting the two columns of interest, can also be specified in the function by 
@@ -134,7 +134,7 @@ Observations that lie at the center of the circle are shared across the N variab
 
 Observations that lie at the edge of the circle on each polygon are dominated by the respective variable
 
-```{r}
+``` r
 data("atac_tissue_score")
 
 ### subsetting only a set of numerical columns
