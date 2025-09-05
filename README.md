@@ -2,15 +2,18 @@
 
 # Overview
 
-**dominatR** is an R package for quantifying and visualizing feature dominance in datasets, it is able to integrate dataframes, matrices and SummarizedExperiment objects. dominatR makes use of Shannon's entropy to identify features that are dominated within a particular category or condition.
+`dominatR` is a genomic data visualization package for R. In brief, `dominatR` applies concepts drawn from physics - such as *center of mass* from classical mechanics and *Shannon's entropy* from statistical mechanics - to effectively visualize features (e.g. genes) that are present within a specific context or condition (e.g. tissue-specific expression). `dominatR` is able to integrate dataframes, matrices and `SummarizedExperiment` objects, perform a number of common genomic normalization methods, compute center of mass, entropy, and categorical entropy values, and generate customizable plots that serve to highlight context-relevant feature dominance.   
+
+Below, we highlight the utility of `dominatR` with specific examples, such as three-way (triangle) visualization of RNA polymerase I, II, and III genomic occupancy dominance at enzyme-specific gene targets ([Rajendra K C et al., Molecular Cell 2024](https://www.sciencedirect.com/science/article/pii/S1097276524007718?dgcid=author)), or such as 19-way (circular) visualization of tissue-specific gene accessibility patterns at canonical RNA Pol III-transcribed genes ([Simon Lizarazo et al., 2025 (preprint)](https://www.biorxiv.org/content/10.1101/2025.08.28.672650v1)).  
+
 
 ## Features
 
--   **Built-in normalization methods:** If desired, feature counts can be normalized across conditions using built-in functions for quantile normalization, min-max normalization, counts per million (cpm), reads per kb per million (rpkm), transcript per million (tpm), and others.
+-   **Built-in normalization methods:** If desired, feature counts can be normalized across conditions using built-in functions for quantile normalization, min-max normalization, counts per million (CPM), reads per kb per million (RPKM), and transcript per million (TPM).
 
--   **Categorical entropy calculation:** Quickly identify features that are specific to a particular category or condition, as well as features that are relatively uniform across conditions
+-   **Categorical entropy calculation:** Quickly identify features that are specific to a particular category or condition, as well as features that are relatively uniform across conditions.
 
--   **Feature dominance plots:** Generate informative and customizable plots that highlight feature dominance, aiding data interpretation and communication. From 2 dimensions to N dimensions
+-   **Feature dominance plots:** Generate informative and customizable plots that highlight feature dominance, aiding data interpretation and communication. From 2 dimensions to N dimensions.
 
 # Installation
 
@@ -157,4 +160,4 @@ ggtitle('Pol III transcribed genes \n accessibility across tissues')
 
 ## Note
 
-`dominatR` does not compute any significance/p-values. It serves as a tool for effective data visualization where dominance patterns serve of interest.
+`dominatR` serves as a tool for effective data normalization and visualization and does not perform significance testing. However, feature-related statistics derived from other methods may be incorporated through customization of `plot_rope()`, `plot_triangle()`, and `plot_circle()`. 
