@@ -2,9 +2,9 @@
 
 # Overview
 
-`dominatR` is a genomic data visualization package for R. In brief, `dominatR` applies concepts drawn from physics - such as *center of mass* from classical mechanics and *Shannon's entropy* from statistical mechanics - to effectively visualize features (e.g. genes) that are present within a specific context or condition (e.g. tissue-specific expression). `dominatR` is able to integrate dataframes, matrices and `SummarizedExperiment` objects, perform a number of common genomic normalization methods, compute center of mass, entropy, and categorical entropy values, and generate customizable plots that serve to highlight context-relevant feature dominance.   
+`dominatR` is a genomic data visualization package for R. In brief, `dominatR` applies concepts drawn from physics - such as *center of mass* from classical mechanics and *Shannon's entropy* from statistical mechanics - to effectively visualize features (e.g. genes) that are present within a specific context or condition (e.g. tissue-specific expression). `dominatR` is able to integrate `dataframes`, `matrices` and `SummarizedExperiment` objects, perform a number of common genomic normalization methods, compute center of mass, entropy, and categorical entropy values, and generate customizable plots that serve to highlight context-relevant feature dominance.   
 
-Below, we highlight the utility of `dominatR` with specific examples, such as three-way (triangle) visualization of RNA polymerase I, II, and III genomic occupancy dominance at enzyme-specific gene targets ([Rajendra K C et al., Molecular Cell 2024](https://www.sciencedirect.com/science/article/pii/S1097276524007718?dgcid=author)), or such as 19-way (circular) visualization of tissue-specific gene accessibility patterns at canonical RNA Pol III-transcribed genes ([Simon Lizarazo et al., 2025 (preprint)](https://www.biorxiv.org/content/10.1101/2025.08.28.672650v1)).  
+Below, we highlight the utility of `dominatR` with specific examples, such as three-way (triangle) visualization of RNA polymerase I, II, and III genomic occupancy dominance at enzyme-specific gene targets [(Rajendra K C et al., 2024 Molecular Cell)](https://www.sciencedirect.com/science/article/pii/S1097276524007718?dgcid=author)), or such as 19-way (circular) visualization of tissue-specific gene accessibility patterns at canonical RNA Pol III-transcribed genes [(Simon Lizarazo et al., 2025 bioRxiv preprint)](https://www.biorxiv.org/content/10.1101/2025.08.28.672650v1)).  
 
 
 ## Features
@@ -160,7 +160,7 @@ ggtitle('Pol III transcribed genes \n accessibility across tissues')
 
 ## Note
 
-`dominatR` serves as a tool for effective data normalization and visualization and does not perform significance testing. However, feature-related statistics derived from other methods may be incorporated through entropy calculation and visualization on features with noted significance (for example, prefiltered gene sets, such as shown for significant RNA Pol I, II, III occupancy or gene accessibility in the usage examples noted above).    
+`dominatR` serves strictly as a tool for effective data normalization and visualization and does not perform significance testing. However, feature-related statistics derived from other methods may be incorporated through entropy calculation and visualization on features with noted significance (for example, prefiltered gene sets, such as shown for significant RNA Pol I, II, III occupancy or gene accessibility in the usage examples noted above).    
     
       
       
