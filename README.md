@@ -156,7 +156,7 @@ plot_circle(data1,
 ggtitle('Pol III transcribed genes \n accessibility across tissues')
 ```
 
-![](man/figures/nd.png)
+![](man/figures/nd_new.png)
 
 ## Note
 
