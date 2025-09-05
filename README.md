@@ -105,7 +105,7 @@ title(main = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Specific',
         cex = 0.5)
 ```
 
-![](man/figures/2d.png)
+![](man/figures/3d.png)
 
 ### Three dimensions - `plot_triangle`
 
@@ -132,7 +132,7 @@ title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III - Specific',
         cex = 0.5)
 ```
 
-![](man/figures/3d.png)
+![](man/figures/2d.png)
 
 ### N-dimensions - `plot_circle`
 
