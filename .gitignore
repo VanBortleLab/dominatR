@@ -1,4 +1,7 @@
+man/.DS_Store
+man/figures/.DS_Store
 .Rproj.user
+*.Rproj
 .Rhistory
 .RData
 .Ruserdata
@@ -6,3 +9,5 @@ inst/doc
 /doc/
 /Meta/
 docs
+vignettes/*.html
+vignettes/*.R
