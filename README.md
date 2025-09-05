@@ -160,4 +160,8 @@ ggtitle('Pol III transcribed genes \n accessibility across tissues')
 
 ## Note
 
-`dominatR` serves as a tool for effective data normalization and visualization and does not perform significance testing. However, feature-related statistics derived from other methods may be incorporated through customization of `plot_rope()`, `plot_triangle()`, and `plot_circle()`. 
+`dominatR` serves as a tool for effective data normalization and visualization and does not perform significance testing. However, feature-related statistics derived from other methods may be incorporated through entropy calculation and visualization on features with noted significance (for example, prefiltered gene sets, such as shown for significant RNA Pol I, II, III occupancy or gene accessibility in the usage examples noted above).    
+    
+      
+      
+      
