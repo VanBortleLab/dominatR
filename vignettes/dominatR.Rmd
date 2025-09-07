@@ -32,9 +32,21 @@ library(ggplot2)
 
 <img src="../man/figures/dominatR_logo.png" align="right" width="220"/>
 
-`dominatR` is a genomic data visualization package that applies concepts drawn from physics - such as *center of mass* from classical mechanics and *Shannon's entropy* from statistical mechanics - to effectively visualize features (e.g. genes) that are present within a specific context or condition (e.g. tissue-specific gene expression). `dominatR` is able to integrate `dataframes`, `matrices` and `SummarizedExperiment` objects, perform a number of common genomic normalization methods, compute center of mass, entropy, and categorical entropy values, and generate customizable plots that serve to highlight context-relevant feature dominance. In all examples, dominance visualization is linked to the coordinate spatial localization of each data point, such that full feature dominance is projected at the radial extreme.  
+`dominatR` is a genomic data visualization package that applies concepts
+drawn from physics - such as *center of mass* from classical mechanics
+and *Shannon's entropy* from statistical mechanics - to effectively
+visualize features (e.g. genes) that are present within a specific
+context or condition (e.g. tissue-specific gene expression). `dominatR`
+is able to integrate `dataframes`, `matrices` and `SummarizedExperiment`
+objects, perform a number of common genomic normalization methods,
+compute center of mass, entropy, and categorical entropy values, and
+generate customizable plots that serve to highlight context-relevant
+feature dominance. In all examples, dominance visualization is linked to
+the coordinate spatial localization of each data point, such that full
+feature dominance is projected at the radial extreme.
 
-`dominatoR` package functions can be subgrouped into the following categories:
+`dominatoR` package functions can be subgrouped into the following
+categories:
 
 -   **Normalization Functions:** Contains basic normalization methods,
     such as:
@@ -67,18 +79,19 @@ library(ggplot2)
 
     -   `plot_circle`
 
-This vignette serves as a quick tutorial for using `dominatR`. Further descriptions and examples of
-customization and the additional features present in the package can be explored in the
-companion articles.
+This vignette serves as a quick tutorial for using `dominatR`. Further
+descriptions and examples of customization and the additional features
+present in the package can be explored in the companion articles.
 
-## Data normalization; computing and plotting feature dominance 
-       
-The data included in this vignette can be found in the `airway` dataset and the supplementary package `dominatRData`
-      
+## Data normalization; computing and plotting feature dominance
+
+The data included in this vignette can be found in the `airway` dataset
+and the supplementary package `dominatRData`
+
 ### Normalization functions (e.g. quantile normalization)
-     
-#### Example 1: `SummarizedExperiment` object   
-   
+
+#### Example 1: `SummarizedExperiment` object
+
 ```{r se_norm, eval = TRUE, echo = TRUE, message = FALSE}
 data("airway")
 
@@ -87,9 +100,9 @@ se = quantile_normalization(airway, new_assay_name = 'quantile_norma')
 head(se)
 head(assay(se, 'quantile_norma'))
 ```
-   
-#### Example 2: `dataframe` object     
-  
+
+#### Example 2: `dataframe` object
+
 ```{r df_norm, eval = TRUE, echo = TRUE, message = FALSE}
 data("atac_tissue_counts")
 
@@ -103,7 +116,7 @@ head(norm1[,1:10])
 
 ### Calculation functions (e.g. entropy)
 
-#### Example 1: `SummarizedExperiment` object   
+#### Example 1: `SummarizedExperiment` object
 
 ```{r se_entr, eval = TRUE, echo = TRUE, message = FALSE}
 
@@ -115,7 +128,7 @@ head(se)
 head(rowData(se))
 ```
 
-#### Example 2: `dataframe` object    
+#### Example 2: `dataframe` object
 
 ```{r df_entr, eval = TRUE, echo = TRUE, message = FALSE}
 
@@ -125,16 +138,17 @@ norm1 = entropy(norm)
 head(norm1[,10:20])
 ```
 
-### Visualization functions (2-, 3-, and N-dimensions)    
+### Visualization functions (2-, 3-, and N-dimensions)
 
-All `dominatR` package functions are compatible with `SummarizedExperiment` and `data.frame` objects. 
-This quick introduction will show examples using `data.frame` objects. Each function produces a
+All `dominatR` package functions are compatible with
+`SummarizedExperiment` and `data.frame` objects. This quick introduction
+will show examples using `data.frame` objects. Each function produces a
 graphic and a `data.frame` with the dominance results; setting the
-atribute `output_table = FALSE` will restrict the dataframe from being displayed. For 
-more details and examples on usage and aesthetics manipulation, refer to the articles in
-the visualization section.
+atribute `output_table = FALSE` will restrict the dataframe from being
+displayed. For more details and examples on usage and aesthetics
+manipulation, refer to the articles in the visualization section.
 
-#### Example 1: Two Dimensions with `plot_rope()`         
+#### Example 1: Two Dimensions with `plot_rope()`
 
 `plot_rope` is useful to visualize feature dominance between two
 variables. In this example the function is comparing dominance over gene
@@ -164,8 +178,9 @@ title(main = 'Gene Occupancy RNA Pol II vs RNA Pol III',
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Below, let's filter for genes with **low entropy** and high significance scores to
-visualize genes that are specifically occupied by either RNA Pol II or RNA Pol III
+Below, let's filter for genes with **low entropy** and high significance
+scores to visualize genes that are specifically occupied by either RNA
+Pol II or RNA Pol III
 
 ```{r rope_pol3_filt, eval = TRUE, echo = TRUE, message = FALSE}
 
@@ -189,8 +204,9 @@ title(main = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Specific',
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Below, let's filter for genes with **high entropy** and high significance scores to
-visualize genes that are specifically occupied by both RNA Pol II and RNA Pol III
+Below, let's filter for genes with **high entropy** and high
+significance scores to visualize genes that are specifically occupied by
+both RNA Pol II and RNA Pol III
 
 ```{r rope_pol3_filt1, eval = TRUE, echo = TRUE, message = FALSE}
 
@@ -212,14 +228,14 @@ title(main = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Shared',
 
 ```
 
-#### Example 2: Three Dimensions with `plot_triangle()`    
+#### Example 2: Three Dimensions with `plot_triangle()`
 
 `plot_triange` is useful to visualize feature dominance between three
 variables. In this example, the function is comparing dominance over
 gene occupancy for RNA Polymerase I, RNA Polymerase II and RNA
-Polymerase III. By default the function plots every data point, 
-but users can again adjust the `entropy_range` attribute 
-values to subset on observations within a specified range.
+Polymerase III. By default the function plots every data point, but
+users can again adjust the `entropy_range` attribute values to subset on
+observations within a specified range.
 
 ```{r trin_pol3, eval = TRUE, echo = TRUE, message = FALSE}
 data1 <- rnapol_score[,5:7]
@@ -237,8 +253,9 @@ title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III',
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Below, let's filter for genes with **low entropy** and high significance scores to
-visualize genes that are specifically occupied by either RNA Pol I, RNA Pol II, or RNA Pol III
+Below, let's filter for genes with **low entropy** and high significance
+scores to visualize genes that are specifically occupied by either RNA
+Pol I, RNA Pol II, or RNA Pol III
 
 ```{r trin_pol3_filt, eval = TRUE, echo = TRUE, message = FALSE}
 data1 <- rnapol_score[,5:7]
@@ -258,8 +275,10 @@ title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III - Specific',
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-Below, let's filter for genes with **high entropy** and high significance scores to
-visualize genes that are specifically occupied by all three RNA Pols or combinations of any 2 RNA Pols (e.g. RNA Pol I and RNA Pol II)
+Below, let's filter for genes with **high entropy** and high
+significance scores to visualize genes that are specifically occupied by
+all three RNA Pols or combinations of any 2 RNA Pols (e.g. RNA Pol I and
+RNA Pol II)
 
 ```{r trin_pol3_filt1, eval = TRUE, echo = TRUE, message = FALSE}
 data1 <- rnapol_score[,5:7]
@@ -277,12 +296,12 @@ title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III - Shared',
 
 ```
 
-Notice that as each data point gets closer to the center (and moving away from the vertices), the observation is characterized by higher entropy and is not dominated by a specific variable (in this case, by a specific RNA polymerase).    
-  
-  
-  
-  
-#### Example 3: N-Dimensions with `plot_circle()`    
+Notice that as each data point gets closer to the center (and moving
+away from the vertices), the observation is characterized by higher
+entropy and is not dominated by a specific variable (in this case, by a
+specific RNA polymerase).
+
+#### Example 3: N-Dimensions with `plot_circle()`
 
 `plot_circle` is useful to visualize feature dominance between N-Numbers
 of variables. In this example, the function is comparing RNA-Pol III
