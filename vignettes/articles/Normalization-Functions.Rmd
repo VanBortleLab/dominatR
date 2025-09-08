@@ -1,0 +1,220 @@
+---
+title: "Normalization Functions"
+---
+
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(
+        collapse = TRUE,
+        comment = "#>", 
+        fig.align = 'center',
+        warning = FALSE, 
+        message = FALSE
+)
+library(dominatR)
+library(airway)
+library(dominatRData)
+library(ggplot2)
+```
+
+# Data
+
+The data used in this article comes from only from the following source:
+
+1.  A `SummarizedExperiment` object from the library `airway`
+
+In this case we are using a single object given that it can be manipulated as a `SummarizedExperiment` or `data.frame`
+
+```{r data, eval = TRUE, echo = TRUE, message = FALSE}
+### summarized experiment
+data("airway")
+se <-airway
+```
+
+# Normalization Methods
+
+Normalization is critical for correcting technical biases and enabling meaningful biological comparisons.
+
+The package contains different normalization methods, some of them include a `log_transf` attribute that calculates the `log2(x+1)` of the normalized value if set to `TRUE`:
+
+-   `cpm_normalization`
+-   `minmax_normalization`
+-   `quantile_normalization`
+-   `rpkm_normalization`
+-   `tpm_normalization`
+
+Let's explore the usage of each normalization method on the `airway` data. 
+
+## Min-Max Normalization
+
+Min-Max normalization is a linear transformation technique that rescales each gene’s expression values to a specified range (typically [0, 1]). This normalization method is useful when you want to bring the data onto the same scale.
+
+Function Purpose:
+
+· Rescales each column to fit within a range [new_min, new_max].
+
+· Preserves the relative structure of values within each column.
+
+· Useful when different assays or samples have varying scales.
+
+### Example 1: Normalize a matrix
+
+```{r ex1, eval = TRUE, echo = TRUE, message = FALSE}
+# Prepare input matrix
+count_mat <- assay(se)
+
+# Apply min-max normalization
+se_minmax <- minmax_normalization(count_mat, new_min = 0, new_max = 1)
+
+# Inspect structure
+dim(se_minmax)
+summary(as.vector(se_minmax))
+head(se_minmax[, 1:5])
+```
+
+You can set new_min = 10 and new_max = 20 if your downstream application prefers values in a different scale:
+
+```{r}
+df_scaled <- minmax_normalization(count_mat, new_min = 10, new_max = 20)
+head(df_scaled)  # All columns now range from 10 to 20
+```
+
+### Example 2: Normalize a SummarizedExperiment
+
+```{r ex2, eval = TRUE, echo = TRUE, message = FALSE}
+se <- se
+
+# Option A: Overwrite the default assay
+se1 <- minmax_normalization(se)
+head(assay(se1))
+
+# Option B: Write to a new assay slot
+se2 <- minmax_normalization(se, new_assay_name = "minmax_counts")
+```
+
+By using the option `new_assay_name` it is possible to store the normalized data in a new assay in the summarizedexperiment object keeping the count matrix intact. If no name is provided upon normalization, then the function will overwrite the count matrix
+
+## Quantile Normalization
+
+Quantile normalization makes the distribution of values across all samples identical. This technique adjusts the data so that the rank distributions of the data across samples are equal.
+
+### Example 1: Normalize a matrix
+
+```{r ex3, eval = TRUE, echo = TRUE, message = FALSE}
+count_mat <- assay(se)
+
+se_quantile <- quantile_normalization(count_mat)
+
+## Check result
+dim((se_quantile))
+summary(as.vector(se_quantile))
+head(se_quantile[1:5, 1:5])
+
+```
+
+### Example 2: Normalize a summarized experiment
+
+```{r ex4, eval = TRUE, echo = TRUE, message = FALSE}
+## Apply quantile normalization to a SummarizedExperiment
+se_quantile <- quantile_normalization(se)
+
+## Check result
+dim(assay(se_quantile))
+summary(as.vector(assay(se_quantile)))
+head(assay(se_quantile)[1:5, 1:5])
+```
+
+## CPM Normalization
+
+The cpm_normalization() function rescales raw count data such that each column sums to one million. This makes count data comparable across samples of different sequencing depths.
+
+### Example 1: Normalize a data.frame
+
+```{r ex5, eval = TRUE, echo = TRUE, message = FALSE}
+df <- assay(se)
+# Normalize without log2-transform
+df_cpm <- cpm_normalization(df, log_trans = FALSE)
+head(df_cpm[, 1:5])
+
+# Normalize with log2-transform
+df_cpm_log <- cpm_normalization(df, log_trans = TRUE)
+head(df_cpm_log[, 1:5])
+```
+
+### Example 2: Normalize a SummarizedExperiment
+
+```{r ex6, eval = TRUE, echo = TRUE, message = FALSE}
+
+# Apply in-place normalization (overwrite assay)
+se1 <- cpm_normalization(se, log_trans = FALSE)
+head(assay(se1))
+
+# Save to a new assay slot
+se2 <- cpm_normalization(se, log_trans = TRUE, new_assay_name = 
+                            "cpm_logged")
+head(assay(se2, "cpm_logged"))
+
+```
+
+## RPKM Normalization
+
+Reads per kilobase per million (RPKM) normalization adjusts for both gene length and sequencing depth, making it particularly useful for RNA-Seq data. RPKM helps compare gene expression levels across genes of different lengths.
+
+### Example 1: Normalize a data.frame
+
+```{r ex6.1, eval = TRUE, echo = TRUE, message = FALSE}
+df <- assay(se)
+length <- rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+df_rpkm <- rpkm_normalization(df, gene_length = length)
+
+head(df_rpkm[, 1:5])
+```
+
+### Example 2: Normalize a SummarizedExperiment
+
+```{r ex7, eval = TRUE, echo = TRUE, message = FALSE}
+## Gene length needed
+rowData(se)$gene_length <- rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+
+## Apply RPKM normalization
+se_rpkm <- rpkm_normalization(se, gene_length, log_trans = TRUE)
+
+## Check the result
+dim(assay(se_rpkm)) 
+head(assay(se_rpkm)[1:5, 1:5])
+```
+
+## TPM Normalization
+
+Transcripts per million normalization.
+
+### Example 1: Normalize a data.frame
+
+```{r ex8, eval = TRUE, echo = TRUE, message = FALSE}
+df <- assay(se)
+length <- sample(c(400:800), nrow(df), replace = TRUE)
+df_tpm <- tpm_normalization(df, gene_length = length)
+
+head(df_tpm[, 1:5])
+```
+
+### Example 2: Normalize a SummarizedExperiment
+
+```{r ex9, eval = TRUE, echo = TRUE, message = FALSE}
+## Gene length needed
+rowData(se)$gene_length <- rowData(se)$gene_seq_end - rowData(se)$gene_seq_start
+
+## Apply RPKM normalization
+se_tpm <- tpm_normalization(se, gene_length, log_trans = TRUE)
+
+## Check the result
+dim(assay(se_tpm)) 
+head(assay(se_tpm)[1:5, 1:5])
+```
+
+### Session Info
+```{r session-info, echo=FALSE}
+sessionInfo()
+```
+

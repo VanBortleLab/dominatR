@@ -1,4 +1,20 @@
 url: ~
+
 template:
   bootstrap: 5
+  bootswatch: lumen
+
+reference:
+- title: 'Normalization methods'
+  contents:
+  - ends_with('normalization')
+- title: 'Calculation functions'
+  contents:
+  - centmass
+  - entropy
+  - Qentropy
+- title: 'Feature dominance plots'
+  contents:
+  - starts_with('plot')
+last_built: 2025-09-07T18:27Z
 
