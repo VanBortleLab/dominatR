@@ -1,0 +1,160 @@
+---
+title: "Calculating Entropy and Center of Mass"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup,  eval = TRUE, echo = TRUE, message = FALSE}
+library(dominatR)
+library(airway)
+library(dominatRData)
+library(ggplot2)
+```
+
+# Data
+
+The data used in this article comes from two different sources:
+
+1.  A `SummarizedExperiment` object from the library `airway`
+2.  A `data.frame` retrieved from the supplementary library `dominatRData`
+
+The purpose of using two different sources is meant to show the capacity of dominatR to process different objects.
+
+```{r}
+### summarized experiment
+data("airway")
+se <-airway
+
+# Only use a random subset of 500 rows
+set.seed(123)
+idx <- sample(seq_len(nrow(se)), size = min(500, nrow(se)))
+se <- se[idx, ]
+
+
+# dataframe
+data("rnapol_score")
+df1 = rnapol_score
+
+data("atac_tissue_score")
+df2 = atac_tissue_score
+
+```
+
+
+In the context of information theory, **entropy (Shannon Entropy)** is a metric used to measure the uncertainty associated with a set of variables. It’s value ranges from 0 to 𝑙𝑜𝑔(𝑁), where N is the total number of variables accounted for. Its interpretation is straightforward:
+
+1.  An observation with high entropy values is not uncertain, that observation is expected to occur at a high probability level, across all the variables. For example, Gene A if it is expressed in all the variables at the same levels will have a high entropy value.
+
+2.  An observation with low entropy values is uncertain, that observation is expected to occur at a high probability level, only in a set of few variables. For example, Gene B if it is expressed only in variable A or variable B and not in the rest of tissues will have a low entropy value.
+
+Entropy is calculated by using the following formula:
+
+$H(X) = -∑ p(x) * log2(p(x))$
+
+Where $p(x)$ is equal to the relative levels of a gene (g) in a specific variable (t). From this formula, it is possible to measure the categorical tissue specificity that is defined as:
+
+$Q_{(g|t)} = H(X) - log2(p(x))$
+
+This formula specifies a 'domination' value for a specific gene in a specific tissue. Therefore low values of $Q_{(g|t)}$ occurs when a gene or observation is mostly present in a small subset of tissues.
+
+In physics, **center of mass** is a way to summarize how a quantity (typically mass) is distributed across space. It represents the unique point where the weighted average of all positions, relative to their associated weights, balances out. For weights $w_i \ge 0$ at coordinates ${r}_i$​, the CoM is
+
+$CoM=\frac{∑_i​w_i​r_i}{∑_i​w_i}​​​$.
+
+For the context of this package, the weights are sample-level measurements (e.g gene expression) and the positions are user defined coordinates assigned to samples (For up to three dimensions). CoM summarizes where the observation is positioned in the coordinate system. Its interpretation is as follows:
+
+1.  An observation that is dominated by one sample, will be located near that sample's coordinate.
+2.  An observation that is uniformly distributed across samples, will be located near the geometric center of all sample coordinates.
+
+The package provides formulas that are useful to calculate the Entropy $H(X)$, 'Categorical' Entropy $Q_{(g|t)}$ and Center of Mass $CoM$:
+
+-   `entropy()`
+
+-   `Qentropy()`
+
+-   `centmass()`\
+
+## Center of Mass
+
+Center of mass is useful when using no more than 3 dimensions given that more than 3 dimensions are not representable in a bidimensional plane. The function requires specification of a set of coordinates, by default, the function uses `x_coord = c(0, 1, 0.5)` and `y_coord = c(0, 0, sqrt(3)/2)`, which correspond to an equilateral triangle. The function returns the pair of coordinates x and y for each observation representing the spatial location of the CoM as a data frame or as extra columns in `rowData()` is a SummarizedExperiment is used.
+
+### Example 1: A data.frame
+
+```{r}
+df = df1
+## calculating center of mass in the numerical functions
+df = centmass(df[,5:7])
+head(df)
+```
+
+### Example 2: A summarized Experiment
+
+```{r}
+# Subsetting 3 columns
+se2 = se[,1:3]
+se2 <- centmass(se2)
+
+head(rowData(se2))
+```
+
+## Entropy
+
+Entropy offers the benefit of calculating the levels of surprise of an observation across N-Variables. The function transforms a data frame into proportions and adds a column with the name Entropy. Nevertheless, if using a `SummarizedExperiment` object, there is an option for the user to store the proportions in a new assay and adds a column with the name Entropy in the `rowdata()`.
+
+### Example 1: A data.frame
+
+```{r}
+df = df1
+df = entropy(df)
+head(df)
+```
+
+### Example 2: A summarized Experiment
+
+```{r}
+# Subsetting 3 columns
+se2 = se
+se2 <- entropy(se2, new_assay_name = 'Entropy')
+
+head(rowData(se2))
+```
+
+## Categorical Entropy
+
+For calculating Categorical Entropy, it is required to compute first Entropy in the dataset of interest. If the object is a dataframe, the Entropy transformed dataframe will be subsequently transformed. If the object is a SummarizedExperiment, the dataset can be stored in a new assay.
+
+### Example 1: A data.frame
+
+```{r}
+df = df2 
+df = entropy(df)
+df = Qentropy(df)
+head(df[order(df$Heart),])
+```
+
+From this dataframe, it is possible to observe how the obserations `gene_9363`, `gene_1112`, `gene_2850` have low values of Qentropy emphasizing high score or normalized features in `Heart` when compared to the other samples.
+
+
+### Example 2: A summarized Experiment
+
+```{r}
+# Subsetting 3 columns
+se2 = se
+se2 <- entropy(se2, new_assay_name = 'Entropy')
+se2 <- Qentropy(se2, assay_name = 'Entropy', new_assay_name = 'Qentropy')
+
+head(assay(se2, 'Qentropy'))
+```
+
+
+### Session Info
+```{r session-info, echo=FALSE}
+sessionInfo()
+```
+
+

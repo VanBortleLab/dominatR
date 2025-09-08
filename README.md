@@ -103,7 +103,7 @@ title(main = 'Gene Occupancy \n RNA Pol II vs RNA Pol III - Specific',
         cex = 0.5)
 ```
 
-![](man/figures/2d_new.png)
+![Dominance in two dimensions](man/figures/2d_new.png)
 
 ### Three dimensions - `plot_triangle`
 
@@ -130,7 +130,7 @@ title(main = 'Gene Occupancy \n Pol I vs Pol II vs Pol III - Specific',
         cex = 0.5)
 ```
 
-![](man/figures/3d_new.png)
+![Dominance in three dimensions](man/figures/3d_new.png)
 
 ### N-dimensions - `plot_circle`
 
@@ -154,7 +154,7 @@ plot_circle(data1,
 ggtitle('Pol III transcribed genes \n accessibility across tissues')
 ```
 
-![](man/figures/nd_new.png)
+![Dominance in N Dimensions](man/figures/nd_new.png)
 
 ## Note
 
