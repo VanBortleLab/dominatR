@@ -1,4 +1,4 @@
-url: ~
+url: https://vanbortlelab.github.io/dominatR/
 
 template:
   bootstrap: 5
@@ -16,5 +16,3 @@ reference:
 - title: 'Feature dominance plots'
   contents:
   - starts_with('plot')
-last_built: 2025-09-07T18:27Z
-
