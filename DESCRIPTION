@@ -1,31 +1,10 @@
 Package: dominatR
 Title: Feature Dominance-based R Package for Genomic Data
 Version: 0.99.0
-Authors@R: c(
-    person(
-    given = "Simon", 
-    family = "Lizarazo", 
-    role = c("aut", "cre"), 
-    email = "silizarazoch@gmail.com", 
-    comment = c(ORCID = "0009-0001-8974-6225")
-    ),
-    person(
-    given = "Ethan", 
-    family = "Chen", 
-    role = c("ctb"), 
-    email = "yitian7@illinois.edu"
-    ),
-    person(
-    given = "Rajendra", 
-    family = "K C", 
-    role = c("aut")
-    ),
-    person(
-    given = "Kevin", 
-    family = "Van Bortle", 
-    role = c("aut", "cre", "cph"), 
-    email = "kvbortle@illinois.edu")
-    )
+Date: 2025-09-10
+Author: Simon Lizarazo [aut, cre], Ethan Chen [ctb], Rajendra K C [aut], Kevin Van Bortle [aut, cre, cph]
+Maintainer: Simon Lizarazo <silizarazoch@gmail.com>,
+            Kevin Van Bortle <kvbortle@illinois.edu>
 Description: dominatR is an R package for quantifying and visualizing feature dominance in datasets.  dominatR makes use of entropy-based triangular projections and compositional comparison metrics.
 License: MIT + file LICENSE
 URL: https://github.com/VanBortleLab/dominatR, https://vanbortlelab.github.io/dominatR/
