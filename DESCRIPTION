@@ -28,7 +28,7 @@ Authors@R: c(
     )
 Description: dominatR is an R package for quantifying and visualizing feature dominance in datasets.  dominatR makes use of entropy-based triangular projections and compositional comparison metrics.
 License: MIT + file LICENSE
-URL: https://github.com/VanBortleLab/dominatR
+URL: https://github.com/VanBortleLab/dominatR, https://vanbortlelab.github.io/dominatR/
 BugReports: https://github.com/VanBortleLab/dominatR/issues
 Encoding: UTF-8
 LazyData: false
