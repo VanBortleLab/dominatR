@@ -50,7 +50,7 @@ Imports:
     tidyr,
     ggforce,
     geomtextpath,
-    ggplot2
+    ggplot2,
     dominatRData
 Suggests:
     BiocStyle,
