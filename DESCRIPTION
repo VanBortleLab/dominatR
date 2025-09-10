@@ -51,12 +51,12 @@ Imports:
     ggforce,
     geomtextpath,
     ggplot2
+    dominatRData
 Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    dominatRData
 VignetteBuilder: knitr
 biocViews: Visualization, Normalization, Classification, GeneExpression
 Config/testthat/edition: 3
