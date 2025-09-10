@@ -18,12 +18,12 @@ Authors@R: c(
     person(
     given = "Rajendra", 
     family = "K C", 
-    role = c("ctb")
+    role = c("aut")
     ),
     person(
     given = "Kevin", 
     family = "Van Bortle", 
-    role = c("ctb"), 
+    role = c("aut", "cre", "cph"), 
     email = "kvbortle@illinois.edu")
     )
 Description: dominatR is an R package for quantifying and visualizing feature dominance in datasets.  dominatR makes use of entropy-based triangular projections and compositional comparison metrics.
