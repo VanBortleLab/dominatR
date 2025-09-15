@@ -51,16 +51,14 @@ Imports:
     tidyr,
     ggforce,
     geomtextpath,
-    ggplot2,
-    dominatRData
+    ggplot2
 Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
+    dominatRData
 VignetteBuilder: knitr
-Remotes:
-    github::VanBortleLab/dominatRData
 biocViews: Visualization, Normalization, Classification, GeneExpression
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2
