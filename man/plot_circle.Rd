@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_circle.R
 \name{plot_circle}
 \alias{plot_circle}
-\title{Circular Dominance Plot (N ≥ 3 variables)}
+\title{Circular Dominance Plot (More than 3 variables)}
 \usage{
 plot_circle(
   x,
@@ -91,7 +91,7 @@ Otherwise only the \code{ggplot} object is returned.
 \description{
 Produces a radial dominance plot in which each observation is located by:
 \itemize{
-  \item \strong{Angle (θ)} – the variable with the greatest value
+  \item \strong{Angle (t)} – the variable with the greatest value
         (ties broken at random).
   \item \strong{Radius (r)} – a monotone mapping of the row‐wise Shannon
         entropy: points with low entropy (one variable dominates)

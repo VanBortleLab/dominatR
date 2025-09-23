@@ -1,5 +1,6 @@
 man/.DS_Store
 man/figures/.DS_Store
+^man/figures$
 .Rproj.user
 *.Rproj
 .Rhistory
@@ -11,3 +12,6 @@ inst/doc
 docs
 vignettes/*.html
 vignettes/*.R
+.DS_Store
+*/.DS_Store
+

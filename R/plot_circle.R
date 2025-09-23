@@ -1,9 +1,9 @@
-#' Circular Dominance Plot (N ≥ 3 variables)
+#' Circular Dominance Plot (More than 3 variables)
 #'
 #' @description
 #' Produces a radial dominance plot in which each observation is located by:
 #' \itemize{
-#'   \item \strong{Angle (θ)} – the variable with the greatest value
+#'   \item \strong{Angle (t)} – the variable with the greatest value
 #'         (ties broken at random).
 #'   \item \strong{Radius (r)} – a monotone mapping of the row‐wise Shannon
 #'         entropy: points with low entropy (one variable dominates)
