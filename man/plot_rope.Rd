@@ -91,7 +91,7 @@ comparisons, e.g. gene expression in *A* and *B* conditions.
 }
 \details{
 The function expects two numeric columns. If the experiment has more than
-two columns, the name of the columns of interest can be specificed by using
+two columns, the name of the columns of interest can be specified by using
 the parameter \code{column_name}. If \code{x} is a
 \code{SummarizedExperiment}, it extracts the indicated assay and extracts
 the columns of interest

@@ -10,3 +10,4 @@
 ^vignettes/articles$
 ^\.github$
 ^man/figures$
+^tests/testthat/Rplots\\.pdf$

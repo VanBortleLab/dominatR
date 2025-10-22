@@ -83,6 +83,16 @@ This vignette serves as a quick tutorial for using `dominatR`. Further
 descriptions and examples of customization and the additional features
 present in the package can be explored in the companion articles.
 
+## Installation
+
+To install this package, start R and enter
+
+```{r installation, eval = FALSE}
+library(BiocManager)
+BiocManager::install('dominatR')
+```
+ 
+
 ## Data normalization; computing and plotting feature dominance
 
 The data included in this vignette can be found in the `airway` dataset
@@ -144,7 +154,7 @@ All `dominatR` package functions are compatible with
 `SummarizedExperiment` and `data.frame` objects. This quick introduction
 will show examples using `data.frame` objects. Each function produces a
 graphic and a `data.frame` with the dominance results; setting the
-atribute `output_table = FALSE` will restrict the dataframe from being
+attribute `output_table = FALSE` will restrict the dataframe from being
 displayed. For more details and examples on usage and aesthetics
 manipulation, refer to the articles in the visualization section.
 
@@ -312,10 +322,10 @@ subsetting specific type of observations.
 Briefly A total of P-1 (P = Number of Variables) circles are plotted and
 they represent degrees of dominance.
 
--   The outtermost circle represents observations that are dominated
+-   The outermost circle represents observations that are dominated
     only by one variable.
 
--   The second outtermost circle represents observations that are
+-   The second outermost circle represents observations that are
     dominated by two variables.
 
 -   The innermost circle represents observations that are uniform across

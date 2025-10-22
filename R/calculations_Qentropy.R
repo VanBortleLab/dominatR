@@ -27,7 +27,8 @@
 #'     if \code{new_assay_name} is set) and \code{rowData(x)$Entropy} removed.
 #'     }
 #'
-#' @import SummarizedExperiment
+#' @importFrom SummarizedExperiment assay assayNames SummarizedExperiment
+#' @importFrom SummarizedExperiment assay<- rowData<-
 #'
 #' @examples
 #'
@@ -82,17 +83,10 @@ Qentropy <- function(x,
     #----------------------#
     # SummarizedExperiment
     #----------------------#
-    if (is.null(assay_name)) {
-        assay_name <- assayNames(x)[1]
-        if (is.na(assay_name)) {
-            stop("No assay found in SummarizedExperiment.")
-        }
-    }
-    mat <- assay(x, assay_name)
-    if (is.null(mat)) {
-        stop("No assay named '", assay_name,
-            "' found in the SummarizedExperiment.")
-    }
+    m <- .get_matrix(se = x, a_name = assay_name)
+
+    mat <- m$mat
+    assay_name <- m$assay_name
 
     # Must have rowData(x)$Entropy
     if (!("Entropy" %in% colnames(rowData(x)))) {
@@ -100,7 +94,6 @@ Qentropy <- function(x,
     }
     e_vals <- rowData(x)$Entropy
 
-    # Q_{ij} = Inf if mat[i,j] == 0, else e_vals[i] - log2(mat[i,j])
     q_mat <- matrix(Inf, nrow = nrow(mat), ncol = ncol(mat))
 
     non_zero <- mat > 0
@@ -111,11 +104,14 @@ Qentropy <- function(x,
     # col index
     j_idx <- idx[,2]
 
-    # e_vals[i] - log2(mat[i,j])
     q_mat[non_zero] <- e_vals[i_idx] - log2(mat[non_zero])
 
     rownames(q_mat) <- rownames(mat)
     colnames(q_mat) <- colnames(mat)
+
+
+    x <- .assing_assay(se = x, matrix = q_mat, a_name = assay_name,
+                new_a_name = new_assay_name)
 
     # Overwrite or store in a new assay
     if (is.null(new_assay_name)) {

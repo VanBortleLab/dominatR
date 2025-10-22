@@ -38,6 +38,9 @@
 #'   SummarizedExperiment, returns the modified SummarizedExperiment with the
 #'   normalized data placed in the existing or new assay.
 #'
+#' @importFrom SummarizedExperiment assay assayNames SummarizedExperiment
+#' @importFrom SummarizedExperiment assay<- rowData<-
+#'
 #' @examples
 #' library(SummarizedExperiment)
 #' library(airway)
@@ -104,24 +107,10 @@ quantile_normalization <- function(x,
     #---------------------------#
     if (inherits(x, "SummarizedExperiment")) {
 
-        if (is.null(assay_name)) {
-            all_assays <- assayNames(x)
-            if (length(all_assays) < 1) {
-                stop("No assays found in the SummarizedExperiment.")
-            }
-            assay_name <- all_assays[[1]]
-        }
+        m <- .get_matrix(se = x, a_name = assay_name)
 
-        mat <- assay(x, assay_name)
-        if (is.null(mat)) {
-            stop("No assay named '", assay_name,
-                "' found in the SummarizedExperiment.")
-        }
-
-        if (!is.numeric(mat)) {
-            stop("Selected assay is not numeric.
-                Please provide numeric data for quantile normalization.")
-        }
+        mat <- m$mat
+        assay_name <- m$assay_name
 
     ## Calculations
     # 1) Rank matrix
@@ -146,11 +135,9 @@ quantile_normalization <- function(x,
     }
 
     # 7) Store result in new or existing assay
-    if (is.null(new_assay_name)) {
-        assay(x, assay_name) <- norm
-    } else {
-        assay(x, new_assay_name) <- norm
-    }
+
+    x <- .assing_assay(se = x, matrix = norm, a_name = assay_name,
+                new_a_name = new_assay_name)
 
     return(x)
 
@@ -159,13 +146,7 @@ quantile_normalization <- function(x,
     #---------------------------#
     } else if (is.data.frame(x) || is.matrix(x)) {
 
-        if (is.data.frame(x)) {
-            x <- as.matrix(x)
-        }
-
-    if (!is.numeric(x)) {
-        stop("Input must be numeric.")
-    }
+    x <- .get_matrix_df(x)
 
     ## Calculations
     # 1) Rank matrix

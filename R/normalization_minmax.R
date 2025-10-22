@@ -24,6 +24,10 @@
 #'       SummarizedExperiment object with the chosen or new assay replaced
 #'       by the scaled values.
 #'   }
+#'
+#' @importFrom SummarizedExperiment assay assayNames SummarizedExperiment
+#' @importFrom SummarizedExperiment assay<- rowData<-
+#'
 #' @examples
 #' library(SummarizedExperiment)
 #' library(airway)
@@ -104,25 +108,10 @@ minmax_normalization <- function(x,
     #-----------------------------#
     # SummarizedExperiment branch
     #-----------------------------#
-        if (is.null(assay_name)) {
-        # Default: use the first assay
-            all_assays <- assayNames(x)
-        if (length(all_assays) < 1) {
-            stop("No assays found in the SummarizedExperiment.")
-        }
-        assay_name <- all_assays[[1]]
-    }
+    m <- .get_matrix(se = x, a_name = assay_name)
 
-    mat <- assay(x, assay_name)
-    if (is.null(mat)) {
-        stop("No assay named '", assay_name,
-            "' found in the SummarizedExperiment.")
-    }
-
-    if (!is.numeric(mat)) {
-        stop("Selected assay is not numeric.")
-    }
-
+    mat <- m$mat
+    assay_name <- m$assay_name
 
     mins <- apply(mat, 2, min, na.rm = TRUE)
     maxs <- apply(mat, 2, max, na.rm = TRUE)
@@ -137,13 +126,8 @@ minmax_normalization <- function(x,
     mat <- (mat - mins) * new_rang / diffs + new_min
 
 
-    if (is.null(new_assay_name)) {
-        # Overwrite existing assay
-        assay(x, assay_name) <- mat
-    } else {
-        # Create a new assay
-        assay(x, new_assay_name) <- mat
-    }
+    x <- .assing_assay(se = x, matrix = mat, a_name = assay_name,
+                new_a_name = new_assay_name)
 
     return(x)
     } else if (is.data.frame(x) || is.matrix(x)) {
@@ -151,15 +135,8 @@ minmax_normalization <- function(x,
     # data.frame/matrix
     #-------------------#
     # Convert data.frame to matrix if needed
-    if (is.data.frame(x)) {
-        x <- as.matrix(x)
-    }
-    # Ensure numeric
-    if (!is.numeric(x)) {
-        stop("Input data is not numeric.")
-    }
+    mat <- .get_matrix_df(x)
 
-    mat <- x
 
     mins <- apply(mat, 2, min, na.rm = TRUE)
     maxs <- apply(mat, 2, max, na.rm = TRUE)

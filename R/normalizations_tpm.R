@@ -35,6 +35,9 @@
 #'   returns the modified SummarizedExperiment with the TPM data placed in the
 #'   existing or new assay.
 #'
+#' @importFrom SummarizedExperiment assay assayNames SummarizedExperiment
+#' @importFrom SummarizedExperiment assay<- rowData<-
+#'
 #' @examples
 #'library(SummarizedExperiment)
 #'library(airway)
@@ -113,33 +116,13 @@ tpm_normalization <- function(x,
     # SummarizedExperiment path
     #---------------------------
     if (inherits(x, "SummarizedExperiment")) {
-        if (is.null(assay_name)) {
-            all_assays <- SummarizedExperiment::assayNames(x)
-            if (length(all_assays) < 1) {
-                stop("No assays found in the SummarizedExperiment.")
-            }
-            assay_name <- all_assays[[1]]
-        }
-        mat <- SummarizedExperiment::assay(x, assay_name)
-        if (is.null(mat)) {
-            stop("No assay named '", assay_name,
-                "' found in the SummarizedExperiment.")
-        }
-        if (!is.numeric(mat)) {
-            stop("Selected assay is not numeric.
-                Please provide numeric data for TPM normalization.")
-        }
+        m <- .get_matrix(se = x, a_name = assay_name)
+
+        mat <- m$mat
+        assay_name <- m$assay_name
 
         # Retrieve gene lengths from rowData
-        rd <- rowData(x)
-        if (!("gene_length" %in% colnames(rd))) {
-            stop("No 'gene_length' column found in rowData(x). ",
-            "Please add rowData(x)$gene_length or use data.frame/matrix mode.")
-        }
-        gene_len_vec <- rd[["gene_length"]]
-        if (!is.numeric(gene_len_vec)) {
-            stop("'gene_length' in rowData(x) must be numeric.")
-        }
+        gene_len_vec <- .get_gene_length_se(se = x, col = 'gene_length')
 
     ## Calculations
     # 1) RPK
@@ -161,11 +144,9 @@ tpm_normalization <- function(x,
     }
 
     # 5) Store result in new or existing assay
-    if (is.null(new_assay_name)) {
-        assay(x, assay_name) <- tpm_mat
-    } else {
-        assay(x, new_assay_name) <- tpm_mat
-    }
+
+    x <- .assing_assay(se = x, matrix = tpm_mat, a_name = assay_name,
+                new_a_name = new_assay_name)
 
     return(x)
 
@@ -174,29 +155,13 @@ tpm_normalization <- function(x,
     #------------------------#
     } else if (is.data.frame(x) || is.matrix(x)) {
         # Convert data.frame to matrix if needed
-        if (is.data.frame(x)) {
-            x <- as.matrix(x)
-        }
-        if (!is.numeric(x)) {
-            stop("Input 'x' must contain numeric data for TPM normalization.")
-        }
-        # Check user-provided gene_length
-        if (is.null(gene_length)) {
-            stop("You must provide 'gene_length' for data.frame/matrix input.")
-        }
-        if (!is.numeric(gene_length)) {
-            stop("Argument 'gene_length' must be numeric.")
-        }
-        if (length(gene_length) != nrow(x)) {
-            stop("Length of 'gene_length' (", length(gene_length),
-            ") must match the number of rows (", nrow(x), ") in 'x'.")
-        }
+        rpk <- .get_matrix_df(x)
 
+        # Eval gene length
+        gene_length <- .eval_gene_length_df(gene_length, df = rpk)
 
     ## Calculations
     # 1) RPK
-    rpk <- x
-
     rpk <- sweep(rpk, 1, gene_length, "/") * 1000
 
     # 2) Column sums

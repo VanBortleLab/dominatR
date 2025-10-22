@@ -57,7 +57,10 @@
 #' \eqn{( \sin(2\pi/3),  \cos(2\pi/3) )} and
 #' \eqn{( \sin(4\pi/3),  \cos(4\pi/3) )}.
 #'
-#' @import SummarizedExperiment
+#' @importFrom SummarizedExperiment assay assayNames SummarizedExperiment
+#' @importFrom SummarizedExperiment assay<- rowData<-
+#' @importFrom dplyr mutate select relocate
+#' @importFrom graphics par plot text points polygon
 #' @export
 #'
 #' @examples
@@ -236,20 +239,15 @@ plot_triangle <- function(x,
     # 1) Acquire / check data
     #-------------------------#
     if (inherits(x, "SummarizedExperiment")) {
-        # SummarizedExperiment path
-        if (is.null(assay_name)) {
-            all_assays <- SummarizedExperiment::assayNames(x)
-        if (length(all_assays) < 1)
-            stop("No assays found in the SummarizedExperiment.")
-        assay_name <- all_assays[1]
-    }
-    mat <- SummarizedExperiment::assay(x, assay_name)
-    if (!is.matrix(mat) || !is.numeric(mat)) {
-        stop("The selected assay must be a numeric matrix.")
-    }
+    m <- .get_matrix(se = x, a_name = assay_name)
+
+    mat <- m$mat
+    assay_name <- m$assay_name
 
     ### Extracting the columns of interest. Default the first three columns
-    if (is.null(column_name)) column_name <- colnames(mat)[seq_len(3)]
+    kc <- min(3, ncol(mat))
+    if (is.null(column_name)) column_name <- colnames(mat)[seq_len(kc)]
+
 
     if (length(column_name) != 3)
         stop("Exactly three columns are required.")
@@ -261,26 +259,13 @@ plot_triangle <- function(x,
     original_colnames <- colnames(mat)
 
     } else if (is.data.frame(x) || is.matrix(x)) {
-        # Data.frame or matrix
-        if (is.data.frame(x)) {
-            mat <- as.data.frame(x)
-        }
-    # Data.frame or matrix
-    if (is.matrix(x)) {
-        mat <- as.matrix(x)
-    }
-    if (!is.numeric(as.matrix(x))) {
-        stop("Data is not numeric.")
-    }
-    if (length(column_name) == 3){
-        mat <- mat[,column_name]
-    }
-    if (ncol(mat) != 3) {
-        stop("plot_triangle() requires exactly 2 columns of data; found ",
-            ncol(mat))
-    }
-    data <- as.data.frame(mat)
+
+    mat <- .get_matrix_df(x)
+
+    data <- .get_column_df(mat = mat, column_name = column_name, type = 3)
+
     original_colnames <- colnames(data)
+
     } else {
         stop("Input must be a data.frame/matrix or SummarizedExperiment.")
     }
@@ -347,7 +332,7 @@ plot_triangle <- function(x,
     #-------------------------#
     if (label) {
         # Label the original column names near the left & right of the rope
-        text(original_colnames,
+        text(labels = original_colnames,
                 x = verts$x * push_text,
                 y = verts$y * push_text)
     }
@@ -355,7 +340,7 @@ plot_triangle <- function(x,
 
     if (plotAll) {
         idx <- data$color == "whitesmoke"
-        graphics::points(data$comx[idx],
+        points(data$comx[idx],
                         data$comy[idx],
                         col = "whitesmoke",
                         bg = "whitesmoke",
@@ -363,7 +348,7 @@ plot_triangle <- function(x,
                         cex = cex)
     }
     idx <- data$color != "whitesmoke"
-    graphics::points(data$comx[idx],
+    points(data$comx[idx],
                     data$comy[idx],
                     col = if(pch %in% 21:25) 'black' else
                     data$color[idx],
@@ -373,7 +358,7 @@ plot_triangle <- function(x,
                     cex = cex)
 
 
-    graphics::polygon(verts$x,
+    polygon(verts$x,
                     verts$y,
                     pch = 16)
 

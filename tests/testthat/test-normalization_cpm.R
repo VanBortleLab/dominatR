@@ -35,7 +35,7 @@ test_that("cpm_normalization fails for non-numeric input", {
   df_nonnum <- data.frame(x=c("a","b"), y=c("c","d"))
   expect_error(
     cpm_normalization(df_nonnum),
-    "Input data is not numeric"
+    "Input must be numeric"
   )
 })
 

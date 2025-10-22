@@ -14,4 +14,5 @@ vignettes/*.html
 vignettes/*.R
 .DS_Store
 */.DS_Store
+tests/testthat/Rplots.pdf
 

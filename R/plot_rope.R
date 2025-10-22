@@ -50,7 +50,7 @@
 #'
 #' @details
 #' The function expects two numeric columns. If the experiment has more than
-#' two columns, the name of the columns of interest can be specificed by using
+#' two columns, the name of the columns of interest can be specified by using
 #' the parameter \code{column_name}. If \code{x} is a
 #' \code{SummarizedExperiment}, it extracts the indicated assay and extracts
 #' the columns of interest
@@ -65,7 +65,9 @@
 #' with thickness \code{rope_width}. Points are scattered in \code{comy}
 #' direction for a bit of jitter within the rope.
 #'
-#' @import SummarizedExperiment
+#' @importFrom SummarizedExperiment assay assayNames SummarizedExperiment
+#' @importFrom SummarizedExperiment assay<- rowData<-
+#' @importFrom graphics plot points polygon text
 #' @export
 #'
 #' @examples
@@ -221,16 +223,11 @@ plot_rope <- function(x,
     #-------------------------#
     if (inherits(x, "SummarizedExperiment")) {
         # SummarizedExperiment path
-        if (is.null(assay_name)) {
-            all_assays <- SummarizedExperiment::assayNames(x)
-        if (length(all_assays) < 1)
-            stop("No assays found in the SummarizedExperiment.")
-        assay_name <- all_assays[1]
-        }
-        mat <- SummarizedExperiment::assay(x, assay_name)
-        if (!is.matrix(mat) || !is.numeric(mat)) {
-            stop("The selected assay must be a numeric matrix.")
-        }
+        m <- .get_matrix(se = x, a_name = assay_name)
+
+        mat <- m$mat
+        assay_name <- m$assay_name
+
         if (length(column_name) == 2){
             mat <- mat[,column_name]
         }
@@ -242,20 +239,11 @@ plot_rope <- function(x,
         original_colnames <- colnames(mat)
     } else if (is.data.frame(x) || is.matrix(x)) {
         # Data.frame or matrix
-        if (is.data.frame(x)) {
-            mat <- as.data.frame(x)
-        }
-        if (!is.numeric(as.matrix(x))) {
-            stop("Data is not numeric.")
-        }
-        if (length(column_name) == 2){
-            mat <- mat[,column_name]
-        }
-        if (ncol(mat) != 2) {
-            stop("plot_rope() requires exactly 2 columns of data; found ",
-                ncol(mat))
-        }
-        data <- as.data.frame(mat)
+
+        mat <- .get_matrix_df(x)
+
+        data <- .get_column_df(mat = mat, column_name = column_name, type = 2)
+
         original_colnames <- colnames(data)
     } else {
         stop("Input must be a data.frame/matrix or SummarizedExperiment.")
@@ -381,7 +369,7 @@ plot_rope <- function(x,
     #-------------------------#
     if (label) {
         # Label the original column names near the left & right of the rope
-        text(original_colnames,
+        text(labels = original_colnames,
             x = px * push_text,  # e.g. -1.2.. +1.2
             y = py)
     }

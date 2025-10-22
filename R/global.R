@@ -55,6 +55,7 @@ utils::globalVariables(
     'scale_color_manual',
     'comx',
     'comy',
-    'max_counts'
+    'max_counts',
+    'is'
     )
 )

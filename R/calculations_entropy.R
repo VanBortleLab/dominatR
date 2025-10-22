@@ -7,8 +7,8 @@
 #' @param new_assay_name If you prefer to store Q-values in a
 #'   *new* assay, provide a name. By default 'Entropy'
 #'
-#' @import SummarizedExperiment airway
-#'
+#' @importFrom SummarizedExperiment assay assayNames SummarizedExperiment
+#' @importFrom SummarizedExperiment assay<- rowData<-
 #'
 #' @return
 #'  \itemize{
@@ -80,21 +80,18 @@
 entropy <- function(x,
                     assay_name = NULL,
                     new_assay_name = 'Entropy') {
+
+
+
+
     if (inherits(x, "SummarizedExperiment")) {
     #----------------------#
     # SummarizedExperiment
     #----------------------#
-    if (is.null(assay_name)) {
-        assay_name <- assayNames(x)[1]
-        if (is.na(assay_name)) {
-            stop("No assay found in SummarizedExperiment.")
-        }
-    }
-    mat <- assay(x, assay_name)
-    if (is.null(mat)) {
-        stop("No assay named '", assay_name,
-            "' found in the SummarizedExperiment.")
-    }
+    m <- .get_matrix(se = x, a_name = assay_name)
+
+    mat <- m$mat
+    assay_name <- m$assay_name
 
     # 1. Compute row sums (use 1 if sum <= 0)
     row_sums <- rowSums(mat, na.rm = TRUE)
@@ -120,7 +117,7 @@ entropy <- function(x,
 
     return(x)
 
-    } else if (is.data.frame(x)) {
+    } else if (is.data.frame(x) || is.matrix(x)) {
     #--------------#
     # data.frame
     #--------------#

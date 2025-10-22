@@ -42,7 +42,7 @@ test_that("minmax_normalization can scale to a user-specified range, e.g. [2..3]
 test_that("minmax_normalization fails on non-numeric input", {
   df <- data.frame(x=c("a","b"), y=c("c","d"))
   expect_error(minmax_normalization(df),
-               "data is not numeric",
+               "Input must be numeric",
                fixed=TRUE)
 })
 

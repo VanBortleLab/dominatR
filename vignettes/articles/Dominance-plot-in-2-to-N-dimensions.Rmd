@@ -474,9 +474,9 @@ Using a polar coordinate system where: - Radial position represents Shannon entr
 
 -   A total of P-1 (P = Number of Variables) circles are plotted and they represent degrees of dominance.
 
-    -   The outtermost circle represents observations that are dominated only by one variable.
+    -   The outermost circle represents observations that are dominated only by one variable.
 
-    -   The second outtermost circle represents observations that are dominated by two variables.
+    -   The second outermost circle represents observations that are dominated by two variables.
 
     -   The innermost circle represents observations that are uniform across all variables.
 
@@ -507,7 +507,7 @@ rownames(df2) = atac_tissue_score$Gene
 
 The `circle_plot` function is able to handle SummarizedExperiment objects, data.frames and matrices just like the previous plots.
 
-Note: there is some randomization in the asignment of the points in the space when a specific gene/observation is shared across many variables. In that way for example, if gene_abc is shared across tissue A, B, C and D, the function will randomly choose a variable for plotting 
+Note: there is some randomization in the assignment of the points in the space when a specific gene/observation is shared across many variables. In that way for example, if gene_abc is shared across tissue A, B, C and D, the function will randomly choose a variable for plotting 
 
 ## Using a dataframe
 
@@ -696,7 +696,7 @@ The returned data frame (`se_results[[2]]`) contains the following columns:
 
 -   **Entropy**: the entropy score computed across rows (for each sample or feature).
 
--   **col**: the dominant sample alocated for that gene in the plotting space. When an observatio is tied among variables, a random variable is chosen
+-   **col**: the dominant sample allocated for that gene in the plotting space. When an observation is tied among variables, a random variable is chosen
 
 -   **rad**: the magnitude (mean expression) encoded as the radial distance in the plot.
 

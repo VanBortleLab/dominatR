@@ -65,8 +65,22 @@
 #' \eqn{H \in [0,\log_2 n]}.
 #' }
 #'
-#' @import SummarizedExperiment tidyverse forcats ggforce ggnewscale lubridate
-#' purrr readr stringr tibble tidyr dplyr ggplot2 utils
+#' @importFrom SummarizedExperiment assay assayNames SummarizedExperiment
+#' @importFrom SummarizedExperiment assay<- rowData<- rowData
+#' @importFrom dplyr select mutate filter left_join rowwise relocate any_of
+#' @importFrom dplyr select_if all_of join_by
+#' @importFrom ggplot2 ggplot aes geom_polygon coord_equal scale_fill_manual
+#' @importFrom ggplot2 scale_color_manual scale_alpha geom_jitter ggplot_build
+#' @importFrom ggplot2 theme_minimal theme_set theme_update element_blank labs
+#' @importFrom ggplot2 scale_y_continuous scale_x_discrete element_line
+#' @importFrom ggplot2 element_text
+#' @importFrom ggforce geom_arc geom_circle
+#' @importFrom ggnewscale new_scale new_scale_color new_scale_fill
+#' @importFrom geomtextpath geom_textcurve
+#' @importFrom scales hue_pal
+#' @importFrom stats lm predict
+#' @importFrom rlang quo
+#'
 #' @export
 #'
 #' @examples
@@ -384,14 +398,16 @@ plot_circle <- function(x,
 {
     ## ---- 1. Pulling the data and the column factor if needed.
     if (inherits(x, "SummarizedExperiment")) {
-        if (is.null(assay_name))
-            assay_name <- SummarizedExperiment::assayNames(x)[1]
-        mat <- SummarizedExperiment::assay(x, assay_name)
-        if (!is.numeric(mat)) stop("Chosen assay is not numeric.")
+        m <- .get_matrix(se = x, a_name = assay_name)
+
+        mat <- m$mat
+        assay_name <- m$assay_name
+
+
         mat <- as.data.frame(mat)
 
         if(!is.null(column_variable_factor)){
-            mat <- cbind(mat, rowData(x)[which(colnames(rowData(se))
+            mat <- cbind(mat, rowData(x)[which(colnames(rowData(x))
                                         == column_variable_factor)])
             colnames(mat)[ncol(mat)] <- 'Factor'
 
@@ -466,29 +482,16 @@ plot_circle <- function(x,
 
     numeric_cols <- colnames(mat)[vapply(mat, is.numeric, logical(1))]
 
-    arc <- NULL
-    for (i in seq(1, n)) {
-        p <- ggplot() +
-            geom_arc(aes(
-                x0 = 0,
-                y0 = 0,
-                r = 100,
-                start = deg_sp + deg * (i - 1),
-                end = deg_sp + deg * (i)
-        ))
-        poly <- rbind(c(0, 0),
-                data.frame(x = ggplot_build(p)$data[[1]]$x,
-                            y = ggplot_build(p)$data[[1]]$y),
-                c(0, 0))
-        poly$type <- numeric_cols[i]
+    arc <- mapply(
+        FUN = function(i, lab) .arc_slice_polygon(i, deg_sp, deg, lab),
+        i = seq_len(n),
+        lab = numeric_cols,
+        SIMPLIFY = FALSE
+    )
 
-        arc <- rbind(arc, poly)
-    }
+    arc <- do.call(rbind, arc)
 
     arc$type <- factor(arc$type, levels = numeric_cols)
-
-
-
 
     ## ---- 4. Entropy calculation and filtering
     mat_num <- mat[,numeric_cols]

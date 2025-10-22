@@ -30,7 +30,9 @@
 #'     with two new columns \code{comx} and \code{comy} in \code{rowData(x)}.
 #'}
 #'
-#' @import SummarizedExperiment
+#' @importFrom SummarizedExperiment assay assayNames SummarizedExperiment
+#' @importFrom SummarizedExperiment assay<- rowData<-
+#'
 #' @export
 #'
 #' @examples
@@ -77,20 +79,12 @@ centmass <- function(
     # Handle SummarizedExperiment case #
     #----------------------------------#
     if (inherits(x, "SummarizedExperiment")) {
-        if (is.null(assay_name)) {
-            # use the first assay by default
-            all_assays <- assayNames(x)
-            if (length(all_assays) < 1) {
-                stop("No assays found in the SummarizedExperiment.")
-            }
-            assay_name <- all_assays[[1]]
-        }
-
-        mat <- assay(x, assay_name)
-        if (is.null(mat)) {
-            stop("No assay named '", assay_name,
-                "' found in the SummarizedExperiment.")
-        }
+        #----------------------#
+        # SummarizedExperiment
+        #----------------------#
+        m <- .get_matrix(se = x, a_name = assay_name)
+        mat <- m$mat
+        assay_name <- m$assay_name
 
         # check length of x_coord, y_coord
         if (ncol(mat) != length(x_coord) || ncol(mat) != length(y_coord)) {
@@ -115,20 +109,20 @@ centmass <- function(
         comy_vals <- comy_vals / row_sums
 
         # store in rowData
-        SummarizedExperiment::rowData(x)$comx <- comx_vals
-        SummarizedExperiment::rowData(x)$comy <- comy_vals
+        rowData(x)$comx <- comx_vals
+        rowData(x)$comy <- comy_vals
 
         return(x)
 
         #-----------------------#
         # Handle data.frame case
         #-----------------------#
-        } else if (is.data.frame(x)) {
+        } else if (is.data.frame(x) || is.matrix(x)) {
         # Convert entire data.frame to matrix (assuming it's numeric columns
         # or user has made sure it is).
         # If your real use-case has non-numeric columns that you need to skip,
         # you can subset them similarly to the entropy approach.
-        mat <- as.matrix(x)
+        mat <- .get_matrix_df(x)
 
         # Dimension checks
         if (ncol(mat) != length(x_coord) || ncol(mat) != length(y_coord)) {
