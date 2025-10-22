@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dominatR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,6 +128,14 @@ customization and the additional features present in the package can be
 explored in the companion articles.</p>
 </div>
 <div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>To install this package, start R and enter</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">BiocManager</a></span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">'dominatR'</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="data-normalization-computing-and-plotting-feature-dominance">Data normalization; computing and plotting feature dominance<a class="anchor" aria-label="anchor" href="#data-normalization-computing-and-plotting-feature-dominance"></a>
 </h2>
 <p>The data included in this vignette can be found in the
@@ -139,7 +147,7 @@ explored in the companion articles.</p>
 <div class="section level4">
 <h4 id="example-1-summarizedexperiment-object">Example 1: <code>SummarizedExperiment</code> object<a class="anchor" aria-label="anchor" href="#example-1-summarizedexperiment-object"></a>
 </h4>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"airway"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">se</span> <span class="op">=</span> <span class="fu"><a href="../reference/quantile_normalization.html">quantile_normalization</a></span><span class="op">(</span><span class="va">airway</span>, new_assay_name <span class="op">=</span> <span class="st">'quantile_norma'</span><span class="op">)</span></span>
@@ -173,7 +181,7 @@ explored in the companion articles.</p>
 <div class="section level4">
 <h4 id="example-2-dataframe-object">Example 2: <code>dataframe</code> object<a class="anchor" aria-label="anchor" href="#example-2-dataframe-object"></a>
 </h4>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"atac_tissue_counts"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## selecting the numeric columns</span></span>
@@ -204,7 +212,7 @@ explored in the companion articles.</p>
 <div class="section level4">
 <h4 id="example-1-summarizedexperiment-object-1">Example 1: <code>SummarizedExperiment</code> object<a class="anchor" aria-label="anchor" href="#example-1-summarizedexperiment-object-1"></a>
 </h4>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">se</span> <span class="op">=</span> <span class="fu"><a href="../reference/entropy.html">entropy</a></span><span class="op">(</span><span class="va">se</span><span class="op">)</span></span>
 <span></span>
@@ -250,7 +258,7 @@ explored in the companion articles.</p>
 <div class="section level4">
 <h4 id="example-2-dataframe-object-1">Example 2: <code>dataframe</code> object<a class="anchor" aria-label="anchor" href="#example-2-dataframe-object-1"></a>
 </h4>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">norm1</span> <span class="op">=</span> <span class="fu"><a href="../reference/entropy.html">entropy</a></span><span class="op">(</span><span class="va">norm</span><span class="op">)</span></span>
 <span></span>
@@ -279,7 +287,7 @@ explored in the companion articles.</p>
 <code>SummarizedExperiment</code> and <code>data.frame</code> objects.
 This quick introduction will show examples using <code>data.frame</code>
 objects. Each function produces a graphic and a <code>data.frame</code>
-with the dominance results; setting the atribute
+with the dominance results; setting the attribute
 <code>output_table = FALSE</code> will restrict the dataframe from being
 displayed. For more details and examples on usage and aesthetics
 manipulation, refer to the articles in the visualization section.</p>
@@ -292,7 +300,7 @@ dominance over gene occupancy for RNA Polymerase II and RNA Polymerase
 III. By default the function plots all data points, but users can adjust
 <code>entropy_range</code> values to subset on observations within a
 specified range.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"rnapol_score"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="va">rnapol_score</span><span class="op">[</span>,<span class="fl">6</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span>
@@ -315,7 +323,7 @@ specified range.</p>
 <p>Below, let’s filter for genes with <strong>low entropy</strong> and
 high significance scores to visualize genes that are specifically
 occupied by either RNA Pol II or RNA Pol III</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/plot_rope.html">plot_rope</a></span><span class="op">(</span></span>
 <span>        <span class="va">data1</span>, </span>
@@ -338,7 +346,7 @@ occupied by either RNA Pol II or RNA Pol III</p>
 <p>Below, let’s filter for genes with <strong>high entropy</strong> and
 high significance scores to visualize genes that are specifically
 occupied by both RNA Pol II and RNA Pol III</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/plot_rope.html">plot_rope</a></span><span class="op">(</span></span>
 <span>        <span class="va">data1</span>,</span>
@@ -366,7 +374,7 @@ dominance over gene occupancy for RNA Polymerase I, RNA Polymerase II
 and RNA Polymerase III. By default the function plots every data point,
 but users can again adjust the <code>entropy_range</code> attribute
 values to subset on observations within a specified range.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="va">rnapol_score</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_Triangle.html">plot_triangle</a></span><span class="op">(</span><span class="va">data1</span>,</span>
@@ -383,7 +391,7 @@ values to subset on observations within a specified range.</p>
 <p>Below, let’s filter for genes with <strong>low entropy</strong> and
 high significance scores to visualize genes that are specifically
 occupied by either RNA Pol I, RNA Pol II, or RNA Pol III</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="va">rnapol_score</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_Triangle.html">plot_triangle</a></span><span class="op">(</span><span class="va">data1</span>, </span>
@@ -402,7 +410,7 @@ occupied by either RNA Pol I, RNA Pol II, or RNA Pol III</p>
 high significance scores to visualize genes that are specifically
 occupied by all three RNA Pols or combinations of any 2 RNA Pols
 (e.g. RNA Pol I and RNA Pol II)</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="va">rnapol_score</span><span class="op">[</span>,<span class="fl">5</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_Triangle.html">plot_triangle</a></span><span class="op">(</span><span class="va">data1</span>, </span>
@@ -433,14 +441,14 @@ observations.</p>
 <p>Briefly A total of P-1 (P = Number of Variables) circles are plotted
 and they represent degrees of dominance.</p>
 <ul>
-<li><p>The outtermost circle represents observations that are dominated
+<li><p>The outermost circle represents observations that are dominated
 only by one variable.</p></li>
-<li><p>The second outtermost circle represents observations that are
+<li><p>The second outermost circle represents observations that are
 dominated by two variables.</p></li>
 <li><p>The innermost circle represents observations that are uniform
 across all variables.</p></li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"atac_tissue_score"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### subsetting only a set of numerical columns</span></span>
@@ -455,7 +463,7 @@ across all variables.</p></li>
 <span>            point_size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> </span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'Pol III transcribed genes \n accessibility across tissues'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dominatR_files/figure-html/circ_tiss-1.png" width="700" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"atac_tissue_score"</span><span class="op">)</span></span>
 <span></span>
 <span></span>
@@ -469,7 +477,7 @@ across all variables.</p></li>
 <span>            point_size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> </span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'Pol III transcribed genes \n accessibility across tissues - Unique'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dominatR_files/figure-html/circ_tiss_filt1-1.png" width="700" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"atac_tissue_score"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_circle.html">plot_circle</a></span><span class="op">(</span><span class="va">data1</span>, </span>
@@ -512,35 +520,31 @@ across all variables.</p></li>
 <span><span class="co">#&gt;  [3] SummarizedExperiment_1.38.1 Biobase_2.68.0             </span></span>
 <span><span class="co">#&gt;  [5] GenomicRanges_1.60.0        GenomeInfoDb_1.44.3        </span></span>
 <span><span class="co">#&gt;  [7] IRanges_2.42.0              S4Vectors_0.46.0           </span></span>
-<span><span class="co">#&gt;  [9] BiocGenerics_0.54.0         generics_0.1.4             </span></span>
+<span><span class="co">#&gt;  [9] BiocGenerics_0.54.1         generics_0.1.4             </span></span>
 <span><span class="co">#&gt; [11] MatrixGenerics_1.20.0       matrixStats_1.5.0          </span></span>
-<span><span class="co">#&gt; [13] dominatRData_0.99.0         dominatR_0.99.2            </span></span>
+<span><span class="co">#&gt; [13] dominatRData_0.99.1         dominatR_0.99.3            </span></span>
 <span><span class="co">#&gt; [15] knitr_1.50                 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] gtable_0.3.6            xfun_0.53               bslib_0.9.0            </span></span>
-<span><span class="co">#&gt;  [4] lattice_0.22-7          tzdb_0.5.0              vctrs_0.6.5            </span></span>
-<span><span class="co">#&gt;  [7] tools_4.5.1             tibble_3.3.0            pkgconfig_2.0.3        </span></span>
-<span><span class="co">#&gt; [10] Matrix_1.7-3            tidyverse_2.0.0         ggnewscale_0.5.2       </span></span>
-<span><span class="co">#&gt; [13] RColorBrewer_1.1-3      S7_0.2.0                desc_1.4.3             </span></span>
-<span><span class="co">#&gt; [16] lifecycle_1.0.4         GenomeInfoDbData_1.2.14 stringr_1.5.2          </span></span>
-<span><span class="co">#&gt; [19] compiler_4.5.1          farver_2.1.2            textshaping_1.0.3      </span></span>
-<span><span class="co">#&gt; [22] ggforce_0.5.0           htmltools_0.5.8.1       sass_0.4.10            </span></span>
-<span><span class="co">#&gt; [25] yaml_2.3.10             tidyr_1.3.1             pillar_1.11.1          </span></span>
-<span><span class="co">#&gt; [28] pkgdown_2.1.3           crayon_1.5.3            jquerylib_0.1.4        </span></span>
-<span><span class="co">#&gt; [31] MASS_7.3-65             DelayedArray_0.34.1     cachem_1.1.0           </span></span>
-<span><span class="co">#&gt; [34] abind_1.4-8             tidyselect_1.2.1        digest_0.6.37          </span></span>
-<span><span class="co">#&gt; [37] stringi_1.8.7           purrr_1.1.0             dplyr_1.1.4            </span></span>
-<span><span class="co">#&gt; [40] labeling_0.4.3          forcats_1.0.0           polyclip_1.10-7        </span></span>
-<span><span class="co">#&gt; [43] fastmap_1.2.0           grid_4.5.1              cli_3.6.5              </span></span>
-<span><span class="co">#&gt; [46] SparseArray_1.8.1       magrittr_2.0.4          S4Arrays_1.8.1         </span></span>
-<span><span class="co">#&gt; [49] readr_2.1.5             withr_3.0.2             UCSC.utils_1.4.0       </span></span>
-<span><span class="co">#&gt; [52] scales_1.4.0            timechange_0.3.0        lubridate_1.9.4        </span></span>
-<span><span class="co">#&gt; [55] rmarkdown_2.29          XVector_0.48.0          httr_1.4.7             </span></span>
-<span><span class="co">#&gt; [58] hms_1.1.3               ragg_1.5.0              evaluate_1.0.5         </span></span>
-<span><span class="co">#&gt; [61] rlang_1.1.6             glue_1.8.0              tweenr_2.0.3           </span></span>
-<span><span class="co">#&gt; [64] jsonlite_2.0.0          R6_2.6.1                systemfonts_1.2.3      </span></span>
-<span><span class="co">#&gt; [67] fs_1.6.6</span></span></code></pre>
+<span><span class="co">#&gt;  [4] lattice_0.22-7          vctrs_0.6.5             tools_4.5.1            </span></span>
+<span><span class="co">#&gt;  [7] tibble_3.3.0            pkgconfig_2.0.3         Matrix_1.7-3           </span></span>
+<span><span class="co">#&gt; [10] ggnewscale_0.5.2        RColorBrewer_1.1-3      S7_0.2.0               </span></span>
+<span><span class="co">#&gt; [13] desc_1.4.3              lifecycle_1.0.4         GenomeInfoDbData_1.2.14</span></span>
+<span><span class="co">#&gt; [16] compiler_4.5.1          farver_2.1.2            textshaping_1.0.4      </span></span>
+<span><span class="co">#&gt; [19] geomtextpath_0.2.0      ggforce_0.5.0           htmltools_0.5.8.1      </span></span>
+<span><span class="co">#&gt; [22] sass_0.4.10             yaml_2.3.10             pillar_1.11.1          </span></span>
+<span><span class="co">#&gt; [25] pkgdown_2.1.3           crayon_1.5.3            jquerylib_0.1.4        </span></span>
+<span><span class="co">#&gt; [28] MASS_7.3-65             DelayedArray_0.34.1     cachem_1.1.0           </span></span>
+<span><span class="co">#&gt; [31] abind_1.4-8             tidyselect_1.2.1        digest_0.6.37          </span></span>
+<span><span class="co">#&gt; [34] dplyr_1.1.4             labeling_0.4.3          polyclip_1.10-7        </span></span>
+<span><span class="co">#&gt; [37] fastmap_1.2.0           grid_4.5.1              cli_3.6.5              </span></span>
+<span><span class="co">#&gt; [40] SparseArray_1.8.1       magrittr_2.0.4          S4Arrays_1.8.1         </span></span>
+<span><span class="co">#&gt; [43] withr_3.0.2             UCSC.utils_1.4.0        scales_1.4.0           </span></span>
+<span><span class="co">#&gt; [46] rmarkdown_2.30          XVector_0.48.0          httr_1.4.7             </span></span>
+<span><span class="co">#&gt; [49] ragg_1.5.0              evaluate_1.0.5          rlang_1.1.6            </span></span>
+<span><span class="co">#&gt; [52] glue_1.8.0              tweenr_2.0.3            jsonlite_2.0.0         </span></span>
+<span><span class="co">#&gt; [55] R6_2.6.1                systemfonts_1.3.1       fs_1.6.6</span></span></code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

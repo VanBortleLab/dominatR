@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dominatR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -596,9 +596,9 @@ Shannon entropy degrees.</p>
 <p>A total of P-1 (P = Number of Variables) circles are plotted and
 they represent degrees of dominance.</p>
 <ul>
-<li><p>The outtermost circle represents observations that are dominated
+<li><p>The outermost circle represents observations that are dominated
 only by one variable.</p></li>
-<li><p>The second outtermost circle represents observations that are
+<li><p>The second outermost circle represents observations that are
 dominated by two variables.</p></li>
 <li><p>The innermost circle represents observations that are uniform
 across all variables.</p></li>
@@ -629,7 +629,7 @@ wedge have their highest expression in that sample</p>
 <p>The <code>circle_plot</code> function is able to handle
 SummarizedExperiment objects, data.frames and matrices just like the
 previous plots.</p>
-<p>Note: there is some randomization in the asignment of the points in
+<p>Note: there is some randomization in the assignment of the points in
 the space when a specific gene/observation is shared across many
 variables. In that way for example, if gene_abc is shared across tissue
 A, B, C and D, the function will randomly choose a variable for
@@ -815,20 +815,20 @@ magnitude, etc.</li>
 <span><span class="co">#&gt; tRNA-Glu-TTC-3-1&amp;&amp;10055                   75% Tissues 4.247928     Spleen</span></span>
 <span><span class="co">#&gt; tRNA-Asn-GTT-1-6&amp;&amp;10056                   75% Tissues 4.247928      Liver</span></span>
 <span><span class="co">#&gt; tRNA-Gly-TCC-4-1&amp;&amp;10058                   75% Tissues 4.247928      Brain</span></span>
-<span><span class="co">#&gt;                                                     rad         deg</span></span>
-<span><span class="co">#&gt; tRNA-Gly-GCC-1-3&amp;&amp;100172                  -1.421085e-14 -3.05891916</span></span>
-<span><span class="co">#&gt; Metazoa_SRP_SRP_RNA_URS0000972307&amp;&amp;100175  1.000000e+02  0.90940840</span></span>
-<span><span class="co">#&gt; tRNA-Val-CAC-1-4&amp;&amp;10049                   -1.421085e-14 -0.08267349</span></span>
-<span><span class="co">#&gt; tRNA-Glu-TTC-3-1&amp;&amp;10055                   -1.421085e-14  0.90940840</span></span>
-<span><span class="co">#&gt; tRNA-Asn-GTT-1-6&amp;&amp;10056                   -1.421085e-14  0.57871444</span></span>
-<span><span class="co">#&gt; tRNA-Gly-TCC-4-1&amp;&amp;10058                   -1.421085e-14 -4.71238898</span></span>
+<span><span class="co">#&gt;                                                    rad         deg</span></span>
+<span><span class="co">#&gt; tRNA-Gly-GCC-1-3&amp;&amp;100172                  1.421085e-14 -3.05891916</span></span>
+<span><span class="co">#&gt; Metazoa_SRP_SRP_RNA_URS0000972307&amp;&amp;100175 1.000000e+02  0.90940840</span></span>
+<span><span class="co">#&gt; tRNA-Val-CAC-1-4&amp;&amp;10049                   1.421085e-14 -0.08267349</span></span>
+<span><span class="co">#&gt; tRNA-Glu-TTC-3-1&amp;&amp;10055                   1.421085e-14  0.90940840</span></span>
+<span><span class="co">#&gt; tRNA-Asn-GTT-1-6&amp;&amp;10056                   1.421085e-14  0.57871444</span></span>
+<span><span class="co">#&gt; tRNA-Gly-TCC-4-1&amp;&amp;10058                   1.421085e-14 -4.71238898</span></span>
 <span><span class="co">#&gt;                                                       x             y</span></span>
-<span><span class="co">#&gt; tRNA-Gly-GCC-1-3&amp;&amp;100172                   1.416351e-14  1.159068e-15</span></span>
+<span><span class="co">#&gt; tRNA-Gly-GCC-1-3&amp;&amp;100172                  -1.416351e-14 -1.159068e-15</span></span>
 <span><span class="co">#&gt; Metazoa_SRP_SRP_RNA_URS0000972307&amp;&amp;100175  6.134069e+01  7.897670e+01</span></span>
-<span><span class="co">#&gt; tRNA-Val-CAC-1-4&amp;&amp;10049                   -1.417034e-14  1.072310e-15</span></span>
-<span><span class="co">#&gt; tRNA-Glu-TTC-3-1&amp;&amp;10055                   -8.648143e-15 -1.127644e-14</span></span>
-<span><span class="co">#&gt; tRNA-Asn-GTT-1-6&amp;&amp;10056                   -1.192059e-14 -7.736136e-15</span></span>
-<span><span class="co">#&gt; tRNA-Gly-TCC-4-1&amp;&amp;10058                    4.351330e-17 -1.421079e-14</span></span>
+<span><span class="co">#&gt; tRNA-Val-CAC-1-4&amp;&amp;10049                    1.417034e-14 -1.072310e-15</span></span>
+<span><span class="co">#&gt; tRNA-Glu-TTC-3-1&amp;&amp;10055                    8.648143e-15  1.127644e-14</span></span>
+<span><span class="co">#&gt; tRNA-Asn-GTT-1-6&amp;&amp;10056                    1.192059e-14  7.736136e-15</span></span>
+<span><span class="co">#&gt; tRNA-Gly-TCC-4-1&amp;&amp;10058                   -4.351330e-17  1.421079e-14</span></span>
 <span><span class="co">#&gt;                                               labels    rand_deg     alpha</span></span>
 <span><span class="co">#&gt; tRNA-Gly-GCC-1-3&amp;&amp;100172                  Gastroesop -3.05993982 0.7764249</span></span>
 <span><span class="co">#&gt; Metazoa_SRP_SRP_RNA_URS0000972307&amp;&amp;100175     Spleen  0.91042906 1.0000000</span></span>
@@ -841,8 +841,8 @@ following columns:</p>
 <ul>
 <li><p><strong>Entropy</strong>: the entropy score computed across rows
 (for each sample or feature).</p></li>
-<li><p><strong>col</strong>: the dominant sample alocated for that gene
-in the plotting space. When an observatio is tied among variables, a
+<li><p><strong>col</strong>: the dominant sample allocated for that gene
+in the plotting space. When an observation is tied among variables, a
 random variable is chosen</p></li>
 <li><p><strong>rad</strong>: the magnitude (mean expression) encoded as
 the radial distance in the plot.</p></li>
@@ -1202,38 +1202,35 @@ threshold.</p></li>
 <span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] ggplot2_4.0.0               dominatRData_0.99.0        </span></span>
+<span><span class="co">#&gt;  [1] ggplot2_4.0.0               dominatRData_0.99.1        </span></span>
 <span><span class="co">#&gt;  [3] airway_1.28.0               SummarizedExperiment_1.38.1</span></span>
 <span><span class="co">#&gt;  [5] Biobase_2.68.0              GenomicRanges_1.60.0       </span></span>
 <span><span class="co">#&gt;  [7] GenomeInfoDb_1.44.3         IRanges_2.42.0             </span></span>
-<span><span class="co">#&gt;  [9] S4Vectors_0.46.0            BiocGenerics_0.54.0        </span></span>
+<span><span class="co">#&gt;  [9] S4Vectors_0.46.0            BiocGenerics_0.54.1        </span></span>
 <span><span class="co">#&gt; [11] generics_0.1.4              MatrixGenerics_1.20.0      </span></span>
-<span><span class="co">#&gt; [13] matrixStats_1.5.0           dominatR_0.99.2            </span></span>
+<span><span class="co">#&gt; [13] matrixStats_1.5.0           dominatR_0.99.3            </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] gtable_0.3.6            xfun_0.53               bslib_0.9.0            </span></span>
-<span><span class="co">#&gt;  [4] lattice_0.22-7          tzdb_0.5.0              vctrs_0.6.5            </span></span>
-<span><span class="co">#&gt;  [7] tools_4.5.1             tibble_3.3.0            pkgconfig_2.0.3        </span></span>
-<span><span class="co">#&gt; [10] Matrix_1.7-3            tidyverse_2.0.0         ggnewscale_0.5.2       </span></span>
-<span><span class="co">#&gt; [13] RColorBrewer_1.1-3      S7_0.2.0                desc_1.4.3             </span></span>
-<span><span class="co">#&gt; [16] lifecycle_1.0.4         GenomeInfoDbData_1.2.14 stringr_1.5.2          </span></span>
-<span><span class="co">#&gt; [19] compiler_4.5.1          farver_2.1.2            textshaping_1.0.3      </span></span>
-<span><span class="co">#&gt; [22] geomtextpath_0.2.0      ggforce_0.5.0           htmltools_0.5.8.1      </span></span>
-<span><span class="co">#&gt; [25] sass_0.4.10             yaml_2.3.10             tidyr_1.3.1            </span></span>
-<span><span class="co">#&gt; [28] pillar_1.11.1           pkgdown_2.1.3           crayon_1.5.3           </span></span>
-<span><span class="co">#&gt; [31] jquerylib_0.1.4         MASS_7.3-65             DelayedArray_0.34.1    </span></span>
-<span><span class="co">#&gt; [34] cachem_1.1.0            abind_1.4-8             tidyselect_1.2.1       </span></span>
-<span><span class="co">#&gt; [37] digest_0.6.37           stringi_1.8.7           purrr_1.1.0            </span></span>
-<span><span class="co">#&gt; [40] dplyr_1.1.4             labeling_0.4.3          forcats_1.0.0          </span></span>
-<span><span class="co">#&gt; [43] polyclip_1.10-7         fastmap_1.2.0           grid_4.5.1             </span></span>
-<span><span class="co">#&gt; [46] cli_3.6.5               SparseArray_1.8.1       magrittr_2.0.4         </span></span>
-<span><span class="co">#&gt; [49] S4Arrays_1.8.1          readr_2.1.5             withr_3.0.2            </span></span>
-<span><span class="co">#&gt; [52] UCSC.utils_1.4.0        scales_1.4.0            timechange_0.3.0       </span></span>
-<span><span class="co">#&gt; [55] lubridate_1.9.4         rmarkdown_2.29          XVector_0.48.0         </span></span>
-<span><span class="co">#&gt; [58] httr_1.4.7              hms_1.1.3               ragg_1.5.0             </span></span>
-<span><span class="co">#&gt; [61] evaluate_1.0.5          knitr_1.50              rlang_1.1.6            </span></span>
-<span><span class="co">#&gt; [64] glue_1.8.0              tweenr_2.0.3            jsonlite_2.0.0         </span></span>
-<span><span class="co">#&gt; [67] R6_2.6.1                systemfonts_1.2.3       fs_1.6.6</span></span></code></pre>
+<span><span class="co">#&gt;  [4] lattice_0.22-7          vctrs_0.6.5             tools_4.5.1            </span></span>
+<span><span class="co">#&gt;  [7] tibble_3.3.0            pkgconfig_2.0.3         Matrix_1.7-3           </span></span>
+<span><span class="co">#&gt; [10] ggnewscale_0.5.2        RColorBrewer_1.1-3      S7_0.2.0               </span></span>
+<span><span class="co">#&gt; [13] desc_1.4.3              lifecycle_1.0.4         GenomeInfoDbData_1.2.14</span></span>
+<span><span class="co">#&gt; [16] compiler_4.5.1          farver_2.1.2            textshaping_1.0.4      </span></span>
+<span><span class="co">#&gt; [19] geomtextpath_0.2.0      ggforce_0.5.0           htmltools_0.5.8.1      </span></span>
+<span><span class="co">#&gt; [22] sass_0.4.10             yaml_2.3.10             pillar_1.11.1          </span></span>
+<span><span class="co">#&gt; [25] pkgdown_2.1.3           crayon_1.5.3            jquerylib_0.1.4        </span></span>
+<span><span class="co">#&gt; [28] MASS_7.3-65             DelayedArray_0.34.1     cachem_1.1.0           </span></span>
+<span><span class="co">#&gt; [31] abind_1.4-8             tidyselect_1.2.1        digest_0.6.37          </span></span>
+<span><span class="co">#&gt; [34] stringi_1.8.7           dplyr_1.1.4             labeling_0.4.3         </span></span>
+<span><span class="co">#&gt; [37] polyclip_1.10-7         fastmap_1.2.0           grid_4.5.1             </span></span>
+<span><span class="co">#&gt; [40] cli_3.6.5               SparseArray_1.8.1       magrittr_2.0.4         </span></span>
+<span><span class="co">#&gt; [43] S4Arrays_1.8.1          withr_3.0.2             UCSC.utils_1.4.0       </span></span>
+<span><span class="co">#&gt; [46] scales_1.4.0            rmarkdown_2.30          XVector_0.48.0         </span></span>
+<span><span class="co">#&gt; [49] httr_1.4.7              ragg_1.5.0              evaluate_1.0.5         </span></span>
+<span><span class="co">#&gt; [52] knitr_1.50              rlang_1.1.6             glue_1.8.0             </span></span>
+<span><span class="co">#&gt; [55] tweenr_2.0.3            jsonlite_2.0.0          R6_2.6.1               </span></span>
+<span><span class="co">#&gt; [58] systemfonts_1.3.1       fs_1.6.6</span></span></code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

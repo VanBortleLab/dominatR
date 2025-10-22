@@ -23,7 +23,7 @@ slice may be drawn as curved text on the circle or shown in a legend."></head><b
 
     <a class="navbar-brand me-2" href="../index.html">dominatR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -209,7 +209,7 @@ where \(H\) is the Shannon entropy of the row after log base 2, so
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.1.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.1.5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 4.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.3.0</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.1.0     </span>
@@ -570,7 +570,7 @@ where \(H\) is the Shannon entropy of the row after log base 2, so
 <span class="r-in"><span>  output_table <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  assay_name <span class="op">=</span> <span class="st">'tpm_norm'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'i' in selecting a method for function '[': error in evaluating the argument 'x' in selecting a method for function 'colnames': error in evaluating the argument 'x' in selecting a method for function 'rowData': object 'se' not found</span>
+<span class="r-plt img"><img src="plot_circle-13.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plot_circle</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">se</span>,</span></span>
@@ -583,7 +583,7 @@ where \(H\) is the Shannon entropy of the row after log base 2, so
 <span class="r-in"><span>  output_table <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  assay_name <span class="op">=</span> <span class="st">'tpm_norm'</span>,</span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'i' in selecting a method for function '[': error in evaluating the argument 'x' in selecting a method for function 'colnames': error in evaluating the argument 'x' in selecting a method for function 'rowData': object 'se' not found</span>
+<span class="r-plt img"><img src="plot_circle-14.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Highlighting only a class of interest</span></span></span>
 <span class="r-in"><span></span></span>
@@ -600,7 +600,7 @@ where \(H\) is the Shannon entropy of the row after log base 2, so
 <span class="r-in"><span>  point_fill_colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'miRNA'</span> <span class="op">=</span> <span class="st">'orange'</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  point_line_colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'miRNA'</span> <span class="op">=</span> <span class="st">'orange'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'i' in selecting a method for function '[': error in evaluating the argument 'x' in selecting a method for function 'colnames': error in evaluating the argument 'x' in selecting a method for function 'rowData': object 'se' not found</span>
+<span class="r-plt img"><img src="plot_circle-15.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Retrieving a dataframe with the results used for plotting,</span></span></span>
@@ -619,30 +619,29 @@ where \(H\) is the Shannon entropy of the row after log base 2, so
 <span class="r-in"><span>  point_fill_colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'miRNA'</span> <span class="op">=</span> <span class="st">'orange'</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  point_line_colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'miRNA'</span> <span class="op">=</span> <span class="st">'orange'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'i' in selecting a method for function '[': error in evaluating the argument 'x' in selecting a method for function 'colnames': error in evaluating the argument 'x' in selecting a method for function 'rowData': object 'se' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># It returns a list.</span></span></span>
 <span class="r-in"><span><span class="co"># The first object is the plot</span></span></span>
 <span class="r-in"><span><span class="va">plot</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-plt img"><img src="plot_circle-13.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="plot_circle-16.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The second the dataframe with information for each row, including</span></span></span>
 <span class="r-in"><span><span class="co"># Entropy and the variable that dominates that particular observation.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">plot</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 Factor   Entropy      col       rad        deg         x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000260166      C 0.0000000 Column_7 100.00000 -3.9269908 -70.71068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000266931      A 0.0000000 Column_5 100.00000 -2.3561945 -70.71068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000267583      D 0.0000000 Column_2 100.00000  0.0000000 100.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000227581      B 0.9820371 Column_6  86.06782 -3.1415927 -86.06782</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000227317      A 0.0000000 Column_1 100.00000  0.7853982  70.71068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000236863      A 0.0000000 Column_5 100.00000 -2.3561945 -70.71068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                             y   labels    rand_deg     alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000260166  7.071068e+01 Column_7 -3.88335759 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000266931 -7.071068e+01 Column_5 -2.37073890 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000267583  0.000000e+00 Column_2 -0.01454441 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000227581 -1.054027e-14 Column_6 -3.15613706 0.8772454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000227317  7.071068e+01 Column_1  0.76115748 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000236863 -7.071068e+01 Column_5 -2.35134635 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         Factor   Entropy      col       rad       deg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000267583        lincRNA 0.0000000 Column_2 100.00000  0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000227581     pseudogene 0.9820371 Column_6  86.06782 -3.141593</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000272324      antisense 0.9976633 Column_4  85.76052 -1.570796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000180919 protein_coding 0.0000000 Column_5 100.00000 -2.356194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000260159     pseudogene 0.9942395 Column_2  85.82814  0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000267440        lincRNA 0.0000000 Column_8 100.00000 -4.712389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             x             y   labels    rand_deg     alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000267583  1.000000e+02  0.000000e+00 Column_2  0.02424068 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000227581 -8.606782e+01 -1.054027e-14 Column_6 -3.18522588 0.8772454</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000272324  5.251318e-15 -8.576052e+01 Column_4 -1.57564446 0.8752921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000180919 -7.071068e+01 -7.071068e+01 Column_5 -2.35134635 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000260159  8.582814e+01  0.000000e+00 Column_2  0.02424068 0.8757201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000267440 -1.836970e-14  1.000000e+02 Column_8 -4.70754084 1.0000000</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
