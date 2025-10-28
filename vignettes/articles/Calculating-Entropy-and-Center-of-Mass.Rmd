@@ -137,7 +137,7 @@ df = Qentropy(df)
 head(df[order(df$Heart),])
 ```
 
-From this dataframe, it is possible to observe how the obserations `gene_9363`, `gene_1112`, `gene_2850` have low values of Qentropy emphasizing high score or normalized features in `Heart` when compared to the other samples.
+From this dataframe, it is possible to see how the observations `gene_9363`, `gene_1112`, `gene_2850` have low values of Qentropy emphasizing high score or normalized features in `Heart` when compared to the other samples.
 
 
 ### Example 2: A summarized Experiment
