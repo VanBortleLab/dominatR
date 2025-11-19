@@ -1,6 +1,6 @@
 Package: dominatR
 Title: Feature Dominance-based R Package for Genomic Data
-Version: 0.99.4
+Version: 1.0.0
 Date: 2025-09-10
 Authors@R: c(
     person(

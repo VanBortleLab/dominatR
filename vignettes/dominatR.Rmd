@@ -30,7 +30,11 @@ library(ggplot2)
 
 ## Overview
 
-<img src="../man/figures/dominatR_logo.png" align="right" width="220"/>
+```{r dominatr-logo, echo=FALSE, fig.align='right', out.width='220px'}
+logo <- system.file("images", "dominatR_logo.png", package = "dominatR")
+knitr::include_graphics(logo)
+```
+
 
 `dominatR` is a genomic data visualization package that applies concepts
 drawn from physics - such as *center of mass* from classical mechanics
@@ -91,7 +95,6 @@ To install this package, start R and enter
 library(BiocManager)
 BiocManager::install('dominatR')
 ```
- 
 
 ## Data normalization; computing and plotting feature dominance
 
@@ -322,8 +325,8 @@ subsetting specific type of observations.
 Briefly A total of P-1 (P = Number of Variables) circles are plotted and
 they represent degrees of dominance.
 
--   The outermost circle represents observations that are dominated
-    only by one variable.
+-   The outermost circle represents observations that are dominated only
+    by one variable.
 
 -   The second outermost circle represents observations that are
     dominated by two variables.

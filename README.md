@@ -20,11 +20,10 @@ Below, we highlight the utility of `dominatR` with specific examples, such as th
 dominatR can be installed from GitHub using the `devtools` package:
 
 ``` r
-# Install devtools if not already installed
-if (!require(devtools)) install.packages("devtools")
+# Install BiocManager if not already installed
+if (!require(BiocManager)) install.packages("BiocManager")
 
-# Install dominatR from GitHub
-devtools::install_github("VanBortleLab/dominatR", build_vignettes = TRUE)
+BiocManager::install("dominatR")
 ```
 
 # Usage

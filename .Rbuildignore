@@ -6,7 +6,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^.*\.png$
 ^vignettes/articles$
 ^\.github$
 ^man/figures$
