@@ -1,12 +1,12 @@
 pandoc: 3.1.11
-pkgdown: 2.1.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   articles/Calculating-Entropy-and-Center-of-Mass: Calculating-Entropy-and-Center-of-Mass.html
   articles/Dominance-plot-in-2-to-N-dimensions: Dominance-plot-in-2-to-N-dimensions.html
   dominatR: dominatR.html
   articles/Normalization-Functions: Normalization-Functions.html
-last_built: 2025-10-28T20:28Z
+last_built: 2025-11-19T03:23Z
 urls:
   reference: https://vanbortlelab.github.io/dominatR/reference
   article: https://vanbortlelab.github.io/dominatR/articles
