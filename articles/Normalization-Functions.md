@@ -347,9 +347,9 @@ head(assay(se_tpm)[1:5, 1:5])
 
 #### Session Info
 
-    #> R version 4.5.2 (2025-10-31)
+    #> R version 4.6.0 (2026-04-24)
     #> Platform: x86_64-pc-linux-gnu
-    #> Running under: Ubuntu 24.04.3 LTS
+    #> Running under: Ubuntu 24.04.4 LTS
     #> 
     #> Matrix products: default
     #> BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -369,31 +369,31 @@ head(assay(se_tpm)[1:5, 1:5])
     #> [8] base     
     #> 
     #> other attached packages:
-    #>  [1] ggplot2_4.0.1               dominatRData_0.99.1        
-    #>  [3] airway_1.30.0               SummarizedExperiment_1.40.0
-    #>  [5] Biobase_2.70.0              GenomicRanges_1.62.0       
-    #>  [7] Seqinfo_1.0.0               IRanges_2.44.0             
-    #>  [9] S4Vectors_0.48.0            BiocGenerics_0.56.0        
-    #> [11] generics_0.1.4              MatrixGenerics_1.22.0      
-    #> [13] matrixStats_1.5.0           dominatR_0.99.5            
-    #> [15] knitr_1.50                 
+    #>  [1] ggplot2_4.0.3               dominatRData_0.99.1        
+    #>  [3] airway_1.31.0               SummarizedExperiment_1.41.1
+    #>  [5] Biobase_2.71.0              GenomicRanges_1.63.2       
+    #>  [7] Seqinfo_1.1.0               IRanges_2.45.0             
+    #>  [9] S4Vectors_0.49.3            BiocGenerics_0.57.1        
+    #> [11] generics_0.1.4              MatrixGenerics_1.23.0      
+    #> [13] matrixStats_1.5.0           dominatR_1.1.0             
+    #> [15] knitr_1.51                 
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] sass_0.4.10         SparseArray_1.10.1  lattice_0.22-7     
-    #>  [4] digest_0.6.38       magrittr_2.0.4      RColorBrewer_1.1-3 
-    #>  [7] evaluate_1.0.5      grid_4.5.2          fastmap_1.2.0      
-    #> [10] jsonlite_2.0.0      Matrix_1.7-4        ggnewscale_0.5.2   
-    #> [13] scales_1.4.0        tweenr_2.0.3        textshaping_1.0.4  
-    #> [16] jquerylib_0.1.4     abind_1.4-8         cli_3.6.5          
-    #> [19] rlang_1.1.6         polyclip_1.10-7     XVector_0.50.0     
-    #> [22] withr_3.0.2         cachem_1.1.0        DelayedArray_0.36.0
-    #> [25] yaml_2.3.10         S4Arrays_1.10.0     tools_4.5.2        
-    #> [28] dplyr_1.1.4         vctrs_0.6.5         R6_2.6.1           
-    #> [31] lifecycle_1.0.4     fs_1.6.6            MASS_7.3-65        
-    #> [34] ragg_1.5.0          pkgconfig_2.0.3     desc_1.4.3         
-    #> [37] pkgdown_2.2.0       bslib_0.9.0         pillar_1.11.1      
-    #> [40] gtable_0.3.6        glue_1.8.0          ggforce_0.5.0      
-    #> [43] systemfonts_1.3.1   xfun_0.54           tibble_3.3.0       
-    #> [46] tidyselect_1.2.1    farver_2.1.2        htmltools_0.5.8.1  
-    #> [49] rmarkdown_2.30      compiler_4.5.2      S7_0.2.1           
+    #>  [1] sass_0.4.10         SparseArray_1.11.13 lattice_0.22-9     
+    #>  [4] digest_0.6.39       magrittr_2.0.5      RColorBrewer_1.1-3 
+    #>  [7] evaluate_1.0.5      grid_4.6.0          fastmap_1.2.0      
+    #> [10] jsonlite_2.0.0      Matrix_1.7-5        ggnewscale_0.5.2   
+    #> [13] scales_1.4.0        tweenr_2.0.3        textshaping_1.0.5  
+    #> [16] jquerylib_0.1.4     abind_1.4-8         cli_3.6.6          
+    #> [19] rlang_1.2.0         polyclip_1.10-7     XVector_0.51.0     
+    #> [22] withr_3.0.2         cachem_1.1.0        DelayedArray_0.37.1
+    #> [25] yaml_2.3.12         S4Arrays_1.11.1     tools_4.6.0        
+    #> [28] dplyr_1.2.1         vctrs_0.7.3         R6_2.6.1           
+    #> [31] lifecycle_1.0.5     fs_2.1.0            MASS_7.3-65        
+    #> [34] ragg_1.5.2          pkgconfig_2.0.3     desc_1.4.3         
+    #> [37] pkgdown_2.2.0       bslib_0.10.0        pillar_1.11.1      
+    #> [40] gtable_0.3.6        glue_1.8.1          ggforce_0.5.0      
+    #> [43] systemfonts_1.3.2   xfun_0.57           tibble_3.3.1       
+    #> [46] tidyselect_1.2.1    farver_2.1.2        htmltools_0.5.9    
+    #> [49] rmarkdown_2.31      compiler_4.6.0      S7_0.2.2           
     #> [52] geomtextpath_0.2.0

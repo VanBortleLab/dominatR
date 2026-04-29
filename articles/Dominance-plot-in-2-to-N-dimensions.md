@@ -820,20 +820,20 @@ head(results[[2]])
 #> tRNA-Glu-TTC-3-1&&10055                   75% Tissues 4.247928     Spleen
 #> tRNA-Asn-GTT-1-6&&10056                   75% Tissues 4.247928      Liver
 #> tRNA-Gly-TCC-4-1&&10058                   75% Tissues 4.247928      Brain
-#>                                                    rad         deg
-#> tRNA-Gly-GCC-1-3&&100172                  1.421085e-14 -3.05891916
-#> Metazoa_SRP_SRP_RNA_URS0000972307&&100175 1.000000e+02  0.90940840
-#> tRNA-Val-CAC-1-4&&10049                   1.421085e-14 -0.08267349
-#> tRNA-Glu-TTC-3-1&&10055                   1.421085e-14  0.90940840
-#> tRNA-Asn-GTT-1-6&&10056                   1.421085e-14  0.57871444
-#> tRNA-Gly-TCC-4-1&&10058                   1.421085e-14 -4.71238898
+#>                                                     rad         deg
+#> tRNA-Gly-GCC-1-3&&100172                  -1.421085e-14 -3.05891916
+#> Metazoa_SRP_SRP_RNA_URS0000972307&&100175  1.000000e+02  0.90940840
+#> tRNA-Val-CAC-1-4&&10049                   -1.421085e-14 -0.08267349
+#> tRNA-Glu-TTC-3-1&&10055                   -1.421085e-14  0.90940840
+#> tRNA-Asn-GTT-1-6&&10056                   -1.421085e-14  0.57871444
+#> tRNA-Gly-TCC-4-1&&10058                   -1.421085e-14 -4.71238898
 #>                                                       x             y
-#> tRNA-Gly-GCC-1-3&&100172                  -1.416351e-14 -1.159068e-15
+#> tRNA-Gly-GCC-1-3&&100172                   1.416351e-14  1.159068e-15
 #> Metazoa_SRP_SRP_RNA_URS0000972307&&100175  6.134069e+01  7.897670e+01
-#> tRNA-Val-CAC-1-4&&10049                    1.417034e-14 -1.072310e-15
-#> tRNA-Glu-TTC-3-1&&10055                    8.648143e-15  1.127644e-14
-#> tRNA-Asn-GTT-1-6&&10056                    1.192059e-14  7.736136e-15
-#> tRNA-Gly-TCC-4-1&&10058                   -4.351330e-17  1.421079e-14
+#> tRNA-Val-CAC-1-4&&10049                   -1.417034e-14  1.072310e-15
+#> tRNA-Glu-TTC-3-1&&10055                   -8.648143e-15 -1.127644e-14
+#> tRNA-Asn-GTT-1-6&&10056                   -1.192059e-14 -7.736136e-15
+#> tRNA-Gly-TCC-4-1&&10058                    4.351330e-17 -1.421079e-14
 #>                                               labels    rand_deg     alpha
 #> tRNA-Gly-GCC-1-3&&100172                  Gastroesop -3.05993982 0.7764249
 #> Metazoa_SRP_SRP_RNA_URS0000972307&&100175     Spleen  0.91042906 1.0000000
@@ -1197,9 +1197,9 @@ The returned table includes:
 
 ### Session Info
 
-    #> R version 4.5.2 (2025-10-31)
+    #> R version 4.6.0 (2026-04-24)
     #> Platform: x86_64-pc-linux-gnu
-    #> Running under: Ubuntu 24.04.3 LTS
+    #> Running under: Ubuntu 24.04.4 LTS
     #> 
     #> Matrix products: default
     #> BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -1219,31 +1219,31 @@ The returned table includes:
     #> [8] base     
     #> 
     #> other attached packages:
-    #>  [1] ggplot2_4.0.1               dominatRData_0.99.1        
-    #>  [3] airway_1.30.0               SummarizedExperiment_1.40.0
-    #>  [5] Biobase_2.70.0              GenomicRanges_1.62.0       
-    #>  [7] Seqinfo_1.0.0               IRanges_2.44.0             
-    #>  [9] S4Vectors_0.48.0            BiocGenerics_0.56.0        
-    #> [11] generics_0.1.4              MatrixGenerics_1.22.0      
-    #> [13] matrixStats_1.5.0           dominatR_0.99.5            
+    #>  [1] ggplot2_4.0.3               dominatRData_0.99.1        
+    #>  [3] airway_1.31.0               SummarizedExperiment_1.41.1
+    #>  [5] Biobase_2.71.0              GenomicRanges_1.63.2       
+    #>  [7] Seqinfo_1.1.0               IRanges_2.45.0             
+    #>  [9] S4Vectors_0.49.3            BiocGenerics_0.57.1        
+    #> [11] generics_0.1.4              MatrixGenerics_1.23.0      
+    #> [13] matrixStats_1.5.0           dominatR_1.1.0             
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] sass_0.4.10         SparseArray_1.10.1  stringi_1.8.7      
-    #>  [4] lattice_0.22-7      digest_0.6.38       magrittr_2.0.4     
-    #>  [7] RColorBrewer_1.1-3  evaluate_1.0.5      grid_4.5.2         
-    #> [10] fastmap_1.2.0       jsonlite_2.0.0      Matrix_1.7-4       
+    #>  [1] sass_0.4.10         SparseArray_1.11.13 stringi_1.8.7      
+    #>  [4] lattice_0.22-9      digest_0.6.39       magrittr_2.0.5     
+    #>  [7] RColorBrewer_1.1-3  evaluate_1.0.5      grid_4.6.0         
+    #> [10] fastmap_1.2.0       jsonlite_2.0.0      Matrix_1.7-5       
     #> [13] ggnewscale_0.5.2    scales_1.4.0        tweenr_2.0.3       
-    #> [16] textshaping_1.0.4   jquerylib_0.1.4     abind_1.4-8        
-    #> [19] cli_3.6.5           rlang_1.1.6         polyclip_1.10-7    
-    #> [22] XVector_0.50.0      withr_3.0.2         cachem_1.1.0       
-    #> [25] DelayedArray_0.36.0 yaml_2.3.10         S4Arrays_1.10.0    
-    #> [28] tools_4.5.2         dplyr_1.1.4         vctrs_0.6.5        
-    #> [31] R6_2.6.1            lifecycle_1.0.4     fs_1.6.6           
-    #> [34] MASS_7.3-65         ragg_1.5.0          pkgconfig_2.0.3    
-    #> [37] desc_1.4.3          pkgdown_2.2.0       bslib_0.9.0        
-    #> [40] pillar_1.11.1       gtable_0.3.6        glue_1.8.0         
-    #> [43] ggforce_0.5.0       systemfonts_1.3.1   xfun_0.54          
-    #> [46] tibble_3.3.0        tidyselect_1.2.1    knitr_1.50         
-    #> [49] farver_2.1.2        htmltools_0.5.8.1   labeling_0.4.3     
-    #> [52] rmarkdown_2.30      compiler_4.5.2      S7_0.2.1           
+    #> [16] textshaping_1.0.5   jquerylib_0.1.4     abind_1.4-8        
+    #> [19] cli_3.6.6           rlang_1.2.0         polyclip_1.10-7    
+    #> [22] XVector_0.51.0      withr_3.0.2         cachem_1.1.0       
+    #> [25] DelayedArray_0.37.1 yaml_2.3.12         S4Arrays_1.11.1    
+    #> [28] tools_4.6.0         dplyr_1.2.1         vctrs_0.7.3        
+    #> [31] R6_2.6.1            lifecycle_1.0.5     fs_2.1.0           
+    #> [34] MASS_7.3-65         ragg_1.5.2          pkgconfig_2.0.3    
+    #> [37] desc_1.4.3          pkgdown_2.2.0       bslib_0.10.0       
+    #> [40] pillar_1.11.1       gtable_0.3.6        glue_1.8.1         
+    #> [43] ggforce_0.5.0       systemfonts_1.3.2   xfun_0.57          
+    #> [46] tibble_3.3.1        tidyselect_1.2.1    knitr_1.51         
+    #> [49] farver_2.1.2        htmltools_0.5.9     labeling_0.4.3     
+    #> [52] rmarkdown_2.31      compiler_4.6.0      S7_0.2.2           
     #> [55] geomtextpath_0.2.0

@@ -165,8 +165,8 @@ values
 #>     default = NULL, skeleton = (function (x, ...) 
 #>     stop(gettextf("invalid call in method dispatch to '%s' (no default method)", 
 #>         "values"), domain = NA))(x, ...))
-#> <bytecode: 0x561e8c4c0e78>
-#> <environment: 0x561e8c4bc830>
+#> <bytecode: 0x557e9e48acc0>
+#> <environment: 0x557e9e485d28>
 #> attr(,"generic")
 #> [1] "values"
 #> attr(,"generic")attr(,"package")

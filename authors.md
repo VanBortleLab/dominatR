@@ -16,14 +16,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/VanBortleLab/dominatR/blob/main/DESCRIPTION)
 
-Lizarazo S, Chen E, K C R, Van Bortle K (2025). *dominatR: Feature
-Dominance-based R Package for Genomic Data*. R package version 0.99.5,
+Lizarazo S, Chen E, K C R, Van Bortle K (2026). *dominatR: Feature
+Dominance-based R Package for Genomic Data*. R package version 1.1.0,
 <https://github.com/VanBortleLab/dominatR>.
 
     @Manual{,
       title = {dominatR: Feature Dominance-based R Package for Genomic Data},
       author = {Simon Lizarazo and Ethan Chen and Rajendra {K C} and Kevin {Van Bortle}},
-      year = {2025},
-      note = {R package version 0.99.5},
+      year = {2026},
+      note = {R package version 1.1.0},
       url = {https://github.com/VanBortleLab/dominatR},
     }
